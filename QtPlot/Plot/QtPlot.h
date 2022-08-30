@@ -1,10 +1,10 @@
 #pragma once
 
 #include "QtPlotGlobal.h"
-#include "ZoomClampedPlot.h"
+#include "MarkingPlot.h"
 
 
-class QTPLOT_EXPORT QtPlot : public ZoomClampedPlot
+class QTPLOT_EXPORT QtPlot : public MarkingPlot
 {
 	Q_OBJECT
 
