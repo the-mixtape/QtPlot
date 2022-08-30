@@ -1,11 +1,13 @@
 #pragma once
 
 #include "QtPlotGlobal.h"
-#include "QCustomPlot/QCustomPlot.h"
+#include "ZoomClampedPlot.h"
 
 
-class QTPLOT_EXPORT QtPlot : public QCustomPlot
+class QTPLOT_EXPORT QtPlot : public ZoomClampedPlot
 {
+	Q_OBJECT
+
 public:
 	explicit QtPlot(QWidget* parent = nullptr);
 	virtual ~QtPlot();

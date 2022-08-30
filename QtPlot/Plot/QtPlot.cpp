@@ -1,9 +1,9 @@
 #include "QtPlot.h"
 
-
 QtPlot::QtPlot(QWidget* parent)
-	:QCustomPlot(parent)
+	: ZoomClampedPlot(parent)
 {
+
 }
 
 QtPlot::~QtPlot()

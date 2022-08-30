@@ -12,5 +12,8 @@ public:
     ~MainWindow();
 
 private:
+    void initializePlot();
+
+private:
     Ui::MainWindowClass ui;
 };

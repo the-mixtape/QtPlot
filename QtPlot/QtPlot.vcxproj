@@ -92,11 +92,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Library\EnumLibrary.h" />
     <ClInclude Include="QtPlotGlobal.h" />
-    <ClInclude Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\QtPlot.h" />
+    <QtMoc Include="ZoomClampedPlot.h" />
+    <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\QtPlot.h" />
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ZoomClampedPlot.cpp" />
     <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\QtPlot.cpp" />
     <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.cpp" />
   </ItemGroup>

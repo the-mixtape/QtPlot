@@ -119,15 +119,16 @@ class QCPBars;
 #define QCUSTOMPLOT_VERSION 0x020001
 
 // decl definitions for shared library compilation/usage:
-#if defined(QT_STATIC_BUILD)
-#  define QCP_LIB_DECL
-#elif defined(QCUSTOMPLOT_COMPILE_LIBRARY)
-#  define QCP_LIB_DECL Q_DECL_EXPORT
-#elif defined(QCUSTOMPLOT_USE_LIBRARY)
-#  define QCP_LIB_DECL Q_DECL_IMPORT
-#else
-#  define QCP_LIB_DECL
-#endif
+// #if defined(QT_STATIC_BUILD)
+// #  define QCP_LIB_DECL
+// #elif defined(QCUSTOMPLOT_COMPILE_LIBRARY)
+// #  define QCP_LIB_DECL Q_DECL_EXPORT
+// #elif defined(QCUSTOMPLOT_USE_LIBRARY)
+// #  define QCP_LIB_DECL Q_DECL_IMPORT
+// #else
+#include "QtPlotGlobal.h"
+#  define QCP_LIB_DECL QTPLOT_EXPORT
+// #endif
 
 // define empty macro for Q_DECL_OVERRIDE if it doesn't exist (Qt < 5)
 #ifndef Q_DECL_OVERRIDE

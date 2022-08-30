@@ -33,13 +33,16 @@
     <Filter Include="Source Files\Plot">
       <UniqueIdentifier>{518dfd4b-6cd4-4a7a-8769-678bd0cc3ebe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Library">
+      <UniqueIdentifier>{51ebb71b-f817-4265-804c-fd341f59b0c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="QtPlotGlobal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\QtPlot.h">
-      <Filter>Header Files\Plot</Filter>
+    <ClInclude Include="Library\EnumLibrary.h">
+      <Filter>Header Files\Library</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -49,10 +52,19 @@
     <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\QtPlot.cpp">
       <Filter>Source Files\Plot</Filter>
     </ClCompile>
+    <ClCompile Include="ZoomClampedPlot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.h">
       <Filter>Header Files\QCustomPlot</Filter>
+    </QtMoc>
+    <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\QtPlot.h">
+      <Filter>Header Files\Plot</Filter>
+    </QtMoc>
+    <QtMoc Include="ZoomClampedPlot.h">
+      <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>
