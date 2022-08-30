@@ -94,13 +94,13 @@
   <ItemGroup>
     <ClInclude Include="Library\EnumLibrary.h" />
     <ClInclude Include="QtPlotGlobal.h" />
-    <QtMoc Include="ZoomClampedPlot.h" />
+    <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\ZoomClampedPlot.h" />
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\QtPlot.h" />
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ZoomClampedPlot.cpp" />
     <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\QtPlot.cpp" />
+    <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\ZoomClampedPlot.cpp" />
     <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
