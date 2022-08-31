@@ -13138,12 +13138,12 @@ void QCustomPlot::setInteractions(const QCP::Interactions &interactions)
   
   \see setInteractions
 */
-void QCustomPlot::setInteraction(const QCP::Interaction &interaction, bool enabled)
+void QCustomPlot::setInteraction(const QCP::Interaction& interaction, bool enabled)
 {
-  if (!enabled && mInteractions.testFlag(interaction))
-    mInteractions &= ~interaction;
-  else if (enabled && !mInteractions.testFlag(interaction))
-    mInteractions |= interaction;
+    if (!enabled && mInteractions.testFlag(interaction))
+        mInteractions &= ~interaction;
+    else if (enabled && !mInteractions.testFlag(interaction))
+        mInteractions |= interaction;
 }
 
 /*!

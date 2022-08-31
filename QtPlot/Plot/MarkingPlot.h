@@ -3,6 +3,10 @@
 #include "ZoomClampedPlot.h"
 
 
+//Forward Declaration
+class MovableItemLine;
+
+
 class QTPLOT_EXPORT MarkingPlot : public ZoomClampedPlot
 {
 	Q_OBJECT
@@ -58,7 +62,7 @@ protected:
 
 private:
 	void initializeRangeLine(QCPItemStraightLine** line);
-	void initializeLine(QCPItemLine** line);
+	void initializeLine(MovableItemLine** line, EAxis moveAxis, QCPItemText* text);
 	void initializeHorMarkerText(QCPItemText** text);
 	void initializeVertMarkerText(QCPItemText** text);
 
@@ -77,12 +81,12 @@ signals:
 private:
 	QCPItemStraightLine* horRangeLine1;
 	QCPItemStraightLine* horRangeLine2;
-	QCPItemLine* horLine;
+	MovableItemLine* horLine;
 	QCPItemText* horLineText;
 
 	QCPItemStraightLine* vertRangeLine1;
 	QCPItemStraightLine* vertRangeLine2;
-	QCPItemLine* vertLine;
+	MovableItemLine* vertLine;
 	QCPItemText* vertLineText;
 
 	Qt::MouseButton horMouseButton = Qt::LeftButton;

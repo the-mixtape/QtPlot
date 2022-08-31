@@ -1,5 +1,7 @@
 #include "MarkingPlot.h"
 
+#include "Items/MovableItemLine.h"
+
 MarkingPlot::MarkingPlot(QWidget* parent) : ZoomClampedPlot(parent)
 {
 	markerAttachRules.insert(EAxis::EA_xAxis, false);
@@ -9,13 +11,13 @@ MarkingPlot::MarkingPlot(QWidget* parent) : ZoomClampedPlot(parent)
 
 	initializeRangeLine(&horRangeLine1);
 	initializeRangeLine(&horRangeLine2);
-	initializeLine(&horLine);
 	initializeHorMarkerText(&horLineText);
+	initializeLine(&horLine, EA_yAxis, horLineText);
 
 	initializeRangeLine(&vertRangeLine1);
 	initializeRangeLine(&vertRangeLine2);
-	initializeLine(&vertLine);
 	initializeVertMarkerText(&vertLineText);
+	initializeLine(&vertLine, EA_xAxis, vertLineText);
 }
 
 MarkingPlot::~MarkingPlot()
@@ -280,19 +282,20 @@ void MarkingPlot::initializeRangeLine(QCPItemStraightLine** line)
 	*line = new QCPItemStraightLine(this);
 	(*line)->setPen(pen);
 	(*line)->setVisible(false);
-	bool success = (*line)->setLayer("axes");
+	(*line)->setLayer("axes");
 }
 
-void MarkingPlot::initializeLine(QCPItemLine** line)
+void MarkingPlot::initializeLine(MovableItemLine** line, EAxis moveAxis, QCPItemText* text)
 {
 	QPen pen = QPen(Qt::PenStyle::DashLine);
 	pen.setWidth(1);
 	pen.setColor(Qt::black);
 
-	(*line) = new QCPItemLine(this);
+	(*line) = new MovableItemLine(this, text);
 	(*line)->setPen(pen);
 	(*line)->setVisible(false);
 	(*line)->setLayer("axes");
+	(*line)->setMoveAxis(moveAxis);
 }
 
 void MarkingPlot::initializeHorMarkerText(QCPItemText** text)

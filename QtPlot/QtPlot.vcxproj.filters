@@ -36,6 +36,12 @@
     <Filter Include="Header Files\Library">
       <UniqueIdentifier>{51ebb71b-f817-4265-804c-fd341f59b0c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Plot\Items">
+      <UniqueIdentifier>{4916bd9b-a85d-4172-8755-574952cee03d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Plot\Items">
+      <UniqueIdentifier>{bc2d843d-2278-41f2-9aa2-b4dd205f7242}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="QtPlotGlobal.h">
@@ -58,6 +64,9 @@
     <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\MarkingPlot.cpp">
       <Filter>Source Files\Plot</Filter>
     </ClCompile>
+    <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\Items\MovableItemLine.cpp">
+      <Filter>Source Files\Plot\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.h">
@@ -71,6 +80,9 @@
     </QtMoc>
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\MarkingPlot.h">
       <Filter>Header Files\Plot</Filter>
+    </QtMoc>
+    <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\Items\MovableItemLine.h">
+      <Filter>Header Files\Plot\Items</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>
