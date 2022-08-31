@@ -1,22 +1,23 @@
 #pragma once
 
-#include "QCustomPlot/QCustomPlot.h"
 #include "Library/EnumLibrary.h"
+#include "QCustomPlot/QCustomPlot.h"
 
 
-class MovableInfinityLine;
+//forward declaration
+class MovableItemLine;
 
 
-class MovableItemLine : public QCPItemLine
+class MovableInfinityLine : public QCPItemStraightLine
 {
 	Q_OBJECT
 
 public:
-	explicit MovableItemLine(QCustomPlot* parentPlot, MovableInfinityLine* fMarker, MovableInfinityLine* sMarker, QCPItemText* text = nullptr);
-	~MovableItemLine() override;
+	explicit MovableInfinityLine(QCustomPlot* parentPlot);
+	~MovableInfinityLine() override;
 
 	inline void setMoveAxis(EAxis inAxis) { axis = inAxis; }
-	void updatePosition();
+	inline void setMidLine(MovableItemLine* line) { midLine = line; }
 
 protected:
 	void mousePressEvent(QMouseEvent* event, const QVariant& details) override;
@@ -26,20 +27,17 @@ private:
 	void xMoveAxis(QMouseEvent* event);
 	void yMoveAxis(QMouseEvent* event);
 
-	void xUpdate();
-	void yUpdate();
+signals:
+	void updatePosition();
 
 private slots:
 	void mouseRelease(QMouseEvent* event);
 	void mouseMove(QMouseEvent* event);
 
 private:
-	MovableInfinityLine* firstMarker;
-	MovableInfinityLine* secondMarker;
-	QCPItemText* attachedText;
+	MovableItemLine* midLine;
 	QCP::Interactions currentInteractions;
 	EAxis axis;
 	bool bIsDrag = false;
-
 };
 

@@ -98,6 +98,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Library\EnumLibrary.h" />
+    <QtMoc Include="Plot\Items\MovableInfinityLine.h" />
     <ClInclude Include="QtPlotGlobal.h" />
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\Items\MovableItemLine.h" />
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\MarkingPlot.h" />
@@ -106,6 +107,7 @@
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Plot\Items\MovableInfinityLine.cpp" />
     <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\Items\MovableItemLine.cpp" />
     <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\MarkingPlot.cpp" />
     <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\QtPlot.cpp" />

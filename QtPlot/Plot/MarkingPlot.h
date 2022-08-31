@@ -5,6 +5,7 @@
 
 //Forward Declaration
 class MovableItemLine;
+class MovableInfinityLine;
 
 
 class QTPLOT_EXPORT MarkingPlot : public ZoomClampedPlot
@@ -61,8 +62,8 @@ protected:
 	virtual void verticalClickEvent(QMouseEvent* event);
 
 private:
-	void initializeRangeLine(QCPItemStraightLine** line);
-	void initializeLine(MovableItemLine** line, EAxis moveAxis, QCPItemText* text);
+	void initializeRangeLine(MovableInfinityLine** line, EAxis moveAxis);
+	void initializeLine(MovableItemLine** line, MovableInfinityLine* fMarker, MovableInfinityLine* sMarker, EAxis moveAxis, QCPItemText* text);
 	void initializeHorMarkerText(QCPItemText** text);
 	void initializeVertMarkerText(QCPItemText** text);
 
@@ -78,14 +79,18 @@ signals:
 	void rangeHorSelectedSignal(double first, double second);
 	void rangeVertSelectedSignal(double first, double second);
 
+private slots:
+	void updateHorizontalMarkers();
+	void updateVerticalMarkers();
+
 private:
-	QCPItemStraightLine* horRangeLine1;
-	QCPItemStraightLine* horRangeLine2;
+	MovableInfinityLine* horRangeLine1;
+	MovableInfinityLine* horRangeLine2;
 	MovableItemLine* horLine;
 	QCPItemText* horLineText;
 
-	QCPItemStraightLine* vertRangeLine1;
-	QCPItemStraightLine* vertRangeLine2;
+	MovableInfinityLine* vertRangeLine1;
+	MovableInfinityLine* vertRangeLine2;
 	MovableItemLine* vertLine;
 	QCPItemText* vertLineText;
 

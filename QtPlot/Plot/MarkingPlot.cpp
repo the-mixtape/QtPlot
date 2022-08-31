@@ -1,6 +1,7 @@
 #include "MarkingPlot.h"
 
 #include "Items/MovableItemLine.h"
+#include "Plot/Items/MovableInfinityLine.h"
 
 MarkingPlot::MarkingPlot(QWidget* parent) : ZoomClampedPlot(parent)
 {
@@ -9,15 +10,15 @@ MarkingPlot::MarkingPlot(QWidget* parent) : ZoomClampedPlot(parent)
 	markerActiveRules.insert(EA_xAxis, false);
 	markerActiveRules.insert(EA_yAxis, false);
 
-	initializeRangeLine(&horRangeLine1);
-	initializeRangeLine(&horRangeLine2);
+	initializeRangeLine(&horRangeLine1, EA_xAxis);
+	initializeRangeLine(&horRangeLine2, EA_xAxis);
 	initializeHorMarkerText(&horLineText);
-	initializeLine(&horLine, EA_yAxis, horLineText);
+	initializeLine(&horLine, horRangeLine1, horRangeLine2, EA_yAxis, horLineText);
 
-	initializeRangeLine(&vertRangeLine1);
-	initializeRangeLine(&vertRangeLine2);
+	initializeRangeLine(&vertRangeLine1, EA_yAxis);
+	initializeRangeLine(&vertRangeLine2, EA_yAxis);
 	initializeVertMarkerText(&vertLineText);
-	initializeLine(&vertLine, EA_xAxis, vertLineText);
+	initializeLine(&vertLine, vertRangeLine1, vertRangeLine2, EA_xAxis, vertLineText);
 }
 
 MarkingPlot::~MarkingPlot()
@@ -170,6 +171,22 @@ void MarkingPlot::horizontalClickEvent(QMouseEvent* event)
 	{
 		setHorLineCoords(horRangeLine2, x);
 
+		// setup default mid line position
+		{
+			const auto currentRange = yAxis->range();
+			const double y = currentRange.upper - ((currentRange.upper - currentRange.lower) / 2.0);
+
+			horLine->start->setCoords(horLine->start->coords().x(), y);
+			horLine->end->setCoords(horLine->start->coords().x(), horLine->start->coords().y());
+		}
+
+		updateHorizontalMarkers();
+
+		horLineText->setVisible(true);
+		horLine->setVisible(true);
+
+		replot();
+
 		double firstPoint = horRangeLine1->point1->key();
 		double secondPoint = horRangeLine2->point1->key();
 
@@ -179,21 +196,6 @@ void MarkingPlot::horizontalClickEvent(QMouseEvent* event)
 			firstPoint = secondPoint;
 			secondPoint = temp;
 		}
-
-		const auto currentRange = yAxis->range();
-		const double y = currentRange.upper - ((currentRange.upper - currentRange.lower) / 2.0);
-
-		horLine->start->setCoords(firstPoint, y);
-		horLine->end->setCoords(secondPoint, y);
-		horLine->setVisible(true);
-
-		const double midX = secondPoint - ((secondPoint - firstPoint) / 2.0);
-
-		horLineText->position->setCoords(midX, y);
-		horLineText->setText(setupHorizontalText(firstPoint, secondPoint));
-		horLineText->setVisible(true);
-
-		replot();
 		emit rangeHorSelectedSignal(firstPoint, secondPoint);
 	}
 
@@ -234,6 +236,22 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 	{
 		setVertLineCoords(vertRangeLine2, y);
 
+		// setup default mid line position
+		{
+			const auto currentRange = xAxis->range();
+			const double x = currentRange.lower + ((currentRange.upper - currentRange.lower) / 5.0);
+
+			vertLine->start->setCoords(x, vertLine->start->coords().y());
+			vertLine->end->setCoords(x, vertLine->start->coords().y());
+		}
+
+		updateVerticalMarkers();
+
+		vertLine->setVisible(true);
+		vertLineText->setVisible(true);
+
+		replot();
+
 		double firstPoint = vertRangeLine1->point1->value();
 		double secondPoint = vertRangeLine2->point1->value();
 
@@ -243,21 +261,6 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 			firstPoint = secondPoint;
 			secondPoint = temp;
 		}
-
-		const auto currentRange = xAxis->range();
-		const double x = currentRange.lower + ((currentRange.upper - currentRange.lower) / 5.0);
-
-		vertLine->start->setCoords(x, firstPoint);
-		vertLine->end->setCoords(x, secondPoint);
-		vertLine->setVisible(true);
-
-		const double midY = secondPoint - ((secondPoint - firstPoint) / 2.0);
-
-		vertLineText->position->setCoords(x, midY);
-		vertLineText->setText(setupVerticalText(firstPoint, secondPoint));
-		vertLineText->setVisible(true);
-
-		replot();
 		emit rangeHorSelectedSignal(firstPoint, secondPoint);
 	}
 
@@ -273,25 +276,35 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 	incrementCount(vertClickCount);
 }
 
-void MarkingPlot::initializeRangeLine(QCPItemStraightLine** line)
+void MarkingPlot::initializeRangeLine(MovableInfinityLine** line, EAxis moveAxis)
 {
 	QPen pen = QPen(Qt::PenStyle::SolidLine);
 	pen.setWidth(2);
 	pen.setColor(Qt::black);
 
-	*line = new QCPItemStraightLine(this);
+	(*line) = new MovableInfinityLine(this);
 	(*line)->setPen(pen);
 	(*line)->setVisible(false);
 	(*line)->setLayer("axes");
+	(*line)->setMoveAxis(moveAxis);
+
+	if(moveAxis == EA_xAxis)
+	{
+		connect((*line), SIGNAL(updatePosition()), this, SLOT(updateHorizontalMarkers()));
+	}
+	else
+	{
+		connect((*line), SIGNAL(updatePosition()), this, SLOT(updateVerticalMarkers()));
+	}
 }
 
-void MarkingPlot::initializeLine(MovableItemLine** line, EAxis moveAxis, QCPItemText* text)
+void MarkingPlot::initializeLine(MovableItemLine** line, MovableInfinityLine* fMarker, MovableInfinityLine* sMarker, EAxis moveAxis, QCPItemText* text)
 {
 	QPen pen = QPen(Qt::PenStyle::DashLine);
 	pen.setWidth(1);
 	pen.setColor(Qt::black);
 
-	(*line) = new MovableItemLine(this, text);
+	(*line) = new MovableItemLine(this, fMarker, sMarker, text);
 	(*line)->setPen(pen);
 	(*line)->setVisible(false);
 	(*line)->setLayer("axes");
@@ -345,4 +358,46 @@ void MarkingPlot::setVertLineCoords(QCPItemStraightLine* line, double y)
 	line->setVisible(true);
 
 	replot();
+}
+
+void MarkingPlot::updateHorizontalMarkers()
+{
+	double firstPoint = horRangeLine1->point1->key();
+	double secondPoint = horRangeLine2->point1->key();
+
+	if (firstPoint > secondPoint)
+	{
+		const double temp = firstPoint;
+		firstPoint = secondPoint;
+		secondPoint = temp;
+	}
+	
+	horLine->start->setCoords(firstPoint, horLine->start->coords().y());
+	horLine->end->setCoords(secondPoint, horLine->start->coords().y());
+
+	const double midX = secondPoint - ((secondPoint - firstPoint) / 2.0);
+
+	horLineText->position->setCoords(midX, horLine->start->coords().y());
+	horLineText->setText(setupHorizontalText(firstPoint, secondPoint));
+}
+
+void MarkingPlot::updateVerticalMarkers()
+{
+	double firstPoint = vertRangeLine1->point1->value();
+	double secondPoint = vertRangeLine2->point1->value();
+
+	if (firstPoint > secondPoint)
+	{
+		const double temp = firstPoint;
+		firstPoint = secondPoint;
+		secondPoint = temp;
+	}
+
+	vertLine->start->setCoords(vertLine->start->coords().x(), firstPoint);
+	vertLine->end->setCoords(vertLine->start->coords().x(), secondPoint);
+
+	const double midY = secondPoint - ((secondPoint - firstPoint) / 2.0);
+	vertLineText->position->setCoords(vertLine->start->coords().x(), midY);
+	vertLineText->setText(setupVerticalText(firstPoint, secondPoint));
+
 }

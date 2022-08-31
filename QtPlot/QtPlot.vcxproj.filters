@@ -67,6 +67,9 @@
     <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\Items\MovableItemLine.cpp">
       <Filter>Source Files\Plot\Items</Filter>
     </ClCompile>
+    <ClCompile Include="Plot\Items\MovableInfinityLine.cpp">
+      <Filter>Source Files\Plot\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.h">
@@ -82,6 +85,9 @@
       <Filter>Header Files\Plot</Filter>
     </QtMoc>
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\Items\MovableItemLine.h">
+      <Filter>Header Files\Plot\Items</Filter>
+    </QtMoc>
+    <QtMoc Include="Plot\Items\MovableInfinityLine.h">
       <Filter>Header Files\Plot\Items</Filter>
     </QtMoc>
   </ItemGroup>
