@@ -31,8 +31,6 @@ public:
 	void setMarkerAxisActive(EAxis axis, bool isActive);
 	void setMarkerMovableAxisActive(EAxis axis, bool isActive) const;
 
-	void setPressLimitTime(qint64 msec);
-
 	void clearMarkers(EAxis axis);
 
 	//=======================================
@@ -89,8 +87,6 @@ private:
 	Qt::MouseButton horMouseButton = Qt::LeftButton;
 	Qt::MouseButton vertMouseButton = Qt::MidButton;
 
-	qint64 pressLimitTime = 150;
-
 	short horClickCount = 0;
 	short vertClickCount = 0;
 
@@ -99,7 +95,7 @@ private:
 
 	QMap<EAxis, bool> markerAttachRules;
 	QMap<EAxis, bool> markerActiveRules;
-	QElapsedTimer timer;
+	QPoint mouseClickPoint;
 
 };
 

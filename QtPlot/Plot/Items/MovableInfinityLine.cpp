@@ -89,34 +89,28 @@ void MovableInfinityLine::yMoveAxis(QMouseEvent* event)
 void MovableInfinityLine::checkHovered(QMouseEvent* event)
 {
 	const int width = pen().width();
+	int mousePos;
+	int linePos;
 
 	if (axis == EA_xAxis)
 	{
-		const int mouseX = event->pos().x();
-		const int lineX = mParentPlot->xAxis->coordToPixel(point1->coords().x());
-
-		if(mouseX >= lineX - width && mouseX <= lineX + width)
-		{
-			setState(hovered);
-		}
-		else
-		{
-			setState(idle);
-		}
+		mousePos = event->pos().x();
+		linePos = mParentPlot->xAxis->coordToPixel(point1->coords().x());
 	}
 	else
 	{
-		const int mouseY = event->pos().y();
-		const int lineY = mParentPlot->yAxis->coordToPixel(point1->coords().y());
+		mousePos = event->pos().y();
+		linePos = mParentPlot->yAxis->coordToPixel(point1->coords().y());
+	}
 
-		if (mouseY >= lineY - width && mouseY <= lineY + width)
-		{
-			setState(hovered);
-		}
-		else
-		{
-			setState(idle);
-		}
+	const bool isHovered = mousePos >= linePos - width && mousePos <= linePos + width;
+	if (isHovered)
+	{
+		setState(hovered);
+	}
+	else
+	{
+		setState(idle);
 	}
 }
 

@@ -130,11 +130,6 @@ void MarkingPlot::setTextColor(EAxis axis, QColor color)
 	}
 }
 
-void MarkingPlot::setPressLimitTime(qint64 msec)
-{
-	pressLimitTime = msec;
-}
-
 void MarkingPlot::setSetupHorLineTextFunc(QString(*func)(double start, double end))
 {
 	setupHorLineFunc = func;
@@ -149,19 +144,17 @@ void MarkingPlot::mousePressEvent(QMouseEvent* event)
 {
 	QCustomPlot::mousePressEvent(event);
 
-	timer.start();
+	mouseClickPoint = event->pos();
 }
 
 void MarkingPlot::mouseReleaseEvent(QMouseEvent* event)
 {
 	QCustomPlot::mouseReleaseEvent(event);
-
+	
+	if (mouseClickPoint != event->pos()) return;
 
 	if (event->button() == horMouseButton && markerActiveRules[EA_xAxis])
 	{
-		const qint64 press_time = timer.elapsed();
-		if (press_time > pressLimitTime) return;
-
 		horizontalClickEvent(event);
 		return;
 	}
