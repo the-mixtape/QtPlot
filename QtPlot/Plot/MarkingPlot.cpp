@@ -10,6 +10,10 @@ MarkingPlot::MarkingPlot(QWidget* parent) : ZoomClampedPlot(parent)
 	markerActiveRules.insert(EA_xAxis, false);
 	markerActiveRules.insert(EA_yAxis, false);
 
+	addLayer("markers");
+	QCPLayer* markerLayer = layer("markers");
+	markerLayer->setMode(QCPLayer::lmBuffered);
+
 	initializeRangeLine(&horRangeLine1, EA_xAxis);
 	initializeRangeLine(&horRangeLine2, EA_xAxis);
 	initializeHorMarkerText(&horLineText);
@@ -40,6 +44,20 @@ void MarkingPlot::setMarkerAxisActive(EAxis axis, bool isActive)
 	}
 }
 
+void MarkingPlot::setMarkerMovableAxisActive(EAxis axis, bool isActive) const
+{
+	if(axis == EA_xAxis)
+	{
+		horRangeLine1->setMovable(isActive);
+		horRangeLine2->setMovable(isActive);
+	}
+	else
+	{
+		vertRangeLine1->setMovable(isActive);
+		vertRangeLine2->setMovable(isActive);
+	}
+}
+
 void MarkingPlot::clearMarkers(EAxis axis)
 {
 	if(axis == EA_xAxis)
@@ -49,7 +67,7 @@ void MarkingPlot::clearMarkers(EAxis axis)
 		horRangeLine2->setVisible(false);
 		horLine->setVisible(false);
 		horLineText->setVisible(false);
-		replot();
+		layer("markers")->replot();
 	}
 	else
 	{
@@ -58,50 +76,58 @@ void MarkingPlot::clearMarkers(EAxis axis)
 		vertRangeLine2->setVisible(false);
 		vertLine->setVisible(false);
 		vertLineText->setVisible(false);
-		replot();
+		layer("markers")->replot();
 	}
 }
 
-void MarkingPlot::setHorMarkersPen(QPen pen)
+void MarkingPlot::setMarkersPen(EAxis axis, ELineState state, QPen pen)
 {
-	horRangeLine1->setPen(pen);
-	horRangeLine2->setPen(pen);
+	if(axis == EA_xAxis)
+	{
+		horRangeLine1->setPen(state, pen);
+		horRangeLine2->setPen(state, pen);
+	}
+	else
+	{
+		vertRangeLine1->setPen(state, pen);
+		vertRangeLine2->setPen(state, pen);
+	}
 }
 
-void MarkingPlot::setHorMidMarkerPen(QPen pen)
+void MarkingPlot::setMidMarkerPen(EAxis axis, ELineState state, QPen pen)
 {
-	horLine->setPen(pen);
+	if (axis == EA_xAxis)
+	{
+		horLine->setPen(state, pen);
+	}
+	else
+	{
+		vertLine->setPen(state, pen);
+	}
 }
 
-void MarkingPlot::setHorTextFont(QFont font)
+void MarkingPlot::setTextFont(EAxis axis, QFont font)
 {
-	horLineText->setFont(font);
+	if(axis == EA_xAxis)
+	{
+		horLineText->setFont(font);
+	}
+	else
+	{
+		vertLineText->setFont(font);
+	}
 }
 
-void MarkingPlot::setHorTextColor(QColor color)
+void MarkingPlot::setTextColor(EAxis axis, QColor color)
 {
-	horLineText->setColor(color);
-}
-
-void MarkingPlot::setVertMarkersPen(QPen pen)
-{
-	vertRangeLine1->setPen(pen);
-	vertRangeLine2->setPen(pen);
-}
-
-void MarkingPlot::setVertMidMarkerPen(QPen pen)
-{
-	vertLine->setPen(pen);
-}
-
-void MarkingPlot::setVertTextFont(QFont font)
-{
-	vertLineText->setFont(font);
-}
-
-void MarkingPlot::setVertTextColor(QColor color)
-{
-	vertLineText->setColor(color);
+	if (axis == EA_xAxis)
+	{
+		horLineText->setColor(color);
+	}
+	else
+	{
+		vertLineText->setColor(color);
+	}
 }
 
 void MarkingPlot::setPressLimitTime(qint64 msec)
@@ -171,7 +197,7 @@ void MarkingPlot::horizontalClickEvent(QMouseEvent* event)
 	{
 		setHorLineCoords(horRangeLine2, x);
 
-		// setup default mid line position
+		// setup idle mid line position
 		{
 			const auto currentRange = yAxis->range();
 			const double y = currentRange.upper - ((currentRange.upper - currentRange.lower) / 2.0);
@@ -185,7 +211,7 @@ void MarkingPlot::horizontalClickEvent(QMouseEvent* event)
 		horLineText->setVisible(true);
 		horLine->setVisible(true);
 
-		replot();
+		layer("markers")->replot();
 
 		double firstPoint = horRangeLine1->point1->key();
 		double secondPoint = horRangeLine2->point1->key();
@@ -205,7 +231,7 @@ void MarkingPlot::horizontalClickEvent(QMouseEvent* event)
 		horRangeLine2->setVisible(false);
 		horLine->setVisible(false);
 		horLineText->setVisible(false);
-		replot();
+		layer("markers")->replot();
 	}
 
 	incrementCount(horClickCount);
@@ -236,7 +262,7 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 	{
 		setVertLineCoords(vertRangeLine2, y);
 
-		// setup default mid line position
+		// setup idle mid line position
 		{
 			const auto currentRange = xAxis->range();
 			const double x = currentRange.lower + ((currentRange.upper - currentRange.lower) / 5.0);
@@ -250,7 +276,7 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 		vertLine->setVisible(true);
 		vertLineText->setVisible(true);
 
-		replot();
+		layer("markers")->replot();
 
 		double firstPoint = vertRangeLine1->point1->value();
 		double secondPoint = vertRangeLine2->point1->value();
@@ -270,7 +296,7 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 		vertRangeLine2->setVisible(false);
 		vertLine->setVisible(false);
 		vertLineText->setVisible(false);
-		replot();
+		layer("markers")->replot();
 	}
 
 	incrementCount(vertClickCount);
@@ -278,14 +304,9 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 
 void MarkingPlot::initializeRangeLine(MovableInfinityLine** line, EAxis moveAxis)
 {
-	QPen pen = QPen(Qt::PenStyle::SolidLine);
-	pen.setWidth(2);
-	pen.setColor(Qt::black);
-
 	(*line) = new MovableInfinityLine(this);
-	(*line)->setPen(pen);
 	(*line)->setVisible(false);
-	(*line)->setLayer("axes");
+	(*line)->setLayer("markers");
 	(*line)->setMoveAxis(moveAxis);
 
 	if(moveAxis == EA_xAxis)
@@ -300,14 +321,9 @@ void MarkingPlot::initializeRangeLine(MovableInfinityLine** line, EAxis moveAxis
 
 void MarkingPlot::initializeLine(MovableItemLine** line, MovableInfinityLine* fMarker, MovableInfinityLine* sMarker, EAxis moveAxis, QCPItemText* text)
 {
-	QPen pen = QPen(Qt::PenStyle::DashLine);
-	pen.setWidth(1);
-	pen.setColor(Qt::black);
-
 	(*line) = new MovableItemLine(this, fMarker, sMarker, text);
-	(*line)->setPen(pen);
 	(*line)->setVisible(false);
-	(*line)->setLayer("axes");
+	(*line)->setLayer("markers");
 	(*line)->setMoveAxis(moveAxis);
 }
 
@@ -319,7 +335,7 @@ void MarkingPlot::initializeHorMarkerText(QCPItemText** text)
 	(*text)->setFont(QFont(font().family(), 12));
 	(*text)->setColor(Qt::black);
 	(*text)->setVisible(false);
-	(*text)->setLayer("axes");
+	(*text)->setLayer("markers");
 }
 
 void MarkingPlot::initializeVertMarkerText(QCPItemText** text)
@@ -330,7 +346,7 @@ void MarkingPlot::initializeVertMarkerText(QCPItemText** text)
 	(*text)->setFont(QFont(font().family(), 12));
 	(*text)->setColor(Qt::black);
 	(*text)->setVisible(false);
-	(*text)->setLayer("axes");
+	(*text)->setLayer("markers");
 }
 
 void MarkingPlot::incrementCount(short& count)
@@ -348,7 +364,7 @@ void MarkingPlot::setHorLineCoords(QCPItemStraightLine* line, double x)
 	line->point2->setCoords(x, 1);
 	line->setVisible(true);
 
-	replot();
+	layer("markers")->replot();
 }
 
 void MarkingPlot::setVertLineCoords(QCPItemStraightLine* line, double y)
@@ -357,7 +373,7 @@ void MarkingPlot::setVertLineCoords(QCPItemStraightLine* line, double y)
 	line->point2->setCoords(1, y);
 	line->setVisible(true);
 
-	replot();
+	layer("markers")->replot();
 }
 
 void MarkingPlot::updateHorizontalMarkers()
@@ -399,5 +415,4 @@ void MarkingPlot::updateVerticalMarkers()
 	const double midY = secondPoint - ((secondPoint - firstPoint) / 2.0);
 	vertLineText->position->setCoords(vertLine->start->coords().x(), midY);
 	vertLineText->setText(setupVerticalText(firstPoint, secondPoint));
-
 }

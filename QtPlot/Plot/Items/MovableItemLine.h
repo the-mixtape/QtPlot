@@ -18,6 +18,8 @@ public:
 	inline void setMoveAxis(EAxis inAxis) { axis = inAxis; }
 	void updatePosition();
 
+	void setPen(ELineState state, QPen pen);
+
 protected:
 	void mousePressEvent(QMouseEvent* event, const QVariant& details) override;
 	virtual void setIsDrag(bool drag);
@@ -25,6 +27,8 @@ protected:
 private:
 	void xMoveAxis(QMouseEvent* event);
 	void yMoveAxis(QMouseEvent* event);
+	void checkHovered(QMouseEvent* event);
+	void setState(ELineState state);
 
 	void xUpdate();
 	void yUpdate();
@@ -38,6 +42,8 @@ private:
 	MovableInfinityLine* secondMarker;
 	QCPItemText* attachedText;
 	QCP::Interactions currentInteractions;
+	ELineState state = idle;
+	QMap<ELineState, QPen> pens;
 	EAxis axis;
 	bool bIsDrag = false;
 

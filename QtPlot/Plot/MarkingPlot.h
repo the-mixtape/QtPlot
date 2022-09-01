@@ -22,17 +22,14 @@ public:
 	}
 
 	inline void setVerticalSelectButton(Qt::MouseButton button)
-	{
-		vertMouseButton = button;
-	}
+	{ vertMouseButton = button; }
 
 	inline void setAttachRule(EAxis axis, bool bNeedAttach)
-	{
-		markerAttachRules[axis] = bNeedAttach;
-	}
+	{ markerAttachRules[axis] = bNeedAttach; }
 
 	void setMarkerAxisAttach(EAxis axis, bool isNeedAttach);
 	void setMarkerAxisActive(EAxis axis, bool isActive);
+	void setMarkerMovableAxisActive(EAxis axis, bool isActive) const;
 
 	void setPressLimitTime(qint64 msec);
 
@@ -40,15 +37,10 @@ public:
 
 	//=======================================
 	//set Style Functions
-	void setHorMarkersPen(QPen pen);
-	void setHorMidMarkerPen(QPen pen);
-	void setHorTextFont(QFont font);
-	void setHorTextColor(QColor color);
-
-	void setVertMarkersPen(QPen pen);
-	void setVertMidMarkerPen(QPen pen);
-	void setVertTextFont(QFont font);
-	void setVertTextColor(QColor color);
+	void setMarkersPen(EAxis axis, ELineState state, QPen pen);
+	void setMidMarkerPen(EAxis axis, ELineState state, QPen pen);
+	void setTextFont(EAxis axis, QFont font);
+	void setTextColor(EAxis axis, QColor color);
 	//=======================================
 
 	void setSetupHorLineTextFunc(QString(*func) (double start, double end) = nullptr);

@@ -8,6 +8,17 @@ MovableItemLine::MovableItemLine(QCustomPlot* parentPlot, MovableInfinityLine* f
 	firstMarker(fMarker), secondMarker(sMarker),
 	attachedText(text)
 {
+	//initialize default pens
+	{
+		QPen pen;
+		pen.setWidth(2);
+		QCPItemLine::setPen(pen);
+
+		pens[idle] = pen;
+		pens[hovered] = pen;
+		pens[dragging] = pen;
+	}
+
 	fMarker->setMidLine(this);
 	sMarker->setMidLine(this);
 
@@ -33,6 +44,12 @@ void MovableItemLine::updatePosition()
 	}
 }
 
+void MovableItemLine::setPen(ELineState inState, QPen pen)
+{
+	pens[inState] = pen;
+	if (inState == idle) QCPItemLine::setPen(pen);
+}
+
 void MovableItemLine::mousePressEvent(QMouseEvent* event, const QVariant& details)
 {
 	QCPItemLine::mousePressEvent(event, details);
@@ -48,6 +65,7 @@ void MovableItemLine::setIsDrag(bool drag)
 
 	if(bIsDrag)
 	{
+		setState(dragging);
 		currentInteractions = mParentPlot->interactions();
 
 		int temp = currentInteractions;
@@ -55,6 +73,7 @@ void MovableItemLine::setIsDrag(bool drag)
 	}
 	else
 	{
+		setState(idle);
 		mParentPlot->setInteractions(currentInteractions);
 	}
 }
@@ -95,6 +114,79 @@ void MovableItemLine::yMoveAxis(QMouseEvent* event)
 	QPointF textCoords = attachedText->position->coords();
 	textCoords.setY(newPos);
 	attachedText->position->setCoords(textCoords);
+}
+
+void MovableItemLine::checkHovered(QMouseEvent* event)
+{
+	const int mouseX = event->pos().x();
+	const int mouseY = event->pos().y();
+	const int width = pen().width();
+
+	bool hoveredX;
+	bool hoveredY;
+
+	if (axis == EA_xAxis)
+	{
+		const int lineX = mParentPlot->xAxis->coordToPixel(start->coords().x());
+		const int lineStartY = mParentPlot->yAxis->coordToPixel(start->coords().y());
+		const int lineEndY = mParentPlot->yAxis->coordToPixel(end->coords().y());
+
+		hoveredX = mouseX >= lineX - width && mouseX <= lineX + width;
+		hoveredY = mouseY >= lineEndY && mouseY <= lineStartY;
+	}
+	else
+	{
+		const int lineY = mParentPlot->yAxis->coordToPixel(start->coords().y());
+		const int lineStartX = mParentPlot->xAxis->coordToPixel(start->coords().x());
+		const int lineEndX = mParentPlot->xAxis->coordToPixel(end->coords().x());
+
+		hoveredX = mouseX >= lineStartX && mouseX <= lineEndX;
+		hoveredY = mouseY >= lineY - width && mouseY <= lineY + width;
+	}
+
+	if (hoveredX && hoveredY)
+	{
+		setState(hovered);
+	}
+	else
+	{
+		setState(idle);
+	}
+}
+
+void MovableItemLine::setState(ELineState inState)
+{
+	if (state == inState) return;
+
+	QPen newPen = pen();
+	bool needReplot = false;
+	if (inState == hovered && state == idle)
+	{
+		state = hovered;
+		newPen = pens[hovered];
+		needReplot = true;
+	}
+
+	if (inState == dragging)
+	{
+		state = dragging;
+		newPen = pens[dragging];
+		needReplot = true;
+	}
+
+	if (inState == idle && !bIsDrag)
+	{
+		state = idle;
+		newPen = pens[idle];
+		needReplot = true;
+	}
+
+	if (needReplot) 
+	{
+		QCPItemLine::setPen(newPen);
+		mParentPlot->layer("markers")->replot();
+		// mParentPlot->replot();
+	}
 }
 
 void MovableItemLine::xUpdate()
@@ -160,6 +252,8 @@ void MovableItemLine::mouseRelease(QMouseEvent* event)
 
 void MovableItemLine::mouseMove(QMouseEvent* event)
 {
+	checkHovered(event);
+
 	if (bIsDrag == false) return;
 
 	if (axis == EA_xAxis)
@@ -171,5 +265,5 @@ void MovableItemLine::mouseMove(QMouseEvent* event)
 		yMoveAxis(event);
 	}
 
-	mParentPlot->replot();
+	mParentPlot->layer("markers")->replot();
 }
