@@ -17,7 +17,7 @@ void MainWindow::initializePlot()
 {
     ui.plot->setMouseTracking(true);
     ui.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-
+    ui.plot->setOpenGl(true);
 	
     ui.plot->yAxis->setLabel("y");
     ui.plot->yAxis->setTickLabelColor(Qt::white);

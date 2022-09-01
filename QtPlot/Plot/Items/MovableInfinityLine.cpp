@@ -30,6 +30,20 @@ void MovableInfinityLine::setPen(ELineState inState, QPen pen)
 	if (inState == idle) QCPItemStraightLine::setPen(pen);
 }
 
+void MovableInfinityLine::setMoveAxis(EAxis inAxis)
+{
+	axis = inAxis;
+
+	if(axis == EA_xAxis)
+	{
+		connect(mParentPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(axisXChanged(QCPRange)));
+	}
+	else
+	{
+		connect(mParentPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(axisYChanged(QCPRange)));
+	}
+}
+
 void MovableInfinityLine::mousePressEvent(QMouseEvent* event, const QVariant& details)
 {
 	QCPItemStraightLine::mousePressEvent(event, details);
@@ -62,7 +76,18 @@ void MovableInfinityLine::setIsDrag(bool drag)
 
 void MovableInfinityLine::xMoveAxis(QMouseEvent* event)
 {
-	const double newPos = mParentPlot->xAxis->pixelToCoord(event->pos().x());
+	double newPos = mParentPlot->xAxis->pixelToCoord(event->pos().x());
+	auto clampRange = mParentPlot->xAxis->range();
+
+	if(newPos < clampRange.lower)
+	{
+		newPos = clampRange.lower;
+	}
+
+	if(newPos > clampRange.upper)
+	{
+		newPos = clampRange.upper;
+	}
 
 	QPointF startCoords = point1->coords();
 	startCoords.setX(newPos);
@@ -75,7 +100,18 @@ void MovableInfinityLine::xMoveAxis(QMouseEvent* event)
 
 void MovableInfinityLine::yMoveAxis(QMouseEvent* event)
 {
-	const double newPos = mParentPlot->yAxis->pixelToCoord(event->pos().y());
+	double newPos = mParentPlot->yAxis->pixelToCoord(event->pos().y());
+	auto clampRange = mParentPlot->yAxis->range();
+
+	if (newPos < clampRange.lower)
+	{
+		newPos = clampRange.lower;
+	}
+
+	if (newPos > clampRange.upper)
+	{
+		newPos = clampRange.upper;
+	}
 
 	QPointF startCoords = point1->coords();
 	startCoords.setY(newPos);
@@ -172,4 +208,14 @@ void MovableInfinityLine::mouseMove(QMouseEvent* event)
 	emit updatePosition();
 
 	mParentPlot->layer("markers")->replot();
+}
+
+void MovableInfinityLine::axisXChanged(const QCPRange& range)
+{
+	qDebug() << "x changed";
+}
+
+void MovableInfinityLine::axisYChanged(const QCPRange& range)
+{
+	qDebug() << "y changed";
 }

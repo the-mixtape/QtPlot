@@ -17,7 +17,7 @@ public:
 	~MovableInfinityLine() override;
 
 	void setPen(ELineState inState, QPen pen);
-	inline void setMoveAxis(EAxis inAxis) { axis = inAxis; }
+	void setMoveAxis(EAxis inAxis);
 	inline void setMidLine(MovableItemLine* line) { midLine = line; }
 	inline void setMovable(bool active)
 	{
@@ -43,6 +43,8 @@ signals:
 private slots:
 	void mouseRelease(QMouseEvent* event);
 	void mouseMove(QMouseEvent* event);
+	void axisXChanged(const QCPRange& range);
+	void axisYChanged(const QCPRange& range);
 
 private:
 	MovableItemLine* midLine;
