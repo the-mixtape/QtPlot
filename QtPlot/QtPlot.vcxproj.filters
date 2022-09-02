@@ -50,6 +50,9 @@
     <ClInclude Include="Library\EnumLibrary.h">
       <Filter>Header Files\Library</Filter>
     </ClInclude>
+    <ClInclude Include="Library\QtPlotMathLibrary.h">
+      <Filter>Header Files\Library</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.cpp">

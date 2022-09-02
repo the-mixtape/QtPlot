@@ -351,19 +351,19 @@ void MarkingPlot::incrementCount(short& count)
 	}
 }
 
-void MarkingPlot::setHorLineCoords(QCPItemStraightLine* line, double x)
+void MarkingPlot::setHorLineCoords(MovableInfinityLine* line, double x)
 {
-	line->point1->setCoords(x, 0);
-	line->point2->setCoords(x, 1);
+	line->setPoint1Coord(x, 0);
+	line->setPoint2Coord(x, 1);
 	line->setVisible(true);
 
 	layer("markers")->replot();
 }
 
-void MarkingPlot::setVertLineCoords(QCPItemStraightLine* line, double y)
+void MarkingPlot::setVertLineCoords(MovableInfinityLine* line, double y)
 {
-	line->point1->setCoords(0, y);
-	line->point2->setCoords(1, y);
+	line->setPoint1Coord(0, y);
+	line->setPoint2Coord(1, y);
 	line->setVisible(true);
 
 	layer("markers")->replot();

@@ -1,5 +1,6 @@
 #include "MovableInfinityLine.h"
 #include "MovableItemLine.h"
+#include "Library/QtPlotMathLibrary.h"
 
 
 MovableInfinityLine::MovableInfinityLine(QCustomPlot* parentPlot)
@@ -22,6 +23,18 @@ MovableInfinityLine::MovableInfinityLine(QCustomPlot* parentPlot)
 
 MovableInfinityLine::~MovableInfinityLine()
 {
+}
+
+void MovableInfinityLine::setPoint1Coord(double x, double y)
+{
+	point1->setCoords(x, y);
+	realCoords = QPointF(x, y);
+}
+
+void MovableInfinityLine::setPoint2Coord(double x, double y)
+{
+	point2->setCoords(x, y);
+	realCoords = QPointF(x, y);
 }
 
 void MovableInfinityLine::setPen(ELineState inState, QPen pen)
@@ -96,6 +109,8 @@ void MovableInfinityLine::xMoveAxis(QMouseEvent* event)
 	QPointF endCoords = point2->coords();
 	endCoords.setX(newPos);
 	point2->setCoords(endCoords);
+
+	realCoords.setX(newPos);
 }
 
 void MovableInfinityLine::yMoveAxis(QMouseEvent* event)
@@ -120,6 +135,8 @@ void MovableInfinityLine::yMoveAxis(QMouseEvent* event)
 	QPointF endCoords = point2->coords();
 	endCoords.setY(newPos);
 	point2->setCoords(endCoords);
+
+	realCoords.setY(newPos);
 }
 
 void MovableInfinityLine::checkHovered(QMouseEvent* event)
@@ -191,9 +208,11 @@ void MovableInfinityLine::mouseRelease(QMouseEvent* event)
 
 void MovableInfinityLine::mouseMove(QMouseEvent* event)
 {
+	if (bIsMovable == false) return;
+
 	checkHovered(event);
 
-	if (!bIsMovable || bIsDrag == false) return;
+	if (bIsDrag == false) return;
 
 	if (axis == EA_xAxis)
 	{
@@ -212,10 +231,123 @@ void MovableInfinityLine::mouseMove(QMouseEvent* event)
 
 void MovableInfinityLine::axisXChanged(const QCPRange& range)
 {
-	qDebug() << "x changed";
+	if (bIsMovable == false) return;
+
+	const double linePos = point1->coords().x();
+	double newLinePos = linePos;
+
+	const double offset = abs(range.upper - range.lower) * 0.003;
+
+	bool clampMin = false;
+	if (newLinePos < range.lower)
+	{
+		newLinePos = range.lower + offset;
+		clampMin = true;
+	}
+	else if(equals(newLinePos, realCoords.x()) == false)
+	{
+		if(realCoords.x() < range.lower)
+		{
+			clampMin = true;
+			newLinePos = range.lower + offset;
+		}
+		else
+		{
+			newLinePos = realCoords.x();
+		}
+	}
+
+	if (clampMin == false)
+	{
+		if (newLinePos > range.upper)
+		{
+			newLinePos = range.upper - offset;
+		}
+		else if (equals(newLinePos, realCoords.x()) == false)
+		{
+			if (realCoords.x() < range.upper)
+			{
+				newLinePos = range.upper + offset;
+			}
+			else
+			{
+				newLinePos = realCoords.x();
+			}
+		}
+	}
+
+	if (equals(newLinePos, linePos) == false)
+	{
+		QPointF coords = point1->coords();
+		coords.setX(newLinePos);
+		point1->setCoords(coords);
+
+		coords = point2->coords();
+		coords.setX(newLinePos);
+		point2->setCoords(coords);
+		
+		mParentPlot->layer("markers")->replot();
+	}
 }
 
 void MovableInfinityLine::axisYChanged(const QCPRange& range)
 {
-	qDebug() << "y changed";
+	if (bIsMovable == false) return;
+
+	const double linePos = point1->coords().y();
+	double newLinePos = linePos;
+
+	const double offset = abs(range.upper - range.lower) * 0.003;
+
+	bool clampMin = false;
+	if (newLinePos < range.lower)
+	{
+		newLinePos = range.lower + offset;
+		clampMin = true;
+	}
+	else if (equals(newLinePos, realCoords.y()) == false)
+	{
+		if (realCoords.y() < range.lower)
+		{
+			clampMin = true;
+			newLinePos = range.lower + offset;
+		}
+		else
+		{
+			newLinePos = realCoords.y();
+		}
+	}
+
+	if (clampMin == false)
+	{
+		if (newLinePos > range.upper)
+		{
+			newLinePos = range.upper - offset;
+		}
+		else if (equals(newLinePos, realCoords.y()) == false)
+		{
+			if (realCoords.y() < range.upper)
+			{
+				newLinePos = range.upper + offset;
+			}
+			else
+			{
+				newLinePos = realCoords.y();
+			}
+		}
+	}
+
+	if (equals(newLinePos, linePos) == false)
+	{
+		QPointF coords = point1->coords();
+		coords.setY(newLinePos);
+		point1->setCoords(coords);
+
+		coords = point2->coords();
+		coords.setY(newLinePos);
+		point2->setCoords(coords);
+
+		qDebug() << range;
+		mParentPlot->layer("markers")->replot();
+	}
 }

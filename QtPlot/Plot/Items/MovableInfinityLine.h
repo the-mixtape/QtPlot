@@ -16,6 +16,9 @@ public:
 	explicit MovableInfinityLine(QCustomPlot* parentPlot);
 	~MovableInfinityLine() override;
 
+	void setPoint1Coord(double x, double y);
+	void setPoint2Coord(double x, double y);
+
 	void setPen(ELineState inState, QPen pen);
 	void setMoveAxis(EAxis inAxis);
 	inline void setMidLine(MovableItemLine* line) { midLine = line; }
@@ -49,6 +52,7 @@ private slots:
 private:
 	MovableItemLine* midLine;
 	QCP::Interactions currentInteractions;
+	QPointF realCoords;
 
 	ELineState state = idle;
 	QMap<ELineState, QPen> pens;

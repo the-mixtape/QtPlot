@@ -59,8 +59,8 @@ private:
 
 	void incrementCount(short& count);
 
-	void setHorLineCoords(QCPItemStraightLine* line, double x);
-	void setVertLineCoords(QCPItemStraightLine* line, double y);
+	void setHorLineCoords(MovableInfinityLine* line, double x);
+	void setVertLineCoords(MovableInfinityLine* line, double y);
 
 	QString setupHorizontalText(double start, double end);
 	QString setupVerticalText(double start, double end);
