@@ -97,7 +97,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ColorMap.h" />
+    <ClInclude Include="Interval.h" />
     <ClInclude Include="Library\EnumLibrary.h" />
+    <ClInclude Include="Waterfall\Waterfall.h" />
+    <QtMoc Include="Waterfall\WaterfallContent.h" />
+    <QtMoc Include="Waterfall\WaterfallLayer.h" />
+    <QtMoc Include="Waterfall\WaterfallThread.h" />
     <QtMoc Include="Plot\Items\MovableInfinityLine.h" />
     <ClInclude Include="Library\QtPlotMathLibrary.h" />
     <ClInclude Include="QtPlotGlobal.h" />
@@ -108,7 +114,13 @@
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ColorMap.cpp" />
+    <ClCompile Include="Interval.cpp" />
     <ClCompile Include="Plot\Items\MovableInfinityLine.cpp" />
+    <ClCompile Include="Waterfall\Waterfall.cpp" />
+    <ClCompile Include="Waterfall\WaterfallContent.cpp" />
+    <ClCompile Include="Waterfall\WaterfallLayer.cpp" />
+    <ClCompile Include="Waterfall\WaterfallThread.cpp" />
     <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\Items\MovableItemLine.cpp" />
     <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\MarkingPlot.cpp" />
     <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\QtPlot.cpp" />

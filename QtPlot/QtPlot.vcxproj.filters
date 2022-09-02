@@ -42,6 +42,12 @@
     <Filter Include="Source Files\Plot\Items">
       <UniqueIdentifier>{bc2d843d-2278-41f2-9aa2-b4dd205f7242}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Waterfall">
+      <UniqueIdentifier>{9e720565-3334-4774-9f65-9e185d55a892}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Waterfall">
+      <UniqueIdentifier>{8493c6eb-4b55-44fb-88f0-f1197a2919e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="QtPlotGlobal.h">
@@ -52,6 +58,15 @@
     </ClInclude>
     <ClInclude Include="Library\QtPlotMathLibrary.h">
       <Filter>Header Files\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Waterfall\Waterfall.h">
+      <Filter>Header Files\Waterfall</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Interval.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +88,24 @@
     <ClCompile Include="Plot\Items\MovableInfinityLine.cpp">
       <Filter>Source Files\Plot\Items</Filter>
     </ClCompile>
+    <ClCompile Include="Waterfall\WaterfallThread.cpp">
+      <Filter>Source Files\Waterfall</Filter>
+    </ClCompile>
+    <ClCompile Include="Waterfall\Waterfall.cpp">
+      <Filter>Source Files\Waterfall</Filter>
+    </ClCompile>
+    <ClCompile Include="Waterfall\WaterfallContent.cpp">
+      <Filter>Source Files\Waterfall</Filter>
+    </ClCompile>
+    <ClCompile Include="Waterfall\WaterfallLayer.cpp">
+      <Filter>Source Files\Waterfall</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Interval.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.h">
@@ -92,6 +125,15 @@
     </QtMoc>
     <QtMoc Include="Plot\Items\MovableInfinityLine.h">
       <Filter>Header Files\Plot\Items</Filter>
+    </QtMoc>
+    <QtMoc Include="Waterfall\WaterfallThread.h">
+      <Filter>Header Files\Waterfall</Filter>
+    </QtMoc>
+    <QtMoc Include="Waterfall\WaterfallContent.h">
+      <Filter>Header Files\Waterfall</Filter>
+    </QtMoc>
+    <QtMoc Include="Waterfall\WaterfallLayer.h">
+      <Filter>Header Files\Waterfall</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>
