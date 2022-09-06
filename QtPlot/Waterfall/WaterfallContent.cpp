@@ -65,7 +65,7 @@ void WaterfallContent::setResolution(int width, int height)
 	update();
 }
 
-void WaterfallContent::setFillColor(QColor fillColor)
+void WaterfallContent::setFillColor(const QColor& fillColor)
 {
 	readWriteLock->lockForWrite();
 	

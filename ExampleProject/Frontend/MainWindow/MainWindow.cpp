@@ -113,7 +113,7 @@ void MainWindow::initializePlot()
 
 void MainWindow::initializeWaterfall()
 {
-    ui.waterfallPlot ->setMouseTracking(true);
+    ui.waterfallPlot->setMouseTracking(true);
     ui.waterfallPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
     ui.waterfallPlot->setBackground(Qt::black);

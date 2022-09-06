@@ -13,19 +13,19 @@ public:
 	explicit WaterfallPlot(QWidget* parent);
 	~WaterfallPlot() override;
 
-	void setFPSLimit(quint32 fps = 0);
+	void appendData(double* data, int size) const;
+	void clear() const;
 
-	void setColorMap(WfColorMap* colorMap);
+	void setFPSLimit(quint32 fps = 0) const;
+	void setColorMap(WfColorMap* colorMap) const;
 	void setAppendSide(EAppendSide side);;
-	void setAppendHeight(int h);
-	void setResolution(int width, int height);
+	void setAppendHeight(int h) const;
+	void setResolution(int width, int height) const;
 	void setPosition(int minx, int miny, int maxx, int maxy);
-	void setPositionX(int minx, int maxx);
-	void setPositionY(int miny, int maxy);
-	void setInterval(int minval, int maxval);
-	void setFillColor(QColor fillColor);
-
-	void clear();
+	void setPositionX(int minx, int maxx) const;
+	void setPositionY(int miny, int maxy) const;
+	void setInterval(int minval, int maxval) const;
+	void setFillColor(const QColor& fillColor) const;
 
 private:
 	WaterfallThread* loadThread;

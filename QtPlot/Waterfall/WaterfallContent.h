@@ -29,7 +29,7 @@ public slots:
 
 public:
 	void setResolution(int width, int height);
-	void setFillColor(QColor fillColor);
+	void setFillColor(const QColor& fillColor);
 	void setInterval(int minval, int maxval);
 	void setPositionX(int minx, int maxx);
 	void setPositionY(int miny, int maxy);
