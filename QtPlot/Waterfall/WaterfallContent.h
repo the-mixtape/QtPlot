@@ -46,6 +46,7 @@ public:
 	  \param fil Fill color for the layer (QColor).
 	 */
 	bool addLayer(qint32 width, qint32 height, qreal minx, qreal miny, qreal maxx, qreal maxy, qreal minval, qreal maxval, QImage::Format fm, QColor fil);
+
 	/*!
   \brief Append data from top
 
@@ -54,8 +55,41 @@ public:
   \param data Array of double values. Size: w*h.
   \param w Width of the data block.
   \param h Height of the data block.
- */
+	*/
 	void appendT(double* data, int w, int h);
+
+	/*!
+  \brief Append data from bottom
+
+  Data 'data' is a linear array (of doubles) of size w*h.
+
+  \param data Array of double values. Size: w*h.
+  \param w Width of the data block.
+  \param h Height of the data block.
+	*/
+	void appendB(double* data, int w, int h);
+
+	/*!
+  \brief Append data from left
+
+  Data 'data' is a linear array (of doubles) of size w*h.
+
+  \param data Array of double values. Size: w*h.
+  \param w Width of the data block.
+  \param h Height of the data block.
+	*/
+	void appendL(double* data, int w, int h);
+
+	/*!
+  \brief Append data from right
+
+  Data 'data' is a linear array (of doubles) of size w*h.
+
+  \param data Array of double values. Size: w*h.
+  \param w Width of the data block.
+  \param h Height of the data block.
+	*/
+	void appendR(double* data, int w, int h);
 
 private:
 	WaterfallLayer* waterfallLayer;

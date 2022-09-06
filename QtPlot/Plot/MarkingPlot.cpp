@@ -10,8 +10,8 @@ MarkingPlot::MarkingPlot(QWidget* parent) : ZoomClampedPlot(parent)
 	markerActiveRules.insert(EA_xAxis, false);
 	markerActiveRules.insert(EA_yAxis, false);
 
-	addLayer("markers");
-	QCPLayer* markerLayer = layer("markers");
+	addLayer(MARKERS_LAYER_NAME);
+	QCPLayer* markerLayer = layer(MARKERS_LAYER_NAME);
 	markerLayer->setMode(QCPLayer::lmBuffered);
 
 	initializeRangeLine(&horRangeLine1, EA_xAxis);
@@ -67,7 +67,6 @@ void MarkingPlot::clearMarkers(EAxis axis)
 		horRangeLine2->setVisible(false);
 		horLine->setVisible(false);
 		horLineText->setVisible(false);
-		layer("markers")->replot();
 	}
 	else
 	{
@@ -76,8 +75,9 @@ void MarkingPlot::clearMarkers(EAxis axis)
 		vertRangeLine2->setVisible(false);
 		vertLine->setVisible(false);
 		vertLineText->setVisible(false);
-		layer("markers")->replot();
 	}
+
+	layer(MARKERS_LAYER_NAME)->replot();
 }
 
 void MarkingPlot::setMarkersPen(EAxis axis, ELineState state, QPen pen)
@@ -204,7 +204,7 @@ void MarkingPlot::horizontalClickEvent(QMouseEvent* event)
 		horLineText->setVisible(true);
 		horLine->setVisible(true);
 
-		layer("markers")->replot();
+		layer(MARKERS_LAYER_NAME)->replot();
 
 		double firstPoint = horRangeLine1->point1->key();
 		double secondPoint = horRangeLine2->point1->key();
@@ -224,7 +224,7 @@ void MarkingPlot::horizontalClickEvent(QMouseEvent* event)
 		horRangeLine2->setVisible(false);
 		horLine->setVisible(false);
 		horLineText->setVisible(false);
-		layer("markers")->replot();
+		layer(MARKERS_LAYER_NAME)->replot();
 	}
 
 	incrementCount(horClickCount);
@@ -269,7 +269,7 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 		vertLine->setVisible(true);
 		vertLineText->setVisible(true);
 
-		layer("markers")->replot();
+		layer(MARKERS_LAYER_NAME)->replot();
 
 		double firstPoint = vertRangeLine1->point1->value();
 		double secondPoint = vertRangeLine2->point1->value();
@@ -289,7 +289,7 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 		vertRangeLine2->setVisible(false);
 		vertLine->setVisible(false);
 		vertLineText->setVisible(false);
-		layer("markers")->replot();
+		layer(MARKERS_LAYER_NAME)->replot();
 	}
 
 	incrementCount(vertClickCount);
@@ -299,7 +299,7 @@ void MarkingPlot::initializeRangeLine(MovableInfinityLine** line, EAxis moveAxis
 {
 	(*line) = new MovableInfinityLine(this);
 	(*line)->setVisible(false);
-	(*line)->setLayer("markers");
+	(*line)->setLayer(MARKERS_LAYER_NAME);
 	(*line)->setMoveAxis(moveAxis);
 
 	if(moveAxis == EA_xAxis)
@@ -316,7 +316,7 @@ void MarkingPlot::initializeLine(MovableItemLine** line, MovableInfinityLine* fM
 {
 	(*line) = new MovableItemLine(this, fMarker, sMarker, text);
 	(*line)->setVisible(false);
-	(*line)->setLayer("markers");
+	(*line)->setLayer(MARKERS_LAYER_NAME);
 	(*line)->setMoveAxis(moveAxis);
 }
 
@@ -328,7 +328,7 @@ void MarkingPlot::initializeHorMarkerText(QCPItemText** text)
 	(*text)->setFont(QFont(font().family(), 12));
 	(*text)->setColor(Qt::black);
 	(*text)->setVisible(false);
-	(*text)->setLayer("markers");
+	(*text)->setLayer(MARKERS_LAYER_NAME);
 }
 
 void MarkingPlot::initializeVertMarkerText(QCPItemText** text)
@@ -339,7 +339,7 @@ void MarkingPlot::initializeVertMarkerText(QCPItemText** text)
 	(*text)->setFont(QFont(font().family(), 12));
 	(*text)->setColor(Qt::black);
 	(*text)->setVisible(false);
-	(*text)->setLayer("markers");
+	(*text)->setLayer(MARKERS_LAYER_NAME);
 }
 
 void MarkingPlot::incrementCount(short& count)
@@ -357,7 +357,7 @@ void MarkingPlot::setHorLineCoords(MovableInfinityLine* line, double x)
 	line->setPoint2Coord(x, 1);
 	line->setVisible(true);
 
-	layer("markers")->replot();
+	layer(MARKERS_LAYER_NAME)->replot();
 }
 
 void MarkingPlot::setVertLineCoords(MovableInfinityLine* line, double y)
@@ -366,7 +366,7 @@ void MarkingPlot::setVertLineCoords(MovableInfinityLine* line, double y)
 	line->setPoint2Coord(1, y);
 	line->setVisible(true);
 
-	layer("markers")->replot();
+	layer(MARKERS_LAYER_NAME)->replot();
 }
 
 void MarkingPlot::updateHorizontalMarkers()

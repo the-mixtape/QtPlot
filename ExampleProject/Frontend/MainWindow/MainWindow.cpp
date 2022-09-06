@@ -142,4 +142,41 @@ void MainWindow::initializeWaterfall()
         ui.waterfallPlot->xAxis->setRange(0, 100);
         ui.waterfallPlot->yAxis->setRange(0, 100);
     }
+
+    //setup markers style
+    {
+        QPen pen(Qt::PenStyle::SolidLine);
+        pen.setWidth(2);
+        pen.setColor(Qt::white);
+
+        QPen hoveredPen(Qt::PenStyle::SolidLine);
+        hoveredPen.setWidth(3);
+        hoveredPen.setColor(Qt::yellow);
+
+        QPen midPen(Qt::PenStyle::DashLine);
+        midPen.setWidth(2);
+        midPen.setColor(Qt::white);
+
+        {
+            ui.plot->setMarkersPen(EA_xAxis, idle, pen);
+            ui.plot->setMarkersPen(EA_xAxis, hovered, hoveredPen);
+            ui.plot->setMarkersPen(EA_xAxis, dragging, pen);
+
+            ui.plot->setMidMarkerPen(EA_xAxis, idle, midPen);
+            ui.plot->setMidMarkerPen(EA_xAxis, hovered, hoveredPen);
+            ui.plot->setMidMarkerPen(EA_xAxis, dragging, pen);
+            ui.plot->setTextColor(EA_xAxis, Qt::white);
+        }
+
+        {
+            ui.plot->setMarkersPen(EA_yAxis, idle, pen);
+            ui.plot->setMarkersPen(EA_yAxis, hovered, hoveredPen);
+            ui.plot->setMarkersPen(EA_yAxis, dragging, pen);
+
+            ui.plot->setMidMarkerPen(EA_yAxis, idle, midPen);
+            ui.plot->setMidMarkerPen(EA_yAxis, hovered, hoveredPen);
+            ui.plot->setMidMarkerPen(EA_yAxis, dragging, pen);
+            ui.plot->setTextColor(EA_yAxis, Qt::white);
+        }
+    }
 }

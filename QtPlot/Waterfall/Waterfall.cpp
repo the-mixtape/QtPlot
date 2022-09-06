@@ -8,15 +8,15 @@
 WaterfallPlot::WaterfallPlot(QWidget* parent)
 	:QtPlot(parent)
 {
-	addLayer("waterfall");
+	addLayer(WATERFALL_LAYER_NAME, layer(MARKERS_LAYER_NAME), limBelow);
 
 	content = new WaterfallContent(this);
 	content->addLayer(512, 512, 0, 0, 100, 100, 0, 100, QImage::Format_ARGB32, Qt::black);
 	WfColorMap* colorMap = new LinearColorMap(Qt::yellow, Qt::blue);
 	content->setColorMap(colorMap);
-	content->setLayer("waterfall");
+	content->setLayer(WATERFALL_LAYER_NAME);
 
-	layer("waterfall")->replot();
+	layer(WATERFALL_LAYER_NAME)->replot();
 	
 	loadThread = new WaterfallThread();
 	loadThread->stopAndClear();
