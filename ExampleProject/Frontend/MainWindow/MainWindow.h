@@ -13,6 +13,7 @@ public:
 
 private:
     void initializePlot();
+    void initializeWaterfall();
 
 private:
     Ui::MainWindowClass ui;

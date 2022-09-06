@@ -1,6 +1,7 @@
-#include "ColorMap.h"
+#include "WfColorMap.h"
 
-#include <qcolor.h>
+#include "Interval.h"
+#include <qvector.h>
 
 
 class LinearColorMap::ColorStops
@@ -189,25 +190,25 @@ inline QRgb LinearColorMap::ColorStops::rgb(
 
 
 
-ColorMap::ColorMap(Format format) : _format(format)
+WfColorMap::WfColorMap(Format format) : _format(format)
 {
 }
 
-ColorMap::~ColorMap()
+WfColorMap::~WfColorMap()
 {
 }
 
-void ColorMap::setFormat(Format format)
+void WfColorMap::setFormat(Format format)
 {
     _format = format;
 }
 
-ColorMap::Format ColorMap::format() const
+WfColorMap::Format WfColorMap::format() const
 {
     return _format;
 }
 
-uint ColorMap::colorIndex(int numColors, const QtInterval& interval, double value) const
+uint WfColorMap::colorIndex(int numColors, const QtInterval& interval, double value) const
 {
     const double width = interval.width();
     if (width <= 0.0)
@@ -224,7 +225,7 @@ uint ColorMap::colorIndex(int numColors, const QtInterval& interval, double valu
     return static_cast<unsigned int>(v + 0.5);
 }
 
-QVector<QRgb> ColorMap::colorTable(int numColors) const
+QVector<QRgb> WfColorMap::colorTable(int numColors) const
 {
     QVector<QRgb> table(256);
 
@@ -236,7 +237,7 @@ QVector<QRgb> ColorMap::colorTable(int numColors) const
     return table;
 }
 
-QVector<QRgb> ColorMap::colorTable256() const
+QVector<QRgb> WfColorMap::colorTable256() const
 {
     QVector< QRgb > table(256);
 
@@ -256,8 +257,8 @@ public:
 };
 
 
-LinearColorMap::LinearColorMap(ColorMap::Format format):
-	ColorMap(format)
+LinearColorMap::LinearColorMap(WfColorMap::Format format):
+	WfColorMap(format)
 {
     m_data = new PrivateData;
     m_data->mode = ScaledColors;
@@ -265,8 +266,8 @@ LinearColorMap::LinearColorMap(ColorMap::Format format):
     setColorInterval(Qt::blue, Qt::yellow);
 }
 
-LinearColorMap::LinearColorMap(const QColor& from, const QColor& to, ColorMap::Format format)
-    : ColorMap(format)
+LinearColorMap::LinearColorMap(const QColor& from, const QColor& to, WfColorMap::Format format)
+    : WfColorMap(format)
 {
     m_data = new PrivateData;
     m_data->mode = ScaledColors;

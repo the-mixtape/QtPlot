@@ -4,6 +4,9 @@
 #include <QMutex>
 
 
+class WaterfallContent;
+
+
 class WaterfallThread : public QThread
 {
 	Q_OBJECT
@@ -20,12 +23,16 @@ public:
 	void stopAndClear();
 
 	void addData(double* data, int size);
-	void setWaterfall();
+	void setWaterfallContent(WaterfallContent* content);
 
+signals:
+	void update();
 
 private:
 	QMutex appendMutex;
 	QMutex copyMutex;
+
+	WaterfallContent* content;
 
 	double* data;
 	int size;

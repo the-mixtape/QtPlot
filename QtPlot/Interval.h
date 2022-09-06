@@ -99,9 +99,9 @@ class QTPLOT_EXPORT QtInterval
     BorderFlags m_borderFlags;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( QtInterval::BorderFlags )
-// Q_DECLARE_METATYPE( QtInterval )
-// Q_DECLARE_TYPEINFO( QtInterval, Q_MOVABLE_TYPE );
+Q_DECLARE_OPERATORS_FOR_FLAGS(QtInterval::BorderFlags)
+Q_DECLARE_METATYPE(QtInterval)
+Q_DECLARE_TYPEINFO(QtInterval, Q_MOVABLE_TYPE);
 
 /*!
    \brief Default Constructor

@@ -3,23 +3,25 @@
 #include <QImage>
 #include <QObject>
 
+#include "Interval.h"
 
 
-class WaterfallLayer : public QObject
+class WfColorMap;
+
+
+class QTPLOT_EXPORT WaterfallLayer : public QObject
 {
 	Q_OBJECT
 
 public:
 	WaterfallLayer();
+	~WaterfallLayer();
 
 public:
 	QImage			image;
 	QImage::Format	format;
 	QColor			fillColor;
-	qreal			minX;
-	qreal			minY;
-	qreal			maxX;
-	qreal			maxY;
-	qreal			opacity;
+	QtInterval		range;
+	WfColorMap*		colorMap;
 
 };

@@ -1,12 +1,16 @@
 #pragma once
 
-#include <qrgb.h>
-#include <QVector>
-
-#include "Interval.h"
 #include "QtPlotGlobal.h"
+#include <qcolor.h>
 
-class QTPLOT_EXPORT ColorMap
+
+class QtInterval;
+
+#if QT_VERSION < 0x060000
+template< typename T > class QVector;
+#endif
+
+class QTPLOT_EXPORT WfColorMap
 {
 public:
 	enum Format
@@ -15,8 +19,8 @@ public:
 		Indexed
 	};
 
-	explicit ColorMap(Format = RGB);
-	virtual ~ColorMap();
+	explicit WfColorMap(Format = RGB);
+	virtual ~WfColorMap();
 
 	void setFormat(Format);
 	Format format() const;
@@ -29,13 +33,12 @@ public:
 	virtual QVector<QRgb> colorTable256() const;
 
 private:
-	Q_DISABLE_COPY(ColorMap)
-
+	Q_DISABLE_COPY(WfColorMap)
 	Format _format;
 
 };
 
-class QTPLOT_EXPORT LinearColorMap : public ColorMap
+class QTPLOT_EXPORT LinearColorMap : public WfColorMap
 {
 public:
     enum Mode
@@ -47,10 +50,10 @@ public:
         ScaledColors
     };
 
-    explicit LinearColorMap(ColorMap::Format = ColorMap::RGB);
+    explicit LinearColorMap(WfColorMap::Format = WfColorMap::RGB);
 
     LinearColorMap(const QColor& from, const QColor& to,
-        ColorMap::Format = ColorMap::RGB);
+        WfColorMap::Format = WfColorMap::RGB);
 
     ~LinearColorMap() override;
 

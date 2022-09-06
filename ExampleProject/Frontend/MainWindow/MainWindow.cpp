@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui.setupUi(this);
 
     initializePlot();
+    initializeWaterfall();
 }
 
 MainWindow::~MainWindow()
@@ -107,5 +108,38 @@ void MainWindow::initializePlot()
                 ui.plot->setTextColor(EA_yAxis, Qt::white);
             }
         }
+    }
+}
+
+void MainWindow::initializeWaterfall()
+{
+    ui.waterfallPlot ->setMouseTracking(true);
+    ui.waterfallPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+
+    ui.waterfallPlot->setBackground(Qt::black);
+    QCPTextElement* chartSpectrRuntimeText = new QCPTextElement(ui.waterfallPlot);
+    chartSpectrRuntimeText->setText("Waterfall");
+    chartSpectrRuntimeText->setFont(QFont("sans", 11, QFont::Bold));
+    chartSpectrRuntimeText->setTextColor(Qt::white);
+
+    ui.waterfallPlot->yAxis->setTickLabelColor(Qt::white);
+    ui.waterfallPlot->yAxis->setBasePen(QPen(Qt::white));
+    
+    ui.waterfallPlot->xAxis->setTickLabelColor(Qt::white);
+    ui.waterfallPlot->xAxis->setBasePen(QPen(Qt::white));
+
+    ui.waterfallPlot->plotLayout()->insertRow(0);
+    ui.waterfallPlot->plotLayout()->addElement(0, 0, chartSpectrRuntimeText);
+
+    // Clamp View Zone
+    {
+        ui.waterfallPlot->setAxisClamp(EA_xAxis, true);
+        ui.waterfallPlot->setAxisClamp(EA_yAxis, true);
+
+        ui.waterfallPlot->setAxisClampRange(EA_xAxis, QCPRange(0, 100));
+        ui.waterfallPlot->setAxisClampRange(EA_yAxis, QCPRange(0, 100));
+
+        ui.waterfallPlot->xAxis->setRange(0, 100);
+        ui.waterfallPlot->yAxis->setRange(0, 100);
     }
 }

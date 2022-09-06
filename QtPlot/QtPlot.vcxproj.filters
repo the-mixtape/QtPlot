@@ -62,7 +62,7 @@
     <ClInclude Include="Waterfall\Waterfall.h">
       <Filter>Header Files\Waterfall</Filter>
     </ClInclude>
-    <ClInclude Include="ColorMap.h">
+    <ClInclude Include="WfColorMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Interval.h">
@@ -100,7 +100,7 @@
     <ClCompile Include="Waterfall\WaterfallLayer.cpp">
       <Filter>Source Files\Waterfall</Filter>
     </ClCompile>
-    <ClCompile Include="ColorMap.cpp">
+    <ClCompile Include="WfColorMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Interval.cpp">
