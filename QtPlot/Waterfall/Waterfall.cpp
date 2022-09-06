@@ -29,6 +29,11 @@ WaterfallPlot::~WaterfallPlot()
 	delete loadThread;
 }
 
+void WaterfallPlot::setFPSLimit(quint32 fps /*= 0*/)
+{
+	loadThread->setFPSLimit(fps);
+}
+
 void WaterfallPlot::setColorMap(WfColorMap* colorMap)
 {
 	content->setColorMap(colorMap);

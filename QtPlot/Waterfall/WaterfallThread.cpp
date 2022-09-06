@@ -1,12 +1,15 @@
 #include "WaterfallThread.h"
-
 #include "WaterfallContent.h"
 
 
 WaterfallThread::WaterfallThread(QObject* object)
-	:QThread(object), data(nullptr), size(0)
+	:QThread(object),
+	data(nullptr),
+	size(0),
+	frameDeltaTime(0)
 {
 	appendMutex.lock();
+	frameTimer = new QElapsedTimer;
 }
 
 WaterfallThread::~WaterfallThread()
@@ -14,38 +17,44 @@ WaterfallThread::~WaterfallThread()
 	stopAndClear();
 
 	delete data;
+	delete frameTimer;
 }
 
 void WaterfallThread::run()
 {
 	bIsQuit = false;
-	double* testData = new double[512];
+	qint64 delta;
+	qint64 sleepTime;
 
 	while(!bIsQuit)
 	{
-		// appendMutex.lock();
+		frameTimer->start();
+		appendMutex.lock();
 
-		if (bIsQuit) return;
+		//lock fps logic
 		{
-			//append logic
+			locker.lockForRead();
 
-			//test logic
+			delta = frameTimer->elapsed();
+			sleepTime = frameDeltaTime - delta;
+
+			if (sleepTime > 0)
 			{
-				if (content) 
-				{
-					msleep(99);
-					for(int i = 0; i < 512; i++)
-					{
-						testData[i] = i;
-						//rand() % 100;
-					}
-
-					content->append(testData, 512);
-					emit update();
-				}
+				msleep(sleepTime);
 			}
 
+			locker.unlock();
 		}
+
+		if (bIsQuit) return;
+
+		if (content) 
+		{
+			content->append(data, size);
+			emit update();
+		}
+
+		copyMutex.unlock();
 	}
 }
 
@@ -59,6 +68,22 @@ void WaterfallThread::stopAndClear()
 {
 	quit();
 	wait();
+}
+
+void WaterfallThread::setFPSLimit(quint32 fps /*= 0*/)
+{
+	locker.lockForWrite();
+
+	if(fps <= 0)
+	{
+		frameDeltaTime = 0;
+	}
+	else 
+	{
+		frameDeltaTime = static_cast<qint64>(1000 / static_cast<double>(fps));
+	}
+
+	locker.unlock();
 }
 
 void WaterfallThread::addData(double* inData, int inSize)
@@ -77,7 +102,7 @@ void WaterfallThread::addData(double* inData, int inSize)
 		memcpy(inData, data, size);
 	}
 
-	copyMutex.unlock();
+	emit copyingCompleted();
 	appendMutex.unlock();
 }
 
