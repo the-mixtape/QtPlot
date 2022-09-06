@@ -13,6 +13,8 @@ public:
 	explicit WaterfallPlot(QWidget* parent);
 	~WaterfallPlot() override;
 
+	void setFPSLimit(quint32 fps = 0);
+
 	void setColorMap(WfColorMap* colorMap);
 	void setAppendSide(EAppendSide side);;
 	void setAppendHeight(int h);

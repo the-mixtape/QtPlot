@@ -68,11 +68,14 @@ void WaterfallContent::setResolution(int width, int height)
 void WaterfallContent::setFillColor(QColor fillColor)
 {
 	readWriteLock->lockForWrite();
-
+	
 	waterfallLayer->fillColor = fillColor;
 	waterfallLayer->image.fill(fillColor);
+	setPixmap(QPixmap::fromImage(waterfallLayer->image));
 
 	readWriteLock->unlock();
+
+	update();
 }
 
 void WaterfallContent::setInterval(int minval, int maxval)
@@ -91,6 +94,8 @@ void WaterfallContent::setPositionX(int minx, int maxx)
 
 	topLeft->setCoords(minx, maxy);
 	bottomRight->setCoords(maxx, miny);
+
+	update();
 }
 
 void WaterfallContent::setPositionY(int miny, int maxy)
@@ -100,6 +105,8 @@ void WaterfallContent::setPositionY(int miny, int maxy)
 
 	topLeft->setCoords(minx, maxy);
 	bottomRight->setCoords(maxx, miny);
+
+	update();
 }
 
 void WaterfallContent::setAppendHeight(int h)
@@ -118,8 +125,11 @@ void WaterfallContent::clear()
 	readWriteLock->lockForRead();
 	
 	waterfallLayer->image.fill(waterfallLayer->fillColor);
+	setPixmap(QPixmap::fromImage(waterfallLayer->image));
 
 	readWriteLock->unlock();
+
+	update();
 }
 
 void WaterfallContent::append(double* data, int w)
