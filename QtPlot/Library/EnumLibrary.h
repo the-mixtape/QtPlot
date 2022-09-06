@@ -12,3 +12,11 @@ enum ELineState
 	hovered,
 	dragging
 };
+
+enum EAppendSide
+{
+	EAS_Top,
+	EAS_Bottom,
+	EAS_Left,
+	EAS_Right
+};

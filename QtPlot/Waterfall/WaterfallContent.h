@@ -4,6 +4,7 @@
 #include "QCustomPlot/QCustomPlot.h"
 
 #include "Interval.h"
+#include "Library/EnumLibrary.h"
 
 class QCustomPlot;
 class WfColorMap;
@@ -21,15 +22,35 @@ public:
 
 public:
 	void setColorMap(WfColorMap* inColorMap);
+	void setAppendSide(EAppendSide side);
 
 public slots:
 	void update();
 
 public:
-	/*!
-	  \brief Adds a new layer
+	void setResolution(int width, int height);
+	void setFillColor(QColor fillColor);
+	void setInterval(int minval, int maxval);
+	void setPositionX(int minx, int maxx);
+	void setPositionY(int miny, int maxy);
+	void setAppendHeight(int h);
 
-	  New _layer is an image (2D) with colored data points
+	void clear();
+
+	/*!
+  \brief Append data
+
+  Data 'data' is a linear array (of doubles) of size w*h.
+
+  \param data Array of double values. Size: w*h.
+  \param w Width of the data block.
+	*/
+	void append(double* data, int w);
+
+	/*!
+	  \brief Create layer
+
+	  Layer is an image (2D) with colored data points
 	  Color map is used to map values inside the 2D region to color value.
 
 	  \note It is normal to use opacity level. Basic styling of underlying QwtPlot::canvas() is supported.
@@ -45,8 +66,9 @@ public:
 	  \param fm Of type QImage::Format. Supported QImage::Format_ARGB32 and QImage::Format_RGB32.
 	  \param fil Fill color for the layer (QColor).
 	 */
-	bool addLayer(qint32 width, qint32 height, qreal minx, qreal miny, qreal maxx, qreal maxy, qreal minval, qreal maxval, QImage::Format fm, QColor fil);
+	bool createLayer(qint32 width, qint32 height, qreal minx, qreal miny, qreal maxx, qreal maxy, qreal minval, qreal maxval, QImage::Format fm, QColor fil);
 
+private:
 	/*!
   \brief Append data from top
 
@@ -94,6 +116,8 @@ public:
 private:
 	WaterfallLayer* waterfallLayer;
 	QReadWriteLock* readWriteLock;
+	EAppendSide		appendSide;
+	qint32			appendHeight;
 
 };
 

@@ -346,8 +346,7 @@ void MovableInfinityLine::axisYChanged(const QCPRange& range)
 		coords = point2->coords();
 		coords.setY(newLinePos);
 		point2->setCoords(coords);
-
-		qDebug() << range;
+		
 		mParentPlot->layer("markers")->replot();
 	}
 }

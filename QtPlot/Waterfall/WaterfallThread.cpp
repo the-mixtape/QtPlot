@@ -40,7 +40,7 @@ void WaterfallThread::run()
 						//rand() % 100;
 					}
 
-					content->appendL(testData, 512, 3);
+					content->append(testData, 512);
 					emit update();
 				}
 			}
