@@ -1,5 +1,9 @@
 #pragma once
 
+#include "QtPlotGlobal.h"
+
+
+
 enum EAxis
 {
 	EA_xAxis,

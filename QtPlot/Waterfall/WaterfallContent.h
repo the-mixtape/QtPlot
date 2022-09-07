@@ -4,7 +4,7 @@
 #include "QCustomPlot/QCustomPlot.h"
 
 #include "Interval.h"
-#include "Library/EnumLibrary.h"
+#include "Library/QtPlotEnumLibrary.h"
 
 class QCustomPlot;
 class WfColorMap;

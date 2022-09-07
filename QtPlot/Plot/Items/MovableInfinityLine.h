@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Library/EnumLibrary.h"
+#include "Library/QtPlotEnumLibrary.h"
 #include "QCustomPlot/QCustomPlot.h"
 
 

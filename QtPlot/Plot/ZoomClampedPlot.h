@@ -1,7 +1,7 @@
 #pragma once
 #include "QtPlotGlobal.h"
 #include "QCustomPlot/QCustomPlot.h"
-#include "Library/EnumLibrary.h"
+#include "Library/QtPlotEnumLibrary.h"
 
 
 class QTPLOT_EXPORT ZoomClampedPlot : public QCustomPlot

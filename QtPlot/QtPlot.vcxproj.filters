@@ -53,7 +53,7 @@
     <ClInclude Include="QtPlotGlobal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Library\EnumLibrary.h">
+    <ClInclude Include="Library\QtPlotEnumLibrary.h">
       <Filter>Header Files\Library</Filter>
     </ClInclude>
     <ClInclude Include="Library\QtPlotMathLibrary.h">
