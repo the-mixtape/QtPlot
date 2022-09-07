@@ -21,6 +21,8 @@ WaterfallPlot::WaterfallPlot(QWidget* parent)
 	loadThread->stopAndClear();
 	loadThread->setWaterfallContent(content);
 	loadThread->start();
+
+	connect(loadThread, &WaterfallThread::copyingCompleted, [=]() { emit copyingCompleted(); });
 }
 
 WaterfallPlot::~WaterfallPlot()

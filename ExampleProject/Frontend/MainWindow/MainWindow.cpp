@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 
 #include "Plot/QtPlot.h"
+#include "Waterfall/WaterfallContent.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -9,10 +11,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     initializePlot();
     initializeWaterfall();
+
+    backend.start();
+
+    connect(&backend, &ExampleBackend::generatedNewData, [=](double* data, int size) { ui.waterfallPlot->appendData(data, size); });
+    connect(ui.waterfallPlot, &WaterfallPlot::copyingCompleted, &backend, &ExampleBackend::copyingCompleted);
 }
 
 MainWindow::~MainWindow()
-{}
+{
+}
 
 void MainWindow::initializePlot()
 {
@@ -118,7 +126,10 @@ void MainWindow::initializeWaterfall()
 
     ui.waterfallPlot->setBackground(Qt::black);
     ui.waterfallPlot->setFillColor(Qt::black);
-    ui.waterfallPlot->setAppendHeight(5);
+    ui.waterfallPlot->setAppendHeight(3);
+    ui.waterfallPlot->setAppendSide(EAS_Top);
+    ui.waterfallPlot->setResolution(512, 512);
+    ui.waterfallPlot->setFPSLimit(30);
 
     QCPTextElement* chartSpectrRuntimeText = new QCPTextElement(ui.waterfallPlot);
     chartSpectrRuntimeText->setText("Waterfall");

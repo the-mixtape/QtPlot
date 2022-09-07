@@ -111,6 +111,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Backend\ExampleBackend.cpp" />
     <ClCompile Include="\\192.168.132.15\share\QtPlot\ExampleProject\Frontend\MainWindow\MainWindow.cpp" />
     <QtRcc Include="ExampleProject.qrc" />
     <ClCompile Include="main.cpp" />
@@ -120,6 +121,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="\\192.168.132.15\share\QtPlot\ExampleProject\Frontend\MainWindow\MainWindow.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Backend\ExampleBackend.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -100,7 +100,7 @@
     <ClInclude Include="WfColorMap.h" />
     <ClInclude Include="Interval.h" />
     <ClInclude Include="Library\EnumLibrary.h" />
-    <ClInclude Include="Waterfall\Waterfall.h" />
+    <QtMoc Include="Waterfall\Waterfall.h" />
     <QtMoc Include="Waterfall\WaterfallContent.h" />
     <QtMoc Include="Waterfall\WaterfallLayer.h" />
     <QtMoc Include="Waterfall\WaterfallThread.h" />

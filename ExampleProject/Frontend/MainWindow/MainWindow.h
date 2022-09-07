@@ -2,6 +2,11 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_MainWindow.h"
+#include "Backend/ExampleBackend.h"
+
+
+class ExampleBackend;
+
 
 class MainWindow : public QMainWindow
 {
@@ -15,6 +20,9 @@ private:
     void initializePlot();
     void initializeWaterfall();
 
+signals:
+
 private:
     Ui::MainWindowClass ui;
+    ExampleBackend      backend;
 };

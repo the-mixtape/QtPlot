@@ -9,6 +9,8 @@ class WfColorMap;
 
 class QTPLOT_EXPORT WaterfallPlot : public QtPlot
 {
+	Q_OBJECT
+
 public:
 	explicit WaterfallPlot(QWidget* parent);
 	~WaterfallPlot() override;
@@ -26,6 +28,9 @@ public:
 	void setPositionY(int miny, int maxy) const;
 	void setInterval(int minval, int maxval) const;
 	void setFillColor(const QColor& fillColor) const;
+
+signals:
+	void copyingCompleted();
 
 private:
 	WaterfallThread* loadThread;

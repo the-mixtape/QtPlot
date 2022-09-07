@@ -59,9 +59,6 @@
     <ClInclude Include="Library\QtPlotMathLibrary.h">
       <Filter>Header Files\Library</Filter>
     </ClInclude>
-    <ClInclude Include="Waterfall\Waterfall.h">
-      <Filter>Header Files\Waterfall</Filter>
-    </ClInclude>
     <ClInclude Include="WfColorMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -133,6 +130,9 @@
       <Filter>Header Files\Waterfall</Filter>
     </QtMoc>
     <QtMoc Include="Waterfall\WaterfallLayer.h">
+      <Filter>Header Files\Waterfall</Filter>
+    </QtMoc>
+    <QtMoc Include="Waterfall\Waterfall.h">
       <Filter>Header Files\Waterfall</Filter>
     </QtMoc>
   </ItemGroup>

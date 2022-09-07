@@ -48,7 +48,7 @@ void WaterfallThread::run()
 
 		if (bIsQuit) return;
 
-		if (content) 
+		if (content)
 		{
 			content->append(data, size);
 			emit update();
@@ -99,7 +99,7 @@ void WaterfallThread::addData(double* inData, int inSize)
 
 	if(data)
 	{
-		memcpy(inData, data, size);
+		memcpy(data, inData, size * sizeof(double));
 	}
 
 	emit copyingCompleted();
