@@ -23,6 +23,8 @@ public:
 	void setAppendSide(EAppendSide side);;
 	void setAppendHeight(int h) const;
 	void setResolution(int width, int height) const;
+	void setWidth(int width) const;
+	void setHeight(int height) const;
 	void setPosition(int minx, int miny, int maxx, int maxy);
 	void setPositionX(int minx, int maxx) const;
 	void setPositionY(int miny, int maxy) const;

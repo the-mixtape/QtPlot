@@ -66,6 +66,16 @@ void WaterfallPlot::setResolution(int width, int height) const
 	content->setResolution(width, height);
 }
 
+void WaterfallPlot::setWidth(int width) const
+{
+	content->setWidth(width);
+}
+
+void WaterfallPlot::setHeight(int height) const
+{
+	content->setHeight(height);
+}
+
 void WaterfallPlot::setPosition(int minx, int miny, int maxx, int maxy)
 {
 	setPositionX(minx, maxx);

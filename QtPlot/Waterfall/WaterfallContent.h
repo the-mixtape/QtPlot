@@ -29,6 +29,8 @@ public slots:
 
 public:
 	void setResolution(int width, int height);
+	void setWidth(int width);
+	void setHeight(int height);
 	void setFillColor(const QColor& fillColor);
 	void setInterval(int minval, int maxval);
 	void setPositionX(int minx, int maxx);
@@ -40,12 +42,12 @@ public:
 	/*!
   \brief Append data
 
-  Data 'data' is a linear array (of doubles) of size w*h.
+  Data 'data' is a linear array (of doubles) of size size*h.
 
   \param data Array of double values. Size: w*h.
-  \param w Width of the data block.
+  \param size Width of the data block.
 	*/
-	void append(double* data, int w);
+	void append(double* data, int size);
 
 	/*!
 	  \brief Create layer

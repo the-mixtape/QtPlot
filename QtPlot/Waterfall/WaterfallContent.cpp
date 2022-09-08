@@ -60,7 +60,28 @@ void WaterfallContent::update()
 
 void WaterfallContent::setResolution(int width, int height)
 {
+	if (waterfallLayer->image.width() == width
+		&& waterfallLayer->image.height() == height) return;
+
 	waterfallLayer->image = QImage(width, height, waterfallLayer->format);
+	waterfallLayer->image.fill(waterfallLayer->fillColor);
+	update();
+}
+
+void WaterfallContent::setWidth(int width)
+{
+	if (waterfallLayer->image.width() == width) return;
+
+	waterfallLayer->image = QImage(width, waterfallLayer->image.height(), waterfallLayer->format);
+	waterfallLayer->image.fill(waterfallLayer->fillColor);
+	update();
+}
+
+void WaterfallContent::setHeight(int height)
+{
+	if (waterfallLayer->image.height() == height) return;
+
+	waterfallLayer->image = QImage(waterfallLayer->image.width(), height, waterfallLayer->format);
 	waterfallLayer->image.fill(waterfallLayer->fillColor);
 	update();
 }
@@ -132,41 +153,38 @@ void WaterfallContent::clear()
 	update();
 }
 
-void WaterfallContent::append(double* data, int w)
+void WaterfallContent::append(double* data, int size)
 {
 	readWriteLock->lockForRead();
 
-	if (waterfallLayer->image.width() >= w && waterfallLayer->image.height() >= appendHeight)
+	switch (appendSide)
 	{
-		switch (appendSide)
+		case EAS_Top:
 		{
-			case EAS_Top:
-			{
-				appendT(data, w, appendHeight);
-				break;
-			}
-
-			case EAS_Bottom:
-			{
-				appendB(data, w, appendHeight);
-				break;
-			}
-
-			case EAS_Left:
-			{
-				appendL(data, w, appendHeight);
-				break;
-			}
-
-			case EAS_Right:
-			{
-				appendR(data, w, appendHeight);
-				break;
-			}
+			appendT(data, size, appendHeight);
+			break;
 		}
 
-		setPixmap(QPixmap::fromImage(waterfallLayer->image));
+		case EAS_Bottom:
+		{
+			appendB(data, size, appendHeight);
+			break;
+		}
+
+		case EAS_Left:
+		{
+			appendL(data, size, appendHeight);
+			break;
+		}
+
+		case EAS_Right:
+		{
+			appendR(data, size, appendHeight);
+			break;
+		}
 	}
+
+	setPixmap(QPixmap::fromImage(waterfallLayer->image));
 
 	readWriteLock->unlock();
 }
@@ -198,6 +216,8 @@ bool WaterfallContent::createLayer(qint32 inWidth, qint32 inHeight, qreal minx, 
 
 void WaterfallContent::appendT(double* data, int w, int h)
 {
+	if (waterfallLayer->image.width() > w) return;
+
 	int y = 0;
 	uchar* imageData = waterfallLayer->image.bits();
 	memmove(imageData + waterfallLayer->image.bytesPerLine() * h, imageData, waterfallLayer->image.sizeInBytes() - waterfallLayer->image.bytesPerLine() * h);
@@ -214,6 +234,8 @@ void WaterfallContent::appendT(double* data, int w, int h)
 
 void WaterfallContent::appendB(double* data, int w, int h)
 {
+	if (waterfallLayer->image.width() > w) return;
+
 	int	y = h;
 	uchar* imageData = waterfallLayer->image.bits();
 	memmove(imageData, imageData + waterfallLayer->image.bytesPerLine() * h, waterfallLayer->image.sizeInBytes() - waterfallLayer->image.bytesPerLine() * h);
@@ -228,6 +250,8 @@ void WaterfallContent::appendB(double* data, int w, int h)
 
 void WaterfallContent::appendL(double* data, int w, int h)
 {
+	if (waterfallLayer->image.height() > w) return;
+
 	const qint32 bpp = waterfallLayer->image.depth() / 8;
 	qint32 offset = 0;
 
@@ -244,6 +268,8 @@ void WaterfallContent::appendL(double* data, int w, int h)
 
 void WaterfallContent::appendR(double* data, int w, int h)
 {
+	if (waterfallLayer->image.height() > w) return;
+
 	const qint32 bpp = waterfallLayer->image.depth() / 8;
 	qint32 offset = 0;
 
