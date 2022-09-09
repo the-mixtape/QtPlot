@@ -14,9 +14,9 @@ MovableItemLine::MovableItemLine(QCustomPlot* parentPlot, MovableInfinityLine* f
 		pen.setWidth(2);
 		QCPItemLine::setPen(pen);
 
-		pens[idle] = pen;
-		pens[hovered] = pen;
-		pens[dragging] = pen;
+		pens[ELS_Idle] = pen;
+		pens[ELS_Hovered] = pen;
+		pens[ELS_Dragging] = pen;
 	}
 
 	fMarker->setMidLine(this);
@@ -47,7 +47,7 @@ void MovableItemLine::updatePosition()
 void MovableItemLine::setPen(ELineState inState, QPen pen)
 {
 	pens[inState] = pen;
-	if (inState == idle) QCPItemLine::setPen(pen);
+	if (inState == ELS_Idle) QCPItemLine::setPen(pen);
 }
 
 void MovableItemLine::mousePressEvent(QMouseEvent* event, const QVariant& details)
@@ -65,7 +65,7 @@ void MovableItemLine::setIsDrag(bool drag)
 
 	if(bIsDrag)
 	{
-		setState(dragging);
+		setState(ELS_Dragging);
 		currentInteractions = mParentPlot->interactions();
 
 		int temp = currentInteractions;
@@ -73,7 +73,7 @@ void MovableItemLine::setIsDrag(bool drag)
 	}
 	else
 	{
-		setState(idle);
+		setState(ELS_Idle);
 		mParentPlot->setInteractions(currentInteractions);
 	}
 }
@@ -146,11 +146,11 @@ void MovableItemLine::checkHovered(QMouseEvent* event)
 
 	if (hoveredX && hoveredY)
 	{
-		setState(hovered);
+		setState(ELS_Hovered);
 	}
 	else
 	{
-		setState(idle);
+		setState(ELS_Idle);
 	}
 }
 
@@ -160,24 +160,24 @@ void MovableItemLine::setState(ELineState inState)
 
 	QPen newPen = pen();
 	bool needReplot = false;
-	if (inState == hovered && state == idle)
+	if (inState == ELS_Hovered && state == ELS_Idle)
 	{
-		state = hovered;
-		newPen = pens[hovered];
+		state = ELS_Hovered;
+		newPen = pens[ELS_Hovered];
 		needReplot = true;
 	}
 
-	if (inState == dragging)
+	if (inState == ELS_Dragging)
 	{
-		state = dragging;
-		newPen = pens[dragging];
+		state = ELS_Dragging;
+		newPen = pens[ELS_Dragging];
 		needReplot = true;
 	}
 
-	if (inState == idle && !bIsDrag)
+	if (inState == ELS_Idle && !bIsDrag)
 	{
-		state = idle;
-		newPen = pens[idle];
+		state = ELS_Idle;
+		newPen = pens[ELS_Idle];
 		needReplot = true;
 	}
 

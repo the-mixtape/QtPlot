@@ -12,9 +12,9 @@ MovableInfinityLine::MovableInfinityLine(QCustomPlot* parentPlot)
 		pen.setWidth(2);
 		QCPItemStraightLine::setPen(pen);
 	
-		pens[idle] = pen;
-		pens[hovered] = pen;
-		pens[dragging] = pen;
+		pens[ELS_Idle] = pen;
+		pens[ELS_Hovered] = pen;
+		pens[ELS_Dragging] = pen;
 	}
 
 	connect(parentPlot, SIGNAL(mouseRelease(QMouseEvent*)), this, SLOT(mouseRelease(QMouseEvent*)));
@@ -40,7 +40,7 @@ void MovableInfinityLine::setPoint2Coord(double x, double y)
 void MovableInfinityLine::setPen(ELineState inState, QPen pen)
 {
 	pens[inState] = pen;
-	if (inState == idle) QCPItemStraightLine::setPen(pen);
+	if (inState == ELS_Idle) QCPItemStraightLine::setPen(pen);
 }
 
 void MovableInfinityLine::setMoveAxis(EAxis inAxis)
@@ -74,7 +74,7 @@ void MovableInfinityLine::setIsDrag(bool drag)
 
 	if (bIsDrag)
 	{
-		setState(dragging);
+		setState(ELS_Dragging);
 		currentInteractions = mParentPlot->interactions();
 
 		int temp = currentInteractions;
@@ -82,7 +82,7 @@ void MovableInfinityLine::setIsDrag(bool drag)
 	}
 	else
 	{
-		setState(idle);
+		setState(ELS_Idle);
 		mParentPlot->setInteractions(currentInteractions);
 	}
 }
@@ -159,11 +159,11 @@ void MovableInfinityLine::checkHovered(QMouseEvent* event)
 	const bool isHovered = mousePos >= linePos - width && mousePos <= linePos + width;
 	if (isHovered)
 	{
-		setState(hovered);
+		setState(ELS_Hovered);
 	}
 	else
 	{
-		setState(idle);
+		setState(ELS_Idle);
 	}
 }
 
@@ -173,24 +173,24 @@ void MovableInfinityLine::setState(ELineState inState)
 
 	QPen newPen = pen();
 	bool needReplot = false;
-	if(inState == hovered && state == idle)
+	if(inState == ELS_Hovered && state == ELS_Idle)
 	{
-		state = hovered;
-		newPen = pens[hovered];
+		state = ELS_Hovered;
+		newPen = pens[ELS_Hovered];
 		needReplot = true;
 	}
 
-	if(inState == dragging)
+	if(inState == ELS_Dragging)
 	{
-		state = dragging;
-		newPen = pens[dragging];
+		state = ELS_Dragging;
+		newPen = pens[ELS_Dragging];
 		needReplot = true;
 	}
 
-	if(inState == idle && !bIsDrag)
+	if(inState == ELS_Idle && !bIsDrag)
 	{
-		state = idle;
-		newPen = pens[idle];
+		state = ELS_Idle;
+		newPen = pens[ELS_Idle];
 		needReplot = true;
 	}
 

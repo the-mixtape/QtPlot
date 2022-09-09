@@ -11,4 +11,6 @@ class QTPLOT_EXPORT QtPlot : public MarkingPlot
 public:
 	explicit QtPlot(QWidget* parent = nullptr);
 	virtual ~QtPlot();
+
+	static void syncZoom(QtPlot* plot1, QtPlot* plot2, EAxis syncAxis, ESyncRule syncRule);
 };

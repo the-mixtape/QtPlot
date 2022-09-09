@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     initializePlot();
     initializeWaterfall();
+    initializeSyncPlots();
 
     backend.start();
 
@@ -24,28 +25,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initializePlot()
 {
-    ui.plot->setMouseTracking(true);
-    ui.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-
-    ui.plot->yAxis->setLabel("y");
-    ui.plot->yAxis->setTickLabelColor(Qt::white);
-    ui.plot->yAxis->setLabelColor(Qt::white);
-    ui.plot->yAxis->setBasePen(QPen(Qt::white));
-
-    ui.plot->xAxis->setLabel("x");
-    ui.plot->xAxis->setTickLabelColor(Qt::white);
-    ui.plot->xAxis->setLabelColor(Qt::white);
-    ui.plot->xAxis->setBasePen(QPen(Qt::white));
-
-	ui.plot->setBackground(Qt::black);
-    QCPTextElement* chartSpectrRuntimeText = new QCPTextElement(ui.plot);
-    chartSpectrRuntimeText->setText("Marker Test");
-    chartSpectrRuntimeText->setFont(QFont("sans", 11, QFont::Bold));
-    chartSpectrRuntimeText->setTextColor(Qt::white);
-
-    ui.plot->plotLayout()->insertRow(0);
-    ui.plot->plotLayout()->addElement(0, 0, chartSpectrRuntimeText);
-
+    initializePlot(ui.plot, "Marker Test");
 
     QCPGraph* spectrGraphRuntime = ui.plot->addGraph();
     spectrGraphRuntime->setPen(QPen(QColor(0, 255, 0), 3));
@@ -59,70 +39,11 @@ void MainWindow::initializePlot()
             spectrGraphRuntime->addData(x, y);
         }
     }
-
-    // Clamp View Zone
-    {
-        ui.plot->setAxisClamp(EA_xAxis, true);
-        ui.plot->setAxisClamp(EA_yAxis, true);
-
-        ui.plot->setAxisClampRange(EA_xAxis, QCPRange(0, 100));
-        ui.plot->setAxisClampRange(EA_yAxis, QCPRange(0, 100));
-
-        ui.plot->xAxis->setRange(0, 100);
-        ui.plot->yAxis->setRange(0, 100);
-    }
-
-    // Setup Markers
-    {
-        ui.plot->setMarkerAxisActive(EA_xAxis, true);
-        ui.plot->setMarkerMovableAxisActive(EA_xAxis, true);
-
-        ui.plot->setMarkerAxisActive(EA_yAxis, true);
-        ui.plot->setMarkerMovableAxisActive(EA_yAxis, true);
-
-        //setup markers style
-        {
-            QPen pen(Qt::PenStyle::SolidLine);
-            pen.setWidth(2);
-            pen.setColor(Qt::white);
-
-            QPen hoveredPen(Qt::PenStyle::SolidLine);
-            hoveredPen.setWidth(3);
-            hoveredPen.setColor(Qt::yellow);
-
-            QPen midPen(Qt::PenStyle::DashLine);
-            midPen.setWidth(2);
-            midPen.setColor(Qt::white);
-
-            {
-                ui.plot->setMarkersPen(EA_xAxis, idle, pen);
-                ui.plot->setMarkersPen(EA_xAxis, hovered, hoveredPen);
-                ui.plot->setMarkersPen(EA_xAxis, dragging, pen);
-
-                ui.plot->setMidMarkerPen(EA_xAxis, idle, midPen);
-                ui.plot->setMidMarkerPen(EA_xAxis, hovered, hoveredPen);
-                ui.plot->setMidMarkerPen(EA_xAxis, dragging, pen);
-                ui.plot->setTextColor(EA_xAxis, Qt::white);
-            }
-
-            {
-                ui.plot->setMarkersPen(EA_yAxis, idle, pen);
-                ui.plot->setMarkersPen(EA_yAxis, hovered, hoveredPen);
-                ui.plot->setMarkersPen(EA_yAxis, dragging, pen);
-
-                ui.plot->setMidMarkerPen(EA_yAxis, idle, midPen);
-                ui.plot->setMidMarkerPen(EA_yAxis, hovered, hoveredPen);
-                ui.plot->setMidMarkerPen(EA_yAxis, dragging, pen);
-                ui.plot->setTextColor(EA_yAxis, Qt::white);
-            }
-        }
-    }
 }
 
 void MainWindow::initializeWaterfall()
 {
-    ui.waterfallPlot->setMouseTracking(true);
-    ui.waterfallPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    initializePlot(ui.waterfallPlot, "Waterfall");
 
     ui.waterfallPlot->setBackground(Qt::black);
     ui.waterfallPlot->setFillColor(Qt::black);
@@ -130,40 +51,60 @@ void MainWindow::initializeWaterfall()
     ui.waterfallPlot->setAppendSide(EAS_Top);
     ui.waterfallPlot->setResolution(512, 512);
     ui.waterfallPlot->setFPSLimit(30);
+}
 
-    QCPTextElement* chartSpectrRuntimeText = new QCPTextElement(ui.waterfallPlot);
-    chartSpectrRuntimeText->setText("Waterfall");
+void MainWindow::initializeSyncPlots()
+{
+    initializePlot(ui.syncPlot1, "Sync Plot 1");
+    initializePlot(ui.syncPlot2, "Sync Plot 2");
+
+    QtPlot::syncZoom(ui.syncPlot1, ui.syncPlot2, EA_xAxis, ESR_Percentage);
+    QtPlot::syncZoom(ui.syncPlot1, ui.syncPlot2, EA_yAxis, ESR_Percentage);
+}
+
+void MainWindow::initializePlot(QtPlot* plot, QString plotName)
+{
+    plot->setMouseTracking(true);
+    plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+
+    // plot->yAxis->setLabel("y");
+    plot->yAxis->setTickLabelColor(Qt::white);
+    plot->yAxis->setLabelColor(Qt::white);
+    plot->yAxis->setBasePen(QPen(Qt::white));
+
+    // plot->xAxis->setLabel("x");
+    plot->xAxis->setTickLabelColor(Qt::white);
+    plot->xAxis->setLabelColor(Qt::white);
+    plot->xAxis->setBasePen(QPen(Qt::white));
+
+    plot->setBackground(Qt::black);
+    QCPTextElement* chartSpectrRuntimeText = new QCPTextElement(plot);
+    chartSpectrRuntimeText->setText(plotName);
     chartSpectrRuntimeText->setFont(QFont("sans", 11, QFont::Bold));
     chartSpectrRuntimeText->setTextColor(Qt::white);
 
-    ui.waterfallPlot->yAxis->setTickLabelColor(Qt::white);
-    ui.waterfallPlot->yAxis->setBasePen(QPen(Qt::white));
-    
-    ui.waterfallPlot->xAxis->setTickLabelColor(Qt::white);
-    ui.waterfallPlot->xAxis->setBasePen(QPen(Qt::white));
-
-    ui.waterfallPlot->plotLayout()->insertRow(0);
-    ui.waterfallPlot->plotLayout()->addElement(0, 0, chartSpectrRuntimeText);
+    plot->plotLayout()->insertRow(0);
+    plot->plotLayout()->addElement(0, 0, chartSpectrRuntimeText);
 
     // Clamp View Zone
     {
-        ui.waterfallPlot->setAxisClamp(EA_xAxis, true);
-        ui.waterfallPlot->setAxisClamp(EA_yAxis, true);
+        plot->setAxisClamp(EA_xAxis, true);
+        plot->setAxisClamp(EA_yAxis, true);
 
-        ui.waterfallPlot->setAxisClampRange(EA_xAxis, QCPRange(0, 100));
-        ui.waterfallPlot->setAxisClampRange(EA_yAxis, QCPRange(0, 100));
+        plot->setAxisClampRange(EA_xAxis, QCPRange(0, 100));
+        plot->setAxisClampRange(EA_yAxis, QCPRange(0, 100));
 
-        ui.waterfallPlot->xAxis->setRange(0, 100);
-        ui.waterfallPlot->yAxis->setRange(0, 100);
+        plot->xAxis->setRange(0, 100);
+        plot->yAxis->setRange(0, 100);
     }
 
     // Setup Markers
     {
-        ui.waterfallPlot->setMarkerAxisActive(EA_xAxis, true);
-        ui.waterfallPlot->setMarkerMovableAxisActive(EA_xAxis, true);
+        plot->setMarkerAxisActive(EA_xAxis, true);
+        plot->setMarkerMovableAxisActive(EA_xAxis, true);
 
-        ui.waterfallPlot->setMarkerAxisActive(EA_yAxis, true);
-        ui.waterfallPlot->setMarkerMovableAxisActive(EA_yAxis, true);
+        plot->setMarkerAxisActive(EA_yAxis, true);
+        plot->setMarkerMovableAxisActive(EA_yAxis, true);
 
         //setup markers style
         {
@@ -180,25 +121,25 @@ void MainWindow::initializeWaterfall()
             midPen.setColor(Qt::white);
 
             {
-                ui.waterfallPlot->setMarkersPen(EA_xAxis, idle, pen);
-                ui.waterfallPlot->setMarkersPen(EA_xAxis, hovered, hoveredPen);
-                ui.waterfallPlot->setMarkersPen(EA_xAxis, dragging, pen);
+                plot->setMarkersPen(EA_xAxis, ELS_Idle, pen);
+                plot->setMarkersPen(EA_xAxis, ELS_Hovered, hoveredPen);
+                plot->setMarkersPen(EA_xAxis, ELS_Dragging, pen);
 
-                ui.waterfallPlot->setMidMarkerPen(EA_xAxis, idle, midPen);
-                ui.waterfallPlot->setMidMarkerPen(EA_xAxis, hovered, hoveredPen);
-                ui.waterfallPlot->setMidMarkerPen(EA_xAxis, dragging, pen);
-                ui.waterfallPlot->setTextColor(EA_xAxis, Qt::white);
+                plot->setMidMarkerPen(EA_xAxis, ELS_Idle, midPen);
+                plot->setMidMarkerPen(EA_xAxis, ELS_Hovered, hoveredPen);
+                plot->setMidMarkerPen(EA_xAxis, ELS_Dragging, pen);
+                plot->setTextColor(EA_xAxis, Qt::white);
             }
 
             {
-                ui.waterfallPlot->setMarkersPen(EA_yAxis, idle, pen);
-                ui.waterfallPlot->setMarkersPen(EA_yAxis, hovered, hoveredPen);
-                ui.waterfallPlot->setMarkersPen(EA_yAxis, dragging, pen);
+                plot->setMarkersPen(EA_yAxis, ELS_Idle, pen);
+                plot->setMarkersPen(EA_yAxis, ELS_Hovered, hoveredPen);
+                plot->setMarkersPen(EA_yAxis, ELS_Dragging, pen);
 
-                ui.waterfallPlot->setMidMarkerPen(EA_yAxis, idle, midPen);
-                ui.waterfallPlot->setMidMarkerPen(EA_yAxis, hovered, hoveredPen);
-                ui.waterfallPlot->setMidMarkerPen(EA_yAxis, dragging, pen);
-                ui.waterfallPlot->setTextColor(EA_yAxis, Qt::white);
+                plot->setMidMarkerPen(EA_yAxis, ELS_Idle, midPen);
+                plot->setMidMarkerPen(EA_yAxis, ELS_Hovered, hoveredPen);
+                plot->setMidMarkerPen(EA_yAxis, ELS_Dragging, pen);
+                plot->setTextColor(EA_yAxis, Qt::white);
             }
         }
     }

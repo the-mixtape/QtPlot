@@ -42,7 +42,7 @@ private:
 	MovableInfinityLine* secondMarker;
 	QCPItemText* attachedText;
 	QCP::Interactions currentInteractions;
-	ELineState state = idle;
+	ELineState state = ELS_Idle;
 	QMap<ELineState, QPen> pens;
 	EAxis axis;
 	bool bIsDrag = false;

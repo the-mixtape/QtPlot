@@ -190,7 +190,7 @@ void MarkingPlot::horizontalClickEvent(QMouseEvent* event)
 	{
 		setHorLineCoords(horRangeLine2, x);
 
-		// setup idle mid line position
+		// setup ELS_Idle mid line position
 		{
 			const auto currentRange = yAxis->range();
 			const double y = currentRange.upper - ((currentRange.upper - currentRange.lower) / 2.0);
@@ -255,7 +255,7 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 	{
 		setVertLineCoords(vertRangeLine2, y);
 
-		// setup idle mid line position
+		// setup ELS_Idle mid line position
 		{
 			const auto currentRange = xAxis->range();
 			const double x = currentRange.lower + ((currentRange.upper - currentRange.lower) / 5.0);

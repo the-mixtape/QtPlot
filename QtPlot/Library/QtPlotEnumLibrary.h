@@ -1,8 +1,5 @@
 #pragma once
 
-#include "QtPlotGlobal.h"
-
-
 
 enum EAxis
 {
@@ -12,9 +9,9 @@ enum EAxis
 
 enum ELineState
 {
-	idle,
-	hovered,
-	dragging
+	ELS_Idle,
+	ELS_Hovered,
+	ELS_Dragging
 };
 
 enum EAppendSide
@@ -23,4 +20,10 @@ enum EAppendSide
 	EAS_Bottom,
 	EAS_Left,
 	EAS_Right
+};
+
+enum ESyncRule
+{
+	ESR_Percentage,
+	ESR_Range
 };

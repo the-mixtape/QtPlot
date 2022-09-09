@@ -19,6 +19,9 @@ public:
 private:
     void initializePlot();
     void initializeWaterfall();
+    void initializeSyncPlots();
+
+    void initializePlot(QtPlot* plot, QString plotName);
 
 signals:
 

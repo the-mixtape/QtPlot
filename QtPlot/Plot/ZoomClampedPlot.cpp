@@ -6,22 +6,15 @@ ZoomClampedPlot::ZoomClampedPlot(QWidget* parent)
     clampAxisRules[EA_xAxis] = false;
     clampAxisRules[EA_yAxis] = false;
 
+    syncRules[EA_xAxis] = ESR_Percentage;
+    syncRules[EA_yAxis] = ESR_Percentage;
+
 	connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(xAxisChanged(QCPRange)));
 	connect(yAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(yAxisChanged(QCPRange)));
 }
 
 ZoomClampedPlot::~ZoomClampedPlot()
 {
-}
-
-void ZoomClampedPlot::setAxisClamp(EAxis clampAxis, bool clamp)
-{
-    clampAxisRules[clampAxis] = clamp;
-}
-
-void ZoomClampedPlot::setAxisClampRange(EAxis clampAxis, const QCPRange& clampRange)
-{
-    limitRangeRules[clampAxis] = clampRange;
 }
 
 void ZoomClampedPlot::limitAxisRange(EAxis axis, QCPAxis* axisObject, const QCPRange& newRange)
@@ -51,6 +44,15 @@ void ZoomClampedPlot::limitAxisRange(EAxis axis, QCPAxis* axisObject, const QCPR
     }
 }
 
+void ZoomClampedPlot::privateSetRange(QCPAxis* axis, const QCPRange& range)
+{
+    if(axis->range() != range)
+    {
+        axis->setRange(range);
+        layer("axes")->replot();
+    }
+}
+
 void ZoomClampedPlot::xAxisChanged(const QCPRange& newRange)
 {
 	const auto axisObject = qobject_cast<QCPAxis*>(QObject::sender());
@@ -61,4 +63,14 @@ void ZoomClampedPlot::yAxisChanged(const QCPRange& newRange)
 {
 	const auto axisObject = qobject_cast<QCPAxis*>(QObject::sender());
 	limitAxisRange(EA_yAxis, axisObject, newRange);
+}
+
+void ZoomClampedPlot::setRangeX(const QCPRange& range)
+{
+    privateSetRange(xAxis, range);
+}
+
+void ZoomClampedPlot::setRangeY(const QCPRange& range)
+{
+    privateSetRange(yAxis, range);
 }

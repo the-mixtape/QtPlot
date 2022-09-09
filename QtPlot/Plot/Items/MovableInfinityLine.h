@@ -54,7 +54,7 @@ private:
 	QCP::Interactions currentInteractions;
 	QPointF realCoords;
 
-	ELineState state = idle;
+	ELineState state = ELS_Idle;
 	QMap<ELineState, QPen> pens;
 
 	EAxis axis;
