@@ -15,7 +15,10 @@ WaterfallPlot::WaterfallPlot(QWidget* parent)
 	content->setColorMap(new LinearColorMap(Qt::blue, Qt::yellow));
 	content->setLayer(WATERFALL_LAYER_NAME);
 
-	layer(WATERFALL_LAYER_NAME)->replot();
+	xAxis->setRange(0, 100);
+	yAxis->setRange(0, 100);
+
+	replot();
 	
 	loadThread = new WaterfallThread();
 	loadThread->stopAndClear();
