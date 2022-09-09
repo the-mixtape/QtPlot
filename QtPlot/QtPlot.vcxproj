@@ -97,7 +97,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="WfColorMap.h" />
+    <ClInclude Include="ColorMap\WaterfallColorMap.h" />
+    <ClInclude Include="ColorMap\WfColorMap.h" />
     <ClInclude Include="Interval.h" />
     <ClInclude Include="Library\QtPlotEnumLibrary.h" />
     <QtMoc Include="Waterfall\Waterfall.h" />
@@ -114,7 +115,8 @@
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="WfColorMap.cpp" />
+    <ClCompile Include="ColorMap\WaterfallColorMap.cpp" />
+    <ClCompile Include="ColorMap\WfColorMap.cpp" />
     <ClCompile Include="Interval.cpp" />
     <ClCompile Include="Plot\Items\MovableInfinityLine.cpp" />
     <ClCompile Include="Waterfall\Waterfall.cpp" />

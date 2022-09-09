@@ -1,6 +1,6 @@
 #include "Waterfall.h"
 
-#include "WfColorMap.h"
+#include "ColorMap/WaterfallColorMap.h"
 #include "WaterfallContent.h"
 #include "WaterfallThread.h"
 
@@ -12,7 +12,7 @@ WaterfallPlot::WaterfallPlot(QWidget* parent)
 
 	content = new WaterfallContent(this);
 	content->createLayer(512, 512, 0, 0, 100, 100, 0, 100, QImage::Format_ARGB32, Qt::white);
-	content->setColorMap(new LinearColorMap(Qt::blue, Qt::yellow));
+	content->setColorMap(new WaterfallColorMap());
 	content->setLayer(WATERFALL_LAYER_NAME);
 
 	xAxis->setRange(0, 100);

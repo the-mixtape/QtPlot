@@ -48,6 +48,12 @@
     <Filter Include="Source Files\Waterfall">
       <UniqueIdentifier>{8493c6eb-4b55-44fb-88f0-f1197a2919e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ColorMap">
+      <UniqueIdentifier>{3587abf1-d653-4835-85d4-b7920885a043}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ColorMap">
+      <UniqueIdentifier>{93ca13a8-3916-473a-96ec-0e985f0a47a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="QtPlotGlobal.h">
@@ -59,11 +65,14 @@
     <ClInclude Include="Library\QtPlotMathLibrary.h">
       <Filter>Header Files\Library</Filter>
     </ClInclude>
-    <ClInclude Include="WfColorMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Interval.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorMap\WfColorMap.h">
+      <Filter>Header Files\ColorMap</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorMap\WaterfallColorMap.h">
+      <Filter>Header Files\ColorMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -97,11 +106,14 @@
     <ClCompile Include="Waterfall\WaterfallLayer.cpp">
       <Filter>Source Files\Waterfall</Filter>
     </ClCompile>
-    <ClCompile Include="WfColorMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Interval.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorMap\WfColorMap.cpp">
+      <Filter>Source Files\ColorMap</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorMap\WaterfallColorMap.cpp">
+      <Filter>Source Files\ColorMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

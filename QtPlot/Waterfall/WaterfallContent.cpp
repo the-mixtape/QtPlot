@@ -1,6 +1,6 @@
 #include "WaterfallContent.h"
 
-#include "WfColorMap.h"
+#include "ColorMap/WfColorMap.h"
 #include "WaterfallLayer.h"
 
 

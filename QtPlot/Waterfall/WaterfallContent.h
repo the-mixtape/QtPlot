@@ -40,12 +40,12 @@ public:
 	void clear();
 
 	/*!
-  \brief Append data
+	\brief Append data
 
-  Data 'data' is a linear array (of doubles) of size size*h.
+	Data 'data' is a linear array (of doubles) of size size*h.
 
-  \param data Array of double values. Size: w*h.
-  \param size Width of the data block.
+	\param data Array of double values. Size: w*h.
+	\param size Width of the data block.
 	*/
 	void append(double* data, int size);
 
