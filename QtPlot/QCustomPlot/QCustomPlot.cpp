@@ -21050,16 +21050,30 @@ void QCPGraph::addData(const QVector<double> &keys, const QVector<double> &value
   mDataContainer->add(tempData, alreadySorted); // don't modify tempData beyond this to prevent copy on write
 }
 
-/*! \overload
-  
-  Adds the provided data point as \a key and \a value to the current data.
-  
-  Alternatively, you can also access and modify the data directly via the \ref data method, which
-  returns a pointer to the internal data container.
+/*!
+  Clear Data.
 */
 void QCPGraph::addData(double key, double value)
 {
   mDataContainer->add(QCPGraphData(key, value));
+}
+
+
+/*! \overload
+
+  Adds the provided points in \a keys and \a values to the current data. The provided vectors
+  should have equal length. Else, the number of added points will be the size of the smallest
+  vector.
+
+  If you can guarantee that the passed data points are sorted by \a keys in ascending order, you
+  can set \a alreadySorted to true, to improve performance by saving a sorting run.
+
+  Alternatively, you can also access and modify the data directly via the \ref data method, which
+  returns a pointer to the internal data container.
+*/
+void QCPGraph::clearData()
+{
+    mDataContainer->clear();
 }
 
 /*!

@@ -16,7 +16,7 @@ public:
 	~WaterfallPlot() override;
 
 	void appendData(double* data, int size) const;
-	void clear() const;
+	virtual void clear();
 
 	void setFPSLimit(quint32 fps = 0) const;
 	void setColorMap(WfColorMap* colorMap) const;

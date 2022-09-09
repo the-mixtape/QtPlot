@@ -39,7 +39,7 @@ void WaterfallPlot::appendData(double* data, int size) const
 	loadThread->addData(data, size);
 }
 
-void WaterfallPlot::clear() const
+void WaterfallPlot::clear()
 {
 	content->clear();
 }
