@@ -11,7 +11,7 @@ WaterfallPlot::WaterfallPlot(QWidget* parent)
 	addLayer(WATERFALL_LAYER_NAME, layer(MARKERS_LAYER_NAME), limBelow);
 
 	content = new WaterfallContent(this);
-	content->createLayer(512, 512, 0, 0, 100, 100, 0, 100, QImage::Format_ARGB32, Qt::white);
+	content->createLayer(200, 200, 0, 0, 100, 100, 0, 100, QImage::Format_ARGB32, Qt::white);
 	content->setColorMap(new WaterfallColorMap());
 	content->setLayer(WATERFALL_LAYER_NAME);
 

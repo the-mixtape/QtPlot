@@ -4,7 +4,8 @@
 
 
 MovableInfinityLine::MovableInfinityLine(QCustomPlot* parentPlot)
-	: QCPItemStraightLine(parentPlot)
+	: QCPItemStraightLine(parentPlot),
+	offset(0)
 {
 	//initialize default pens
 	{
@@ -35,6 +36,33 @@ void MovableInfinityLine::setPoint2Coord(double x, double y)
 {
 	point2->setCoords(x, y);
 	realCoords = QPointF(x, y);
+}
+
+void MovableInfinityLine::addOffset(int inOffset)
+{
+	offset = inOffset;
+
+	auto coords1 = point1->coords();
+	auto coords2 = point2->coords();
+
+	qreal x1 = coords1.x();
+	qreal x2 = coords2.x();
+	qreal y1 = coords1.y();
+	qreal y2 = coords2.y();
+
+	if(axis == EA_xAxis)
+	{
+		x1 += offset;
+		x2 += offset;
+	}
+	else
+	{
+		y1 += offset;
+		y2 += offset;
+	}
+
+	setPoint1Coord(x1, y1);
+	setPoint2Coord(x2, y2);
 }
 
 void MovableInfinityLine::setPen(ELineState inState, QPen pen)
@@ -90,7 +118,8 @@ void MovableInfinityLine::setIsDrag(bool drag)
 void MovableInfinityLine::xMoveAxis(QMouseEvent* event)
 {
 	double newPos = mParentPlot->xAxis->pixelToCoord(event->pos().x());
-	auto clampRange = mParentPlot->xAxis->range();
+
+	const auto clampRange = mParentPlot->xAxis->range();
 
 	if(newPos < clampRange.lower)
 	{
@@ -226,7 +255,7 @@ void MovableInfinityLine::mouseMove(QMouseEvent* event)
 	midLine->updatePosition();
 	emit updatePosition();
 
-	mParentPlot->layer("markers")->replot();
+	mParentPlot->layer(MARKERS_LAYER_NAME)->replot();
 }
 
 void MovableInfinityLine::axisXChanged(const QCPRange& range)
@@ -236,12 +265,12 @@ void MovableInfinityLine::axisXChanged(const QCPRange& range)
 	const double linePos = point1->coords().x();
 	double newLinePos = linePos;
 
-	const double offset = abs(range.upper - range.lower) * 0.003;
+	const double locOffset = abs(range.upper - range.lower) * 0.003;
 
 	bool clampMin = false;
 	if (newLinePos < range.lower)
 	{
-		newLinePos = range.lower + offset;
+		newLinePos = range.lower + locOffset;
 		clampMin = true;
 	}
 	else if(equals(newLinePos, realCoords.x()) == false)
@@ -249,7 +278,7 @@ void MovableInfinityLine::axisXChanged(const QCPRange& range)
 		if(realCoords.x() < range.lower)
 		{
 			clampMin = true;
-			newLinePos = range.lower + offset;
+			newLinePos = range.lower + locOffset;
 		}
 		else
 		{
@@ -261,13 +290,13 @@ void MovableInfinityLine::axisXChanged(const QCPRange& range)
 	{
 		if (newLinePos > range.upper)
 		{
-			newLinePos = range.upper - offset;
+			newLinePos = range.upper - locOffset;
 		}
 		else if (equals(newLinePos, realCoords.x()) == false)
 		{
 			if (realCoords.x() < range.upper)
 			{
-				newLinePos = range.upper + offset;
+				newLinePos = range.upper + locOffset;
 			}
 			else
 			{
@@ -297,12 +326,12 @@ void MovableInfinityLine::axisYChanged(const QCPRange& range)
 	const double linePos = point1->coords().y();
 	double newLinePos = linePos;
 
-	const double offset = abs(range.upper - range.lower) * 0.003;
+	const double locOffset = abs(range.upper - range.lower) * 0.003;
 
 	bool clampMin = false;
 	if (newLinePos < range.lower)
 	{
-		newLinePos = range.lower + offset;
+		newLinePos = range.lower + locOffset;
 		clampMin = true;
 	}
 	else if (equals(newLinePos, realCoords.y()) == false)
@@ -310,7 +339,7 @@ void MovableInfinityLine::axisYChanged(const QCPRange& range)
 		if (realCoords.y() < range.lower)
 		{
 			clampMin = true;
-			newLinePos = range.lower + offset;
+			newLinePos = range.lower + locOffset;
 		}
 		else
 		{
@@ -322,13 +351,13 @@ void MovableInfinityLine::axisYChanged(const QCPRange& range)
 	{
 		if (newLinePos > range.upper)
 		{
-			newLinePos = range.upper - offset;
+			newLinePos = range.upper - locOffset;
 		}
 		else if (equals(newLinePos, realCoords.y()) == false)
 		{
 			if (realCoords.y() < range.upper)
 			{
-				newLinePos = range.upper + offset;
+				newLinePos = range.upper + locOffset;
 			}
 			else
 			{

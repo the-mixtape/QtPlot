@@ -58,6 +58,22 @@ void MarkingPlot::setMarkerMovableAxisActive(EAxis axis, bool isActive) const
 	}
 }
 
+void MarkingPlot::addMarkersOffset(EAxis axis, int offset) const
+{
+	if (axis == EA_xAxis)
+	{
+		horRangeLine1->addOffset(offset);
+		horRangeLine2->addOffset(offset);
+		horLine->updatePosition();
+	}
+	else
+	{
+		vertRangeLine1->addOffset(offset);
+		vertRangeLine2->addOffset(offset);
+		vertLine->updatePosition();
+	}
+}
+
 void MarkingPlot::clearMarkers(EAxis axis)
 {
 	if(axis == EA_xAxis)

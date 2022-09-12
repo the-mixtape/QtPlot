@@ -19,9 +19,11 @@ public:
 	void setPoint1Coord(double x, double y);
 	void setPoint2Coord(double x, double y);
 
+	void addOffset(int inOffset);
 	void setPen(ELineState inState, QPen pen);
 	void setMoveAxis(EAxis inAxis);
 	inline void setMidLine(MovableItemLine* line) { midLine = line; }
+	
 	inline void setMovable(bool active)
 	{
 		bIsMovable = active;
@@ -57,6 +59,7 @@ private:
 	ELineState state = ELS_Idle;
 	QMap<ELineState, QPen> pens;
 
+	int offset;
 	EAxis axis;
 	bool bIsDrag	= false;
 	bool bIsMovable = false;

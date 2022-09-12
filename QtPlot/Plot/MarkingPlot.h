@@ -30,6 +30,7 @@ public:
 	void setMarkerAxisAttach(EAxis axis, bool isNeedAttach);
 	void setMarkerAxisActive(EAxis axis, bool isActive);
 	void setMarkerMovableAxisActive(EAxis axis, bool isActive) const;
+	void addMarkersOffset(EAxis axis, int offset) const;
 
 	void clearMarkers(EAxis axis);
 
