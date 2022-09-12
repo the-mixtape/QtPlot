@@ -16,6 +16,10 @@ public:
 	inline void setAxisClampRange(EAxis clampAxis, const QCPRange& clampRange) { limitRangeRules[clampAxis] = clampRange; };
 	inline void setSyncRule(EAxis axis, ESyncRule rule) { syncRules[axis] = rule; }
 
+	inline bool		 getAxisClamp(EAxis axis)  { return clampAxisRules[axis]; }
+	inline QCPRange  getLimitRange(EAxis axis) { return limitRangeRules[axis]; }
+	inline ESyncRule getSyncRule(EAxis axis)   { return syncRules[axis]; }
+
 private:
 	void limitAxisRange(EAxis axis, QCPAxis* axisObject, const QCPRange& newRange);
 
