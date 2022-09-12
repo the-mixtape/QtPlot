@@ -20,6 +20,7 @@ private:
 	void limitAxisRange(EAxis axis, QCPAxis* axisObject, const QCPRange& newRange);
 
 	void privateSetRange(QCPAxis* axis, const QCPRange& range);
+	void privateSetRange(QCPAxis* axis, EAxis axisE, const ZoomClampedPlot* plot, const QCPRange& range);
 
 protected slots:
 	virtual void xAxisChanged(const QCPRange& newRange);

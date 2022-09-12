@@ -6,8 +6,8 @@ ZoomClampedPlot::ZoomClampedPlot(QWidget* parent)
     clampAxisRules[EA_xAxis] = false;
     clampAxisRules[EA_yAxis] = false;
 
-    syncRules[EA_xAxis] = ESR_Percentage;
-    syncRules[EA_yAxis] = ESR_Percentage;
+    syncRules[EA_xAxis] = ESR_Range;
+    syncRules[EA_yAxis] = ESR_Range;
 
 	connect(xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(xAxisChanged(QCPRange)));
 	connect(yAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(yAxisChanged(QCPRange)));
@@ -53,6 +53,23 @@ void ZoomClampedPlot::privateSetRange(QCPAxis* axis, const QCPRange& range)
     }
 }
 
+void ZoomClampedPlot::privateSetRange(QCPAxis* axis, EAxis axisE, const ZoomClampedPlot* plot, const QCPRange& range)
+{
+	const QCPRange plotLimit = plot->limitRangeRules[axisE];
+    const QCPRange limitRange = limitRangeRules[axisE];
+
+    const double delta = plotLimit.upper - plotLimit.lower;
+	const double upperPercentage = (plotLimit.upper - range.upper) / delta;
+	const double lowerPercentage = (plotLimit.lower - range.lower) / delta;
+
+    const double currentDelta = limitRange.upper - limitRange.lower;
+    const QCPRange newRange = QCPRange(
+        limitRange.lower - (currentDelta * lowerPercentage),
+        limitRange.upper - (currentDelta * upperPercentage));
+
+    privateSetRange(axis, newRange);
+}
+
 void ZoomClampedPlot::xAxisChanged(const QCPRange& newRange)
 {
 	const auto axisObject = qobject_cast<QCPAxis*>(QObject::sender());
@@ -67,10 +84,30 @@ void ZoomClampedPlot::yAxisChanged(const QCPRange& newRange)
 
 void ZoomClampedPlot::setRangeX(const QCPRange& range)
 {
-    privateSetRange(xAxis, range);
+    if (syncRules[EA_xAxis] == ESR_Percentage)
+    {
+        const auto axisObject = qobject_cast<QCPAxis*>(QObject::sender());
+        const auto plot = qobject_cast<ZoomClampedPlot*>(axisObject->parentPlot());
+
+        privateSetRange(xAxis, EA_xAxis, plot, range);
+    }
+    else if(syncRules[EA_xAxis] == ESR_Range)
+    {
+        privateSetRange(xAxis, range);
+    }
 }
 
 void ZoomClampedPlot::setRangeY(const QCPRange& range)
 {
-    privateSetRange(yAxis, range);
+    if (syncRules[EA_yAxis] == ESR_Percentage)
+    {
+        const auto axisObject = qobject_cast<QCPAxis*>(QObject::sender());
+        const auto plot = qobject_cast<ZoomClampedPlot*>(axisObject->parentPlot());
+
+        privateSetRange(yAxis, EA_yAxis, plot, range);
+    }
+    else if (syncRules[EA_yAxis] == ESR_Range)
+    {
+        privateSetRange(yAxis, range);
+    }
 }

@@ -60,6 +60,18 @@ void MainWindow::initializeSyncPlots()
 
     QtPlot::syncZoom(ui.syncPlot1, ui.syncPlot2, EA_xAxis, ESR_Percentage);
     QtPlot::syncZoom(ui.syncPlot1, ui.syncPlot2, EA_yAxis, ESR_Percentage);
+
+    // Clamp View Zone
+    {
+        ui.syncPlot2->setAxisClamp(EA_xAxis, true);
+        ui.syncPlot2->setAxisClamp(EA_yAxis, true);
+
+        ui.syncPlot2->setAxisClampRange(EA_xAxis, QCPRange(-100, 0));
+        ui.syncPlot2->setAxisClampRange(EA_yAxis, QCPRange(-100, 0));
+
+        ui.syncPlot2->xAxis->setRange(-100, 0);
+        ui.syncPlot2->yAxis->setRange(-100, 0);
+    }
 }
 
 void MainWindow::initializePlot(QtPlot* plot, QString plotName)
