@@ -146,16 +146,6 @@ void MarkingPlot::setTextColor(EAxis axis, QColor color)
 	}
 }
 
-void MarkingPlot::setSetupHorLineTextFunc(QString(*func)(double start, double end))
-{
-	setupHorLineFunc = func;
-}
-
-void MarkingPlot::setSetupVertLineTextFunc(QString(*func)(double start, double end))
-{
-	setupVertLineFunc = func;
-}
-
 void MarkingPlot::mousePressEvent(QMouseEvent* event)
 {
 	QCustomPlot::mousePressEvent(event);
@@ -309,6 +299,16 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 	}
 
 	incrementCount(vertClickCount);
+}
+
+QString MarkingPlot::setupHorizontalText(double start, double end)
+{
+	return QString::number(end - start);
+}
+
+QString MarkingPlot::setupVerticalText(double start, double end)
+{
+	return QString::number(end - start);
 }
 
 void MarkingPlot::initializeRangeLine(MovableInfinityLine** line, EAxis moveAxis)

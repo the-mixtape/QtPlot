@@ -42,15 +42,15 @@ public:
 	void setTextColor(EAxis axis, QColor color);
 	//=======================================
 
-	void setSetupHorLineTextFunc(QString(*func) (double start, double end) = nullptr);
-	void setSetupVertLineTextFunc(QString(*func) (double start, double end) = nullptr);
-
 protected:
 	void mousePressEvent(QMouseEvent* event) override;
 	void mouseReleaseEvent(QMouseEvent* event) override;
 
 	virtual void horizontalClickEvent(QMouseEvent* event);
 	virtual void verticalClickEvent(QMouseEvent* event);
+
+	virtual QString setupHorizontalText(double start, double end);
+	virtual QString setupVerticalText(double start, double end);
 
 private:
 	void initializeRangeLine(MovableInfinityLine** line, EAxis moveAxis);
@@ -62,9 +62,6 @@ private:
 
 	void setHorLineCoords(MovableInfinityLine* line, double x);
 	void setVertLineCoords(MovableInfinityLine* line, double y);
-
-	QString setupHorizontalText(double start, double end);
-	QString setupVerticalText(double start, double end);
 
 signals:
 	void rangeHorSelectedSignal(double first, double second);
@@ -91,25 +88,9 @@ private:
 	short horClickCount = 0;
 	short vertClickCount = 0;
 
-	QString(*setupHorLineFunc) (double start, double end) = nullptr;
-	QString(*setupVertLineFunc) (double start, double end) = nullptr;
-
 	QMap<EAxis, bool> markerAttachRules;
 	QMap<EAxis, bool> markerActiveRules;
 	QPoint mouseClickPoint;
 
 };
 
-inline QString MarkingPlot::setupHorizontalText(double start, double end)
-{
-	if (setupHorLineFunc == nullptr) return QString::number(end - start);
-
-	return setupHorLineFunc(start, end);
-}
-
-inline QString MarkingPlot::setupVerticalText(double start, double end)
-{
-	if (setupVertLineFunc == nullptr) return QString::number(end - start);
-
-	return setupVertLineFunc(start, end);
-}
