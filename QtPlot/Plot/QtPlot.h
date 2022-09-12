@@ -13,4 +13,5 @@ public:
 	virtual ~QtPlot();
 
 	static void syncZoom(QtPlot* plot1, QtPlot* plot2, EAxis syncAxis, ESyncRule syncRule);
+	static void desyncZoom(QtPlot* plot1, QtPlot* plot2, EAxis syncAxis);
 };

@@ -28,3 +28,20 @@ void QtPlot::syncZoom(QtPlot* plot1, QtPlot* plot2, EAxis syncAxis, ESyncRule sy
 		connect(plotAxis2, SIGNAL(rangeChanged(QCPRange)), plot1, SLOT(setRangeY(QCPRange)));
 	}
 }
+
+void QtPlot::desyncZoom(QtPlot* plot1, QtPlot* plot2, EAxis syncAxis)
+{
+	const auto plotAxis1 = syncAxis == EA_xAxis ? plot1->xAxis : plot1->yAxis;
+	const auto plotAxis2 = syncAxis == EA_xAxis ? plot2->xAxis : plot2->yAxis;
+
+	if (syncAxis == EA_xAxis)
+	{
+		disconnect(plotAxis1, SIGNAL(rangeChanged(QCPRange)), plot2, SLOT(setRangeX(QCPRange)));
+		disconnect(plotAxis2, SIGNAL(rangeChanged(QCPRange)), plot1, SLOT(setRangeX(QCPRange)));
+	}
+	else
+	{
+		disconnect(plotAxis1, SIGNAL(rangeChanged(QCPRange)), plot2, SLOT(setRangeY(QCPRange)));
+		disconnect(plotAxis2, SIGNAL(rangeChanged(QCPRange)), plot1, SLOT(setRangeY(QCPRange)));
+	}
+}
