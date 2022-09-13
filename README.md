@@ -21,6 +21,7 @@ Classes:
 * movable markers
 * clamp move & zoom zone
 * full customization of marker styles
+* synchronization of the zoom (2 modes)
 
 ---
 
