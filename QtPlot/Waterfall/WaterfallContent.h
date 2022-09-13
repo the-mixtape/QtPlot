@@ -9,7 +9,7 @@
 class QCustomPlot;
 class WfColorMap;
 class WaterfallLayer;
-class QCPItemPixmap;
+class QtPlot;
 
 
 class WaterfallContent : public QCPItemPixmap
@@ -115,11 +115,18 @@ private:
 	*/
 	void appendR(double* data, int w, int h);
 
+protected:
+	void draw(QCPPainter* painter) override;
+
+private:
+	void setupScaledPixmap(QRect finalRect, bool flipHorz, bool flipVert);
+
 private:
 	WaterfallLayer* waterfallLayer;
 	QReadWriteLock* readWriteLock;
 	EAppendSide		appendSide;
 	qint32			appendHeight;
+	QtPlot*			parentQtPlot;
 
 };
 

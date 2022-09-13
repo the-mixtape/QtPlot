@@ -2,6 +2,7 @@
 
 #include "ColorMap/WfColorMap.h"
 #include "WaterfallLayer.h"
+#include "Plot/QtPlot.h"
 
 
 WaterfallContent::WaterfallContent(QCustomPlot* parent)
@@ -10,8 +11,9 @@ WaterfallContent::WaterfallContent(QCustomPlot* parent)
 	appendSide(EAS_Top),
 	appendHeight(1)
 {
+	parentQtPlot = reinterpret_cast<QtPlot*>(parent);
 	readWriteLock = new QReadWriteLock(QReadWriteLock::Recursive);
-	setScaled(true, Qt::IgnoreAspectRatio);
+	setScaled(true, Qt::IgnoreAspectRatio, Qt::FastTransformation);
 }
 
 WaterfallContent::~WaterfallContent()
@@ -282,4 +284,75 @@ void WaterfallContent::appendR(double* data, int w, int h)
 			*lina++ = waterfallLayer->colorMap->rgb(waterfallLayer->range, data[i]);
 		offset += h;
 	}
+}
+
+void WaterfallContent::draw(QCPPainter* painter)
+{
+	bool flipHorz = false;
+	bool flipVert = false;
+	QRect rect = getFinalRect(&flipHorz, &flipVert);
+	int clipPad = mainPen().style() == Qt::NoPen ? 0 : qCeil(mainPen().widthF());
+	QRect boundingRect = rect.adjusted(-clipPad, -clipPad, clipPad, clipPad);
+	if (boundingRect.intersects(clipRect()))
+	{
+		setupScaledPixmap(rect, flipHorz, flipVert);
+		painter->drawPixmap(clipRect().topLeft(), mScaled ? mScaledPixmap : mPixmap);
+		QPen pen = mainPen();
+		if (pen.style() != Qt::NoPen)
+		{
+			painter->setPen(pen);
+			painter->setBrush(Qt::NoBrush);
+			painter->drawRect(clipRect());
+		}
+	}
+}
+
+void WaterfallContent::setupScaledPixmap(QRect finalRect, bool flipHorz, bool flipVert)
+{
+	if (mPixmap.isNull())
+		return;
+
+	if (mScaled)
+	{
+#ifdef QCP_DEVICEPIXELRATIO_SUPPORTED
+		double devicePixelRatio = mPixmap.devicePixelRatio();
+#else
+		double devicePixelRatio = 1.0;
+#endif
+		if (finalRect.isNull())
+			finalRect = getFinalRect(&flipHorz, &flipVert);
+		if (mScaledPixmapInvalidated || finalRect.size() != mScaledPixmap.size() / devicePixelRatio)
+		{
+			const auto xLimitRange = parentQtPlot->getLimitRange(EA_xAxis);
+			const auto yLimitRange = parentQtPlot->getLimitRange(EA_yAxis);
+			const auto xRange = parentQtPlot->xAxis->range();
+			const auto yRange = parentQtPlot->yAxis->range();
+
+			const double xDelta = xLimitRange.upper - xLimitRange.lower;
+			const double yDelta = yLimitRange.upper - yLimitRange.lower;
+
+			const double xMultiply = (xRange.upper - xRange.lower) / xDelta;
+			const double yMultiply = (yRange.upper - yRange.lower) / yDelta;
+
+			const double width = mPixmap.width() * xMultiply;
+			const double height = mPixmap.height() * yMultiply;
+			const double xOffset = (xRange.lower - xLimitRange.lower) / xDelta * mPixmap.width();
+			const double yOffset = (yLimitRange.upper - yRange.upper) / xDelta * mPixmap.height();
+
+			const QRect baseRect = clipRect();
+			const QRect copyRect(xOffset, yOffset, width, height);
+
+			mScaledPixmap = mPixmap.copy(copyRect);
+			mScaledPixmap = mScaledPixmap.scaled(baseRect.size() * devicePixelRatio, mAspectRatioMode, mTransformationMode);
+
+			if (flipHorz || flipVert)
+				mScaledPixmap = QPixmap::fromImage(mScaledPixmap.toImage().mirrored(flipHorz, flipVert));
+#ifdef QCP_DEVICEPIXELRATIO_SUPPORTED
+			mScaledPixmap.setDevicePixelRatio(devicePixelRatio);
+#endif
+		}
+	}
+	else if (!mScaledPixmap.isNull())
+		mScaledPixmap = QPixmap();
+	mScaledPixmapInvalidated = false;
 }
