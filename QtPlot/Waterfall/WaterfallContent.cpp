@@ -321,7 +321,8 @@ void WaterfallContent::setupScaledPixmap(QRect finalRect, bool flipHorz, bool fl
 #endif
 		if (finalRect.isNull())
 			finalRect = getFinalRect(&flipHorz, &flipVert);
-		if (mScaledPixmapInvalidated || finalRect.size() != mScaledPixmap.size() / devicePixelRatio)
+		
+		if (mScaledPixmapInvalidated || lastFinalRect.size() != finalRect.size())
 		{
 			const auto xLimitRange = parentQtPlot->getLimitRange(EA_xAxis);
 			const auto yLimitRange = parentQtPlot->getLimitRange(EA_yAxis);
@@ -351,6 +352,8 @@ void WaterfallContent::setupScaledPixmap(QRect finalRect, bool flipHorz, bool fl
 			mScaledPixmap.setDevicePixelRatio(devicePixelRatio);
 #endif
 		}
+
+		lastFinalRect = finalRect;
 	}
 	else if (!mScaledPixmap.isNull())
 		mScaledPixmap = QPixmap();

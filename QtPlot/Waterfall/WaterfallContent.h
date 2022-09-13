@@ -122,11 +122,13 @@ private:
 	void setupScaledPixmap(QRect finalRect, bool flipHorz, bool flipVert);
 
 private:
+	QRect			lastFinalRect;
+
 	WaterfallLayer* waterfallLayer;
 	QReadWriteLock* readWriteLock;
+	QtPlot*			parentQtPlot;
 	EAppendSide		appendSide;
 	qint32			appendHeight;
-	QtPlot*			parentQtPlot;
 
 };
 
