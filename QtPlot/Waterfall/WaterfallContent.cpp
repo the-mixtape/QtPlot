@@ -14,6 +14,10 @@ WaterfallContent::WaterfallContent(QCustomPlot* parent)
 	parentQtPlot = reinterpret_cast<QtPlot*>(parent);
 	readWriteLock = new QReadWriteLock(QReadWriteLock::Recursive);
 	setScaled(true, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+
+	connect(parent->xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(update()));
+	connect(parent->yAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(update()));
 }
 
 WaterfallContent::~WaterfallContent()
@@ -321,13 +325,19 @@ void WaterfallContent::setupScaledPixmap(QRect finalRect, bool flipHorz, bool fl
 #endif
 		if (finalRect.isNull())
 			finalRect = getFinalRect(&flipHorz, &flipVert);
-		
-		if (mScaledPixmapInvalidated || lastFinalRect.size() != finalRect.size())
+
+		const auto xRange = parentQtPlot->xAxis->range();
+		const auto yRange = parentQtPlot->yAxis->range();
+
+		if (mScaledPixmapInvalidated || lastFinalRect.size() != finalRect.size() || xLastRange != xRange || yLastRange != yRange)
 		{
+			xLastRange = xRange;
+			yLastRange = yRange;
+
 			const auto xLimitRange = parentQtPlot->getLimitRange(EA_xAxis);
 			const auto yLimitRange = parentQtPlot->getLimitRange(EA_yAxis);
-			const auto xRange = parentQtPlot->xAxis->range();
-			const auto yRange = parentQtPlot->yAxis->range();
+			
+			qDebug() << xRange;
 
 			const double xDelta = xLimitRange.upper - xLimitRange.lower;
 			const double yDelta = yLimitRange.upper - yLimitRange.lower;

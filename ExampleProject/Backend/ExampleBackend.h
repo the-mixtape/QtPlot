@@ -26,5 +26,8 @@ private:
 	QMutex generateNewData;
 	bool bIsQuit;
 
+	int size = 512;
+	double* data;
+
 };
 

@@ -130,5 +130,8 @@ private:
 	EAppendSide		appendSide;
 	qint32			appendHeight;
 
+	QCPRange xLastRange;
+	QCPRange yLastRange;
+
 };
 

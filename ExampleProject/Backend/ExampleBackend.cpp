@@ -12,6 +12,7 @@ ExampleBackend::ExampleBackend(QObject* parent)
 
 ExampleBackend::~ExampleBackend()
 {
+	// delete data;
 }
 
 void ExampleBackend::stopAndClear()
@@ -35,16 +36,22 @@ void ExampleBackend::copyingCompleted()
 
 void ExampleBackend::run()
 {
-	int size = 512;
-	double* data = new double[size];
+	data = new double[size];
+
 	double d = 0;
 	bIsQuit = false;
-
+	int j = 0;
 	while(!bIsQuit)
 	{
 		generateNewData.lock();
 
 		if (bIsQuit) break;
+
+		if (j > 10)
+		{
+			disconnect();
+			break;
+		}
 
 		d = (rand() % 4 + 2);
 		for(int i = 0; i < size; i++)
@@ -53,8 +60,8 @@ void ExampleBackend::run()
 		}
 
 		emit generatedNewData(data, size);
+		j++;
 	}
 
 	generateNewData.unlock();
-	delete data;
 }
