@@ -13,7 +13,7 @@ WaterfallContent::WaterfallContent(QCustomPlot* parent)
 {
 	parentQtPlot = reinterpret_cast<QtPlot*>(parent);
 	readWriteLock = new QReadWriteLock(QReadWriteLock::Recursive);
-	setScaled(true, Qt::IgnoreAspectRatio, Qt::FastTransformation);
+	setScaled(true, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
 WaterfallContent::~WaterfallContent()
