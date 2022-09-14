@@ -63,5 +63,13 @@ private:
 	EAxis axis;
 	bool bIsDrag	= false;
 	bool bIsMovable = false;
+
+public:
+	void addSyncLine(MovableInfinityLine* line);
+	void removeSyncLine(MovableInfinityLine* line);
+
+private:
+	QList<MovableInfinityLine*> syncLines;
+
 };
 

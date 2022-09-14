@@ -28,14 +28,34 @@ MovableInfinityLine::~MovableInfinityLine()
 
 void MovableInfinityLine::setPoint1Coord(double x, double y)
 {
+	const QPoint newRealCoords(x, y);
+
+	if (realCoords.x() == newRealCoords.x() && realCoords.y() == newRealCoords.y()) return;
+
 	point1->setCoords(x, y);
-	realCoords = QPointF(x, y);
+	realCoords = newRealCoords;
+
+	for(const auto& syncLine: syncLines)
+	{
+		syncLine->point1->setCoords(x, y);
+		syncLine->realCoords = newRealCoords;
+	}
 }
 
 void MovableInfinityLine::setPoint2Coord(double x, double y)
 {
+	const QPoint newRealCoords(x, y);
+
+	if (realCoords.x() == newRealCoords.x() && realCoords.y() == newRealCoords.y()) return;
+
 	point2->setCoords(x, y);
-	realCoords = QPointF(x, y);
+	realCoords = newRealCoords;
+
+	for (const auto& syncLine : syncLines)
+	{
+		syncLine->point2->setCoords(x, y);
+		syncLine->realCoords = newRealCoords;
+	}
 }
 
 void MovableInfinityLine::addOffset(int inOffset)
@@ -130,16 +150,9 @@ void MovableInfinityLine::xMoveAxis(QMouseEvent* event)
 	{
 		newPos = clampRange.upper;
 	}
-
-	QPointF startCoords = point1->coords();
-	startCoords.setX(newPos);
-	point1->setCoords(startCoords);
-
-	QPointF endCoords = point2->coords();
-	endCoords.setX(newPos);
-	point2->setCoords(endCoords);
-
-	realCoords.setX(newPos);
+	
+	setPoint1Coord(newPos, point1->coords().y());
+	setPoint2Coord(newPos, point2->coords().y());
 }
 
 void MovableInfinityLine::yMoveAxis(QMouseEvent* event)
@@ -156,16 +169,9 @@ void MovableInfinityLine::yMoveAxis(QMouseEvent* event)
 	{
 		newPos = clampRange.upper;
 	}
-
-	QPointF startCoords = point1->coords();
-	startCoords.setY(newPos);
-	point1->setCoords(startCoords);
-
-	QPointF endCoords = point2->coords();
-	endCoords.setY(newPos);
-	point2->setCoords(endCoords);
-
-	realCoords.setY(newPos);
+	
+	setPoint1Coord(point1->coords().x(), newPos);
+	setPoint2Coord(point2->coords().x(), newPos);
 }
 
 void MovableInfinityLine::checkHovered(QMouseEvent* event)
@@ -226,7 +232,7 @@ void MovableInfinityLine::setState(ELineState inState)
 	if (needReplot)
 	{
 		QCPItemStraightLine::setPen(newPen);
-		mParentPlot->layer("markers")->replot();
+		mParentPlot->layer(MARKERS_LAYER_NAME)->replot();
 	}
 }
 
@@ -254,8 +260,14 @@ void MovableInfinityLine::mouseMove(QMouseEvent* event)
 
 	midLine->updatePosition();
 	emit updatePosition();
-
 	mParentPlot->layer(MARKERS_LAYER_NAME)->replot();
+
+	for(const auto& syncLine: syncLines)
+	{
+		syncLine->midLine->updatePosition();
+		emit syncLine->updatePosition();
+		syncLine->mParentPlot->layer(MARKERS_LAYER_NAME)->replot();
+	}
 }
 
 void MovableInfinityLine::axisXChanged(const QCPRange& range)
@@ -315,7 +327,7 @@ void MovableInfinityLine::axisXChanged(const QCPRange& range)
 		coords.setX(newLinePos);
 		point2->setCoords(coords);
 		
-		mParentPlot->layer("markers")->replot();
+		mParentPlot->layer(MARKERS_LAYER_NAME)->replot();
 	}
 }
 
@@ -376,6 +388,20 @@ void MovableInfinityLine::axisYChanged(const QCPRange& range)
 		coords.setY(newLinePos);
 		point2->setCoords(coords);
 		
-		mParentPlot->layer("markers")->replot();
+		mParentPlot->layer(MARKERS_LAYER_NAME)->replot();
 	}
+}
+
+void MovableInfinityLine::addSyncLine(MovableInfinityLine* line)
+{
+	if (!line) return;
+
+	syncLines.append(line);
+}
+
+void MovableInfinityLine::removeSyncLine(MovableInfinityLine* line)
+{
+	if (!line) return;
+
+	syncLines.removeOne(line);
 }

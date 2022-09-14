@@ -65,12 +65,26 @@ void MarkingPlot::addMarkersOffset(EAxis axis, int offset) const
 		horRangeLine1->addOffset(offset);
 		horRangeLine2->addOffset(offset);
 		horLine->updatePosition();
+
+		for(const auto& syncPlot: xSyncPlots)
+		{
+			syncPlot->horRangeLine1->addOffset(offset);
+			syncPlot->horRangeLine2->addOffset(offset);
+			syncPlot->horLine->updatePosition();
+		}
 	}
 	else
 	{
 		vertRangeLine1->addOffset(offset);
 		vertRangeLine2->addOffset(offset);
 		vertLine->updatePosition();
+
+		for (const auto& syncPlot : ySyncPlots)
+		{
+			syncPlot->horRangeLine1->addOffset(offset);
+			syncPlot->horRangeLine2->addOffset(offset);
+			syncPlot->horLine->updatePosition();
+		}
 	}
 }
 
@@ -495,13 +509,21 @@ void MarkingPlot::addMarkerSyncPlot(EAxis syncAxis, MarkingPlot* plot)
 
 	if(syncAxis == EA_xAxis)
 	{
+		plot->horRangeLine1->addSyncLine(horRangeLine1);
+		plot->horRangeLine2->addSyncLine(horRangeLine2);
+		horRangeLine1->addSyncLine(plot->horRangeLine1);
+		horRangeLine2->addSyncLine(plot->horRangeLine2);
+
 		xSyncPlots.append(plot);
-		xSyncPlotsCount = xSyncPlots.count();
 	}
 	else
 	{
+		plot->vertRangeLine1->addSyncLine(vertRangeLine1);
+		plot->vertRangeLine2->addSyncLine(vertRangeLine2);
+		vertRangeLine1->addSyncLine(plot->vertRangeLine1);
+		vertRangeLine2->addSyncLine(plot->vertRangeLine2);
+
 		ySyncPlots.append(plot);
-		ySyncPlotsCount = ySyncPlots.count();
 	}
 }
 
@@ -511,12 +533,20 @@ void MarkingPlot::removeMarkerSyncPlot(EAxis syncAxis, MarkingPlot* plot)
 
 	if (syncAxis == EA_xAxis)
 	{
+		plot->horRangeLine1->removeSyncLine(horRangeLine1);
+		plot->horRangeLine2->removeSyncLine(horRangeLine2);
+		horRangeLine1->removeSyncLine(plot->horRangeLine1);
+		horRangeLine2->removeSyncLine(plot->horRangeLine2);
+
 		xSyncPlots.removeOne(plot);
-		xSyncPlotsCount = xSyncPlots.count();
 	}
 	else
 	{
+		plot->vertRangeLine1->removeSyncLine(vertRangeLine1);
+		plot->vertRangeLine2->removeSyncLine(vertRangeLine2);
+		vertRangeLine1->removeSyncLine(plot->vertRangeLine1);
+		vertRangeLine2->removeSyncLine(plot->vertRangeLine2);
+
 		ySyncPlots.removeOne(plot);
-		ySyncPlotsCount = xSyncPlots.count();
 	}
 }

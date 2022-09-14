@@ -103,8 +103,5 @@ private:
 	QList<MarkingPlot*> xSyncPlots;
 	QList<MarkingPlot*> ySyncPlots;
 
-	quint8 xSyncPlotsCount;
-	quint8 ySyncPlotsCount;
-
 };
 

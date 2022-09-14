@@ -184,7 +184,7 @@ void MovableItemLine::setState(ELineState inState)
 	if (needReplot) 
 	{
 		QCPItemLine::setPen(newPen);
-		mParentPlot->layer("markers")->replot();
+		mParentPlot->layer(MARKERS_LAYER_NAME)->replot();
 		// mParentPlot->replot();
 	}
 }
@@ -265,5 +265,5 @@ void MovableItemLine::mouseMove(QMouseEvent* event)
 		yMoveAxis(event);
 	}
 
-	mParentPlot->layer("markers")->replot();
+	mParentPlot->layer(MARKERS_LAYER_NAME)->replot();
 }
