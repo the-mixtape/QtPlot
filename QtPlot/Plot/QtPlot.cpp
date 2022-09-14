@@ -45,3 +45,18 @@ void QtPlot::desyncZoom(QtPlot* plot1, QtPlot* plot2, EAxis syncAxis)
 		disconnect(plotAxis2, SIGNAL(rangeChanged(QCPRange)), plot1, SLOT(setRangeY(QCPRange)));
 	}
 }
+
+void QtPlot::syncMarkers(QtPlot* plot1, QtPlot* plot2, EAxis syncAxis)
+{
+	plot1->clearMarkers(syncAxis);
+	plot2->clearMarkers(syncAxis);
+
+	plot1->addMarkerSyncPlot(syncAxis, plot2);
+	plot2->addMarkerSyncPlot(syncAxis, plot1);
+}
+
+void QtPlot::desyncMarkers(QtPlot* plot1, QtPlot* plot2, EAxis syncAxis)
+{
+	plot1->removeMarkerSyncPlot(syncAxis, plot2);
+	plot2->removeMarkerSyncPlot(syncAxis, plot1);
+}

@@ -83,6 +83,16 @@ void MarkingPlot::clearMarkers(EAxis axis)
 		horRangeLine2->setVisible(false);
 		horLine->setVisible(false);
 		horLineText->setVisible(false);
+
+		for (const auto& syncPlot : xSyncPlots)
+		{
+			syncPlot->horClickCount = 0;
+			syncPlot->horRangeLine1->setVisible(false);
+			syncPlot->horRangeLine2->setVisible(false);
+			syncPlot->horLine->setVisible(false);
+			syncPlot->horLineText->setVisible(false);
+			syncPlot->layer(MARKERS_LAYER_NAME)->replot();
+		}
 	}
 	else
 	{
@@ -91,6 +101,16 @@ void MarkingPlot::clearMarkers(EAxis axis)
 		vertRangeLine2->setVisible(false);
 		vertLine->setVisible(false);
 		vertLineText->setVisible(false);
+
+		for (const auto& syncPlot : ySyncPlots)
+		{
+			syncPlot->vertClickCount = 0;
+			syncPlot->vertRangeLine1->setVisible(false);
+			syncPlot->vertRangeLine2->setVisible(false);
+			syncPlot->vertLine->setVisible(false);
+			syncPlot->vertLineText->setVisible(false);
+			syncPlot->layer(MARKERS_LAYER_NAME)->replot();
+		}
 	}
 
 	layer(MARKERS_LAYER_NAME)->replot();
@@ -190,23 +210,24 @@ void MarkingPlot::horizontalClickEvent(QMouseEvent* event)
 	if (horClickCount == 0)
 	{
 		setHorLineCoords(horRangeLine1, x);
+		incrementCount(horClickCount);
+
+		for(const auto& syncPlot: xSyncPlots)
+		{
+			syncPlot->setHorLineCoords(syncPlot->horRangeLine1, x);
+			syncPlot->incrementCount(syncPlot->horClickCount);
+		}
+
+		return;
 	}
 
 	if (horClickCount == 1)
 	{
 		setHorLineCoords(horRangeLine2, x);
+		incrementCount(horClickCount);
 
-		// setup ELS_Idle mid line position
-		{
-			const auto currentRange = yAxis->range();
-			const double y = currentRange.upper - ((currentRange.upper - currentRange.lower) / 2.0);
-
-			horLine->start->setCoords(horLine->start->coords().x(), y);
-			horLine->end->setCoords(horLine->start->coords().x(), horLine->start->coords().y());
-		}
-
+		setupHorFirstMidLinePosition();
 		updateHorizontalMarkers();
-
 		horLineText->setVisible(true);
 		horLine->setVisible(true);
 
@@ -221,19 +242,31 @@ void MarkingPlot::horizontalClickEvent(QMouseEvent* event)
 			firstPoint = secondPoint;
 			secondPoint = temp;
 		}
+
 		emit rangeHorSelectedSignal(firstPoint, secondPoint);
+
+		for (const auto& syncPlot : xSyncPlots)
+		{
+			syncPlot->setHorLineCoords(syncPlot->horRangeLine2, x);
+			syncPlot->incrementCount(syncPlot->horClickCount);
+
+			syncPlot->setupHorFirstMidLinePosition();
+			syncPlot->updateHorizontalMarkers();
+			syncPlot->horLineText->setVisible(true);
+			syncPlot->horLine->setVisible(true);
+
+			syncPlot->layer(MARKERS_LAYER_NAME)->replot();
+
+			emit syncPlot->rangeHorSelectedSignal(firstPoint, secondPoint);
+		}
+
+		return;
 	}
 
 	if (horClickCount == 2)
 	{
-		horRangeLine1->setVisible(false);
-		horRangeLine2->setVisible(false);
-		horLine->setVisible(false);
-		horLineText->setVisible(false);
-		layer(MARKERS_LAYER_NAME)->replot();
+		clearMarkers(EA_xAxis);
 	}
-
-	incrementCount(horClickCount);
 }
 
 void MarkingPlot::verticalClickEvent(QMouseEvent* event)
@@ -255,23 +288,24 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 	if (vertClickCount == 0)
 	{
 		setVertLineCoords(vertRangeLine1, y);
+		incrementCount(vertClickCount);
+
+		for (const auto& syncPlot : ySyncPlots)
+		{
+			syncPlot->setVertLineCoords(syncPlot->vertRangeLine1, y);
+			syncPlot->incrementCount(syncPlot->vertClickCount);
+		}
+
+		return;
 	}
 
 	if (vertClickCount == 1)
 	{
 		setVertLineCoords(vertRangeLine2, y);
+		incrementCount(vertClickCount);
 
-		// setup ELS_Idle mid line position
-		{
-			const auto currentRange = xAxis->range();
-			const double x = currentRange.lower + ((currentRange.upper - currentRange.lower) / 5.0);
-
-			vertLine->start->setCoords(x, vertLine->start->coords().y());
-			vertLine->end->setCoords(x, vertLine->start->coords().y());
-		}
-
+		setupVertFirstMidLinePosition();
 		updateVerticalMarkers();
-
 		vertLine->setVisible(true);
 		vertLineText->setVisible(true);
 
@@ -287,18 +321,29 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 			secondPoint = temp;
 		}
 		emit rangeHorSelectedSignal(firstPoint, secondPoint);
+
+		for (const auto& syncPlot : ySyncPlots)
+		{
+			syncPlot->setVertLineCoords(syncPlot->vertRangeLine2, y);
+			syncPlot->incrementCount(syncPlot->vertClickCount);
+
+			syncPlot->setupVertFirstMidLinePosition();
+			syncPlot->updateVerticalMarkers();
+			syncPlot->vertLine->setVisible(true);
+			syncPlot->vertLineText->setVisible(true);
+
+			syncPlot->layer(MARKERS_LAYER_NAME)->replot();
+
+			emit syncPlot->rangeHorSelectedSignal(firstPoint, secondPoint);
+		}
+
+		return;
 	}
 
 	if (vertClickCount == 2)
 	{
-		vertRangeLine1->setVisible(false);
-		vertRangeLine2->setVisible(false);
-		vertLine->setVisible(false);
-		vertLineText->setVisible(false);
-		layer(MARKERS_LAYER_NAME)->replot();
+		clearMarkers(EA_yAxis);
 	}
-
-	incrementCount(vertClickCount);
 }
 
 QString MarkingPlot::setupHorizontalText(double start, double end)
@@ -385,6 +430,24 @@ void MarkingPlot::setVertLineCoords(MovableInfinityLine* line, double y)
 	layer(MARKERS_LAYER_NAME)->replot();
 }
 
+void MarkingPlot::setupHorFirstMidLinePosition()
+{
+	const auto currentRange = yAxis->range();
+	const double y = currentRange.upper - ((currentRange.upper - currentRange.lower) / 2.0);
+
+	horLine->start->setCoords(horLine->start->coords().x(), y);
+	horLine->end->setCoords(horLine->start->coords().x(), horLine->start->coords().y());
+}
+
+void MarkingPlot::setupVertFirstMidLinePosition()
+{
+	const auto currentRange = xAxis->range();
+	const double x = currentRange.lower + ((currentRange.upper - currentRange.lower) / 5.0);
+
+	vertLine->start->setCoords(x, vertLine->start->coords().y());
+	vertLine->end->setCoords(x, vertLine->start->coords().y());
+}
+
 void MarkingPlot::updateHorizontalMarkers()
 {
 	double firstPoint = horRangeLine1->point1->key();
@@ -424,4 +487,36 @@ void MarkingPlot::updateVerticalMarkers()
 	const double midY = secondPoint - ((secondPoint - firstPoint) / 2.0);
 	vertLineText->position->setCoords(vertLine->start->coords().x(), midY);
 	vertLineText->setText(setupVerticalText(firstPoint, secondPoint));
+}
+
+void MarkingPlot::addMarkerSyncPlot(EAxis syncAxis, MarkingPlot* plot)
+{
+	if (!plot) return;
+
+	if(syncAxis == EA_xAxis)
+	{
+		xSyncPlots.append(plot);
+		xSyncPlotsCount = xSyncPlots.count();
+	}
+	else
+	{
+		ySyncPlots.append(plot);
+		ySyncPlotsCount = ySyncPlots.count();
+	}
+}
+
+void MarkingPlot::removeMarkerSyncPlot(EAxis syncAxis, MarkingPlot* plot)
+{
+	if (!plot) return;
+
+	if (syncAxis == EA_xAxis)
+	{
+		xSyncPlots.removeOne(plot);
+		xSyncPlotsCount = xSyncPlots.count();
+	}
+	else
+	{
+		ySyncPlots.removeOne(plot);
+		ySyncPlotsCount = xSyncPlots.count();
+	}
 }

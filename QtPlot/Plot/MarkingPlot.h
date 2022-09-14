@@ -63,6 +63,9 @@ private:
 	void setHorLineCoords(MovableInfinityLine* line, double x);
 	void setVertLineCoords(MovableInfinityLine* line, double y);
 
+	void setupHorFirstMidLinePosition();
+	void setupVertFirstMidLinePosition();
+
 signals:
 	void rangeHorSelectedSignal(double first, double second);
 	void rangeVertSelectedSignal(double first, double second);
@@ -91,6 +94,17 @@ private:
 	QMap<EAxis, bool> markerAttachRules;
 	QMap<EAxis, bool> markerActiveRules;
 	QPoint mouseClickPoint;
+
+public:
+	void addMarkerSyncPlot(EAxis syncAxis, MarkingPlot* plot);
+	void removeMarkerSyncPlot(EAxis syncAxis, MarkingPlot* plot);
+
+private:
+	QList<MarkingPlot*> xSyncPlots;
+	QList<MarkingPlot*> ySyncPlots;
+
+	quint8 xSyncPlotsCount;
+	quint8 ySyncPlotsCount;
 
 };
 
