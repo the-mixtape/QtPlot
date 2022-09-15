@@ -37,21 +37,13 @@ void ExampleBackend::copyingCompleted()
 void ExampleBackend::run()
 {
 	data = new double[size];
-
-	double d = 0;
+	double d = 1;
 	bIsQuit = false;
-	int j = 0;
 	while(!bIsQuit)
 	{
 		generateNewData.lock();
 
 		if (bIsQuit) break;
-
-		if (j > 10)
-		{
-			disconnect();
-			break;
-		}
 
 		d = (rand() % 4 + 2);
 		for(int i = 0; i < size; i++)
@@ -60,7 +52,6 @@ void ExampleBackend::run()
 		}
 
 		emit generatedNewData(data, size);
-		j++;
 	}
 
 	generateNewData.unlock();

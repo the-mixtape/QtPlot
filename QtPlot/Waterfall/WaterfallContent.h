@@ -119,13 +119,14 @@ protected:
 	void draw(QCPPainter* painter) override;
 
 private:
-	void setupScaledPixmap(QRect finalRect, bool flipHorz, bool flipVert);
+	void setupScaledPixmap(QRect finalRect);
 
 private:
 	QRect			lastFinalRect;
 
 	WaterfallLayer* waterfallLayer;
 	QReadWriteLock* readWriteLock;
+	QReadWriteLock* readWritePixmap;
 	QtPlot*			parentQtPlot;
 	EAppendSide		appendSide;
 	qint32			appendHeight;

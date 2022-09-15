@@ -13,11 +13,8 @@ WaterfallContent::WaterfallContent(QCustomPlot* parent)
 {
 	parentQtPlot = reinterpret_cast<QtPlot*>(parent);
 	readWriteLock = new QReadWriteLock(QReadWriteLock::Recursive);
+	readWritePixmap = new QReadWriteLock();
 	setScaled(true, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
-
-	connect(parent->xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(update()));
-	connect(parent->yAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(update()));
 }
 
 WaterfallContent::~WaterfallContent()
@@ -33,6 +30,11 @@ WaterfallContent::~WaterfallContent()
 
 	delete readWriteLock;
 	readWriteLock = nullptr;
+
+	readWritePixmap->unlock();
+
+	delete readWritePixmap;
+	readWritePixmap = nullptr;
 }	
 
 void WaterfallContent::setColorMap(WfColorMap* inColorMap)
@@ -190,7 +192,9 @@ void WaterfallContent::append(double* data, int size)
 		}
 	}
 
+	readWritePixmap->lockForWrite();
 	setPixmap(QPixmap::fromImage(waterfallLayer->image));
+	readWritePixmap->unlock();
 
 	readWriteLock->unlock();
 }
@@ -299,8 +303,8 @@ void WaterfallContent::draw(QCPPainter* painter)
 	QRect boundingRect = rect.adjusted(-clipPad, -clipPad, clipPad, clipPad);
 	if (boundingRect.intersects(clipRect()))
 	{
-		setupScaledPixmap(rect, flipHorz, flipVert);
-		painter->drawPixmap(clipRect().topLeft(), mScaled ? mScaledPixmap : mPixmap);
+		setupScaledPixmap(rect);
+		painter->drawPixmap(clipRect().topLeft(), mScaledPixmap);
 		QPen pen = mainPen();
 		if (pen.style() != Qt::NoPen)
 		{
@@ -311,7 +315,7 @@ void WaterfallContent::draw(QCPPainter* painter)
 	}
 }
 
-void WaterfallContent::setupScaledPixmap(QRect finalRect, bool flipHorz, bool flipVert)
+void WaterfallContent::setupScaledPixmap(QRect finalRect)
 {
 	if (mPixmap.isNull())
 		return;
@@ -324,7 +328,7 @@ void WaterfallContent::setupScaledPixmap(QRect finalRect, bool flipHorz, bool fl
 		double devicePixelRatio = 1.0;
 #endif
 		if (finalRect.isNull())
-			finalRect = getFinalRect(&flipHorz, &flipVert);
+			return;
 
 		const auto xRange = parentQtPlot->xAxis->range();
 		const auto yRange = parentQtPlot->yAxis->range();
@@ -336,8 +340,6 @@ void WaterfallContent::setupScaledPixmap(QRect finalRect, bool flipHorz, bool fl
 
 			const auto xLimitRange = parentQtPlot->getLimitRange(EA_xAxis);
 			const auto yLimitRange = parentQtPlot->getLimitRange(EA_yAxis);
-			
-			qDebug() << xRange;
 
 			const double xDelta = xLimitRange.upper - xLimitRange.lower;
 			const double yDelta = yLimitRange.upper - yLimitRange.lower;
@@ -353,11 +355,12 @@ void WaterfallContent::setupScaledPixmap(QRect finalRect, bool flipHorz, bool fl
 			const QRect baseRect = clipRect();
 			const QRect copyRect(xOffset, yOffset, width, height);
 
+			readWritePixmap->lockForRead();
 			mScaledPixmap = mPixmap.copy(copyRect);
+			readWritePixmap->unlock();
+
 			mScaledPixmap = mScaledPixmap.scaled(baseRect.size() * devicePixelRatio, mAspectRatioMode, mTransformationMode);
 
-			if (flipHorz || flipVert)
-				mScaledPixmap = QPixmap::fromImage(mScaledPixmap.toImage().mirrored(flipHorz, flipVert));
 #ifdef QCP_DEVICEPIXELRATIO_SUPPORTED
 			mScaledPixmap.setDevicePixelRatio(devicePixelRatio);
 #endif

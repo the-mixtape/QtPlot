@@ -49,7 +49,7 @@ void MainWindow::initializeWaterfall()
     ui.waterfallPlot->setFillColor(Qt::black);
     ui.waterfallPlot->setAppendHeight(3);
     ui.waterfallPlot->setAppendSide(EAS_Top);
-    ui.waterfallPlot->setResolution(512, 512);
+    ui.waterfallPlot->setResolution(512, 10000);
     ui.waterfallPlot->setFPSLimit(30);
 }
 
