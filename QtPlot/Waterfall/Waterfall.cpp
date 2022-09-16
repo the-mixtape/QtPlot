@@ -44,6 +44,21 @@ void WaterfallPlot::clear()
 	content->clear();
 }
 
+void WaterfallPlot::update()
+{
+	content->update();
+}
+
+void WaterfallPlot::updatePixmap()
+{
+	content->updatePixmap();
+}
+
+void WaterfallPlot::setAutoUpdate(bool bAuto /*= true*/)
+{
+	loadThread->setAutoUpdate(bAuto);
+}
+
 void WaterfallPlot::setFPSLimit(quint32 fps /*= 0*/) const
 {
 	loadThread->setFPSLimit(fps);

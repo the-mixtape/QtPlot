@@ -6,7 +6,8 @@ WaterfallThread::WaterfallThread(QObject* object)
 	:QThread(object),
 	data(nullptr),
 	size(0),
-	frameDeltaTime(0)
+	frameDeltaTime(0),
+	bIsAuto(true)
 {
 	appendMutex.lock();
 	frameTimer = new QElapsedTimer;
@@ -50,8 +51,16 @@ void WaterfallThread::run()
 
 		if (content)
 		{
-			content->append(data, size);
-			emit update();
+			locker.lockForRead();
+
+			content->append(data, size, bIsAuto);
+
+			if(bIsAuto)
+			{
+				emit update();
+			}
+
+			locker.unlock();
 		}
 
 		copyMutex.unlock();
@@ -68,6 +77,13 @@ void WaterfallThread::stopAndClear()
 {
 	quit();
 	wait();
+}
+
+void WaterfallThread::setAutoUpdate(bool bAuto)
+{
+	locker.lockForWrite();
+	bIsAuto = bAuto;
+	locker.unlock();
 }
 
 void WaterfallThread::setFPSLimit(quint32 fps /*= 0*/)

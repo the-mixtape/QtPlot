@@ -24,6 +24,7 @@ protected:
 public:
 	void quit();
 	void stopAndClear();
+	void setAutoUpdate(bool bAuto);
 
 	void setFPSLimit(quint32 fps = 0);
 
@@ -49,5 +50,6 @@ private:
 	int		size;
 
 	bool	bIsQuit;
+	bool	bIsAuto;
 };
 

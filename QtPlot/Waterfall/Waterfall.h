@@ -18,6 +18,10 @@ public:
 	void appendData(double* data, int size) const;
 	virtual void clear();
 
+	void update();
+	void updatePixmap();
+
+	void setAutoUpdate(bool bAuto = true);
 	void setFPSLimit(quint32 fps = 0) const;
 	void setColorMap(WfColorMap* colorMap) const;
 	void setAppendSide(EAppendSide side);;

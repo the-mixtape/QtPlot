@@ -62,6 +62,13 @@ void WaterfallContent::setAppendSide(EAppendSide side)
 	readWriteLock->unlock();
 }
 
+void WaterfallContent::updatePixmap()
+{
+	readWriteLock->lockForRead();
+	setPixmap(QPixmap::fromImage(waterfallLayer->image));
+	readWriteLock->unlock();
+}
+
 void WaterfallContent::update()
 {
 	parentPlot()->layer(WATERFALL_LAYER_NAME)->replot();
@@ -197,7 +204,7 @@ void WaterfallContent::clear()
 	update();
 }
 
-void WaterfallContent::append(double* data, int size)
+void WaterfallContent::append(double* data, int size, bool needUpdatePixmap/* = true*/)
 {
 	readWriteLock->lockForRead();
 
@@ -228,9 +235,12 @@ void WaterfallContent::append(double* data, int size)
 		}
 	}
 
-	readWritePixmap->lockForWrite();
-	setPixmap(QPixmap::fromImage(waterfallLayer->image));
-	readWritePixmap->unlock();
+	if (needUpdatePixmap)
+	{
+		readWritePixmap->lockForWrite();
+		setPixmap(QPixmap::fromImage(waterfallLayer->image));
+		readWritePixmap->unlock();
+	}
 
 	readWriteLock->unlock();
 }

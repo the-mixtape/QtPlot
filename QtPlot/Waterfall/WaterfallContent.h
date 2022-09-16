@@ -23,6 +23,7 @@ public:
 public:
 	void setColorMap(WfColorMap* inColorMap);
 	void setAppendSide(EAppendSide side);
+	void updatePixmap();
 
 public slots:
 	void update();
@@ -47,7 +48,7 @@ public:
 	\param data Array of double values. Size: w*h.
 	\param size Width of the data block.
 	*/
-	void append(double* data, int size);
+	void append(double* data, int size, bool needUpdatePixmap = true);
 
 	/*!
 	  \brief Create layer
