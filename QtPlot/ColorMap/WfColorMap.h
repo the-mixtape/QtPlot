@@ -26,6 +26,7 @@ public:
 	Format format() const;
 
 	virtual QRgb rgb(const QtInterval& interval, double value) const = 0;
+    virtual double RGB2Double(const QtInterval& interval, QRgb color) = 0;
 	virtual uint colorIndex(int numColors, const QtInterval& interval, double value) const;
 
 	QColor color(const QtInterval&, double value) const;
@@ -69,6 +70,9 @@ public:
 
     virtual QRgb rgb(const QtInterval&,
         double value) const override;
+
+    virtual double RGB2Double(const QtInterval& interval,
+        QRgb color) override;
 
     virtual uint colorIndex(int numColors,
         const QtInterval&, double value) const override;

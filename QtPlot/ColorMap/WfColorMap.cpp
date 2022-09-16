@@ -15,6 +15,7 @@ public:
 
     void insert(double pos, const QColor& color);
     QRgb rgb(LinearColorMap::Mode, double pos) const;
+    double value(LinearColorMap::Mode, QRgb color, double width) const;
 
     QVector< double > stops() const;
 
@@ -73,7 +74,7 @@ private:
     };
 
     inline int findUpper(double pos) const;
-    QVector< ColorStop > m_stops;
+    QVector<ColorStop> m_stops;
     bool m_doAlpha;
 };
 
@@ -188,6 +189,30 @@ inline QRgb LinearColorMap::ColorStops::rgb(
     }
 }
 
+double LinearColorMap::ColorStops::value(LinearColorMap::Mode mode, QRgb color, double width) const
+{
+    if (mode == FixedColors)
+    {
+        int index = 0;
+        bool find = false;
+
+        for (auto it = m_stops.constBegin(); it != m_stops.constEnd(); it++, index++)
+        {
+            if (it->rgb == color)
+            {
+                find = true;
+                break;
+            }
+        }
+        if (!find) index = 0;
+
+        return index / static_cast<double>(m_stops.size());
+    }
+    else
+    {
+        return 0.0;
+    }
+}
 
 
 WfColorMap::WfColorMap(Format format) : _format(format)
@@ -325,6 +350,15 @@ QRgb LinearColorMap::rgb(const QtInterval& interval, double value) const
 
     const double ratio = (value - interval.minValue()) / width;
     return m_data->colorStops.rgb(m_data->mode, ratio);
+}
+
+double LinearColorMap::RGB2Double(const QtInterval& interval, QRgb color)
+{
+    const double width = interval.width();
+    if (width <= 0.0)
+        return 0.0;
+    
+    return m_data->colorStops.value(m_data->mode, color, width);
 }
 
 uint LinearColorMap::colorIndex(int numColors, const QtInterval& interval, double value) const

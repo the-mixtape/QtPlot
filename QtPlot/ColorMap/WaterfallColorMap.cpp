@@ -3,6 +3,8 @@
 WaterfallColorMap::WaterfallColorMap()
 	:LinearColorMap(Qt::black, Qt::red)
 {
+	setMode(Mode::FixedColors);
+
 	const double size = 255;
 	double value, tcolor;
 	QColor color;

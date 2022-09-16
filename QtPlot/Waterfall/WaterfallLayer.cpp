@@ -6,6 +6,7 @@ WaterfallLayer::WaterfallLayer()
 {
 	colorMap = nullptr;
 	fillColor = Qt::white;
+	range = QtInterval(0, 0);
 }
 
 WaterfallLayer::~WaterfallLayer()

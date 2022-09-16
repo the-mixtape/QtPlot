@@ -78,7 +78,7 @@ void WaterfallThread::setFPSLimit(quint32 fps /*= 0*/)
 	{
 		frameDeltaTime = 0;
 	}
-	else 
+	else
 	{
 		frameDeltaTime = static_cast<qint64>(1000 / static_cast<double>(fps));
 	}

@@ -2,6 +2,7 @@
 
 #include "ColorMap/WfColorMap.h"
 #include "WaterfallLayer.h"
+#include "Library/QtPlotMathLibrary.h"
 #include "Plot/QtPlot.h"
 
 
@@ -89,8 +90,13 @@ void WaterfallContent::setHeight(int height)
 {
 	if (waterfallLayer->image.height() == height) return;
 
+	readWriteLock->lockForWrite();
+
 	waterfallLayer->image = QImage(waterfallLayer->image.width(), height, waterfallLayer->format);
 	waterfallLayer->image.fill(waterfallLayer->fillColor);
+
+	readWriteLock->unlock();
+
 	update();
 }
 
@@ -110,10 +116,40 @@ void WaterfallContent::setFillColor(const QColor& fillColor)
 void WaterfallContent::setInterval(int minval, int maxval)
 {
 	readWriteLock->lockForWrite();
-	
-	waterfallLayer->range = QtInterval(minval, maxval);
+	{
+		if (waterfallLayer->range.isValid())
+		{
+			const auto currentInterval = waterfallLayer->range;
+			waterfallLayer->range = QtInterval(minval, maxval);
 
+			for (int h = 0; h < waterfallLayer->image.height(); h++)
+			{
+				auto line = reinterpret_cast<QRgb*>(waterfallLayer->image.scanLine(h));
+
+				for (int w = 0; w < waterfallLayer->image.width(); w++)
+				{
+					double oldValue = waterfallLayer->colorMap->RGB2Double(currentInterval, *line);
+					if(equals(oldValue, 0.0))
+					{
+						*line++;
+						continue;
+					}
+					oldValue = currentInterval.minValue() + oldValue * currentInterval.width();
+
+					*line++ = waterfallLayer->colorMap->rgb(waterfallLayer->range, oldValue);
+				}
+			}
+		}
+	}
 	readWriteLock->unlock();
+
+	{
+		readWriteLock->lockForRead();
+		setPixmap(QPixmap::fromImage(waterfallLayer->image));
+		readWriteLock->unlock();
+
+		update();
+	}
 }
 
 void WaterfallContent::setPositionX(int minx, int maxx)
