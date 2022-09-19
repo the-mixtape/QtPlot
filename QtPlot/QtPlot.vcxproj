@@ -110,6 +110,7 @@
     <QtMoc Include="Waterfall\WaterfallThread.h" />
     <QtMoc Include="Plot\Items\MovableInfinityLine.h" />
     <ClInclude Include="Library\QtPlotMathLibrary.h" />
+    <QtMoc Include="Plot\InfoPlot.h" />
     <ClInclude Include="QtPlotGlobal.h" />
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\Items\MovableItemLine.h" />
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\MarkingPlot.h" />
@@ -121,6 +122,7 @@
     <ClCompile Include="ColorMap\WaterfallColorMap.cpp" />
     <ClCompile Include="ColorMap\WfColorMap.cpp" />
     <ClCompile Include="Interval.cpp" />
+    <ClCompile Include="Plot\InfoPlot.cpp" />
     <ClCompile Include="Plot\Items\MovableInfinityLine.cpp" />
     <ClCompile Include="Waterfall\Waterfall.cpp" />
     <ClCompile Include="Waterfall\WaterfallContent.cpp" />

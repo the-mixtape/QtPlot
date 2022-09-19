@@ -27,6 +27,9 @@ void MainWindow::initializePlot()
 {
     initializePlot(ui.plot, "Marker Test");
 
+    ui.plot->enableTooltip();
+    ui.plot->setShowInfoRule(ESIR_Attach);
+
     QCPGraph* spectrGraphRuntime = ui.plot->addGraph();
     spectrGraphRuntime->setPen(QPen(QColor(0, 255, 0), 3));
 

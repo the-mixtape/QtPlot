@@ -27,3 +27,9 @@ enum ESyncRule
 	ESR_Percentage,
 	ESR_Range
 };
+
+enum EShowInfoRule
+{
+	ESIR_None,
+	ESIR_Attach,
+};

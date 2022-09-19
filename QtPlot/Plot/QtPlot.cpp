@@ -1,8 +1,9 @@
 #include "QtPlot.h"
 
 QtPlot::QtPlot(QWidget* parent)
-	: MarkingPlot(parent)
+	: InfoPlot(parent)
 {
+
 }
 
 QtPlot::~QtPlot()

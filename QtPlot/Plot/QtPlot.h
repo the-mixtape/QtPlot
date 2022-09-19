@@ -1,10 +1,10 @@
 #pragma once
 
 #include "QtPlotGlobal.h"
-#include "MarkingPlot.h"
+#include "Plot/InfoPlot.h"
 
 
-class QTPLOT_EXPORT QtPlot : public MarkingPlot
+class QTPLOT_EXPORT QtPlot : public InfoPlot
 {
 	Q_OBJECT
 

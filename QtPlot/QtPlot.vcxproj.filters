@@ -115,6 +115,9 @@
     <ClCompile Include="ColorMap\WaterfallColorMap.cpp">
       <Filter>Source Files\ColorMap</Filter>
     </ClCompile>
+    <ClCompile Include="Plot\InfoPlot.cpp">
+      <Filter>Source Files\Plot</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.h">
@@ -146,6 +149,9 @@
     </QtMoc>
     <QtMoc Include="Waterfall\Waterfall.h">
       <Filter>Header Files\Waterfall</Filter>
+    </QtMoc>
+    <QtMoc Include="Plot\InfoPlot.h">
+      <Filter>Header Files\Plot</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>
