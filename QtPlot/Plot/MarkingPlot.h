@@ -17,12 +17,18 @@ public:
 	virtual ~MarkingPlot();
 
 	inline void setHorizontalSelectButton(Qt::MouseButton button)
-	{
-		horMouseButton = button;
-	}
+	{ horMouseButton = button; }
+
+	inline void setHorizontalSelectModifier(Qt::KeyboardModifier modifier)
+	{ horMouseModifier = modifier; }
 
 	inline void setVerticalSelectButton(Qt::MouseButton button)
 	{ vertMouseButton = button; }
+
+	inline void setVerticalSelectModifier(Qt::KeyboardModifier modifier)
+	{
+		vertMouseModifier = modifier;
+	}
 
 	inline void setAttachRule(EAxis axis, bool bNeedAttach)
 	{ markerAttachRules[axis] = bNeedAttach; }
@@ -87,6 +93,9 @@ private:
 
 	Qt::MouseButton horMouseButton = Qt::LeftButton;
 	Qt::MouseButton vertMouseButton = Qt::MidButton;
+
+	Qt::KeyboardModifier horMouseModifier = Qt::NoModifier;
+	Qt::KeyboardModifier vertMouseModifier = Qt::NoModifier;
 
 	short horClickCount = 0;
 	short vertClickCount = 0;

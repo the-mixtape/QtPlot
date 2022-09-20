@@ -19,21 +19,22 @@ void InfoPlot::disableTooltip() const
     disconnect(this, SIGNAL(mouseMove(QMouseEvent*)), this, SLOT(mouseMovePlot(QMouseEvent*)));
 }
 
+QString InfoPlot::createTooltipText(double x, double y) const
+{
+    return QString::number(x) + ":" + QString::number(y);
+}
+
 QString InfoPlot::updateTooltip(double x, double y) const
 {
     if(showInfoRule == ESIR_None)
     {
-        const QString xString = QString::number(static_cast<int>(x));
-        const QString yString = QString::number(static_cast<int>(y));
-
-        return xString + ":" + yString;
+        return createTooltipText(x, y);
     }
 
 	if(showInfoRule == ESIR_Attach)
     {
         if (infoGraphIndex < 0 && infoGraphIndex > graphCount()) return "";
-
-        QString str = "";
+        
         const int size = graph(infoGraphIndex)->data()->size();
 
         for(int index = 0; index < size; index++)
@@ -41,12 +42,9 @@ QString InfoPlot::updateTooltip(double x, double y) const
 	        const auto point = graph(infoGraphIndex)->data()->at(index);
 			if(fabs(point->key - x) < 0.5)
             {
-                str = QString::number(point->key) + ":" + QString::number(point->value);
-                break;
+                return createTooltipText(point->key, point->value);
             }
         }
-
-        return str;
     }
 
     return "";

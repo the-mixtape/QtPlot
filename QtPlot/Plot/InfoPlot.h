@@ -16,7 +16,10 @@ public:
 	inline void setShowInfoRule(EShowInfoRule rule) { showInfoRule = rule; }
 	inline void setInfoGraphIndex(int index) { infoGraphIndex = index; }
 
-	virtual QString updateTooltip(double x, double y) const;
+	virtual QString createTooltipText(double x, double y) const;
+
+private:
+	QString updateTooltip(double x, double y) const;
 
 private slots:
 	void mouseMovePlot(QMouseEvent* event);

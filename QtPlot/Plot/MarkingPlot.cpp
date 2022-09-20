@@ -193,13 +193,15 @@ void MarkingPlot::mouseReleaseEvent(QMouseEvent* event)
 	
 	if (mouseClickPoint != event->pos()) return;
 
-	if (event->button() == horMouseButton && markerActiveRules[EA_xAxis])
+	if (event->button() == horMouseButton && event->modifiers() == horMouseModifier 
+		&& markerActiveRules[EA_xAxis])
 	{
 		horizontalClickEvent(event);
 		return;
 	}
 
-	if (event->button() == vertMouseButton && markerActiveRules[EA_yAxis])
+	if (event->button() == vertMouseButton && event->modifiers() == vertMouseModifier 
+		&& markerActiveRules[EA_yAxis])
 	{
 		verticalClickEvent(event);
 	}
