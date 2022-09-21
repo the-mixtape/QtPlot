@@ -28,33 +28,29 @@ MovableInfinityLine::~MovableInfinityLine()
 
 void MovableInfinityLine::setPoint1Coord(double x, double y)
 {
-	const QPoint newRealCoords(x, y);
-
-	if (realCoords.x() == newRealCoords.x() && realCoords.y() == newRealCoords.y()) return;
+	if (equals(realCoords.x(), x) && equals(realCoords.y(), y)) return;
 
 	point1->setCoords(x, y);
-	realCoords = newRealCoords;
+	realCoords = QPointF(x, y);
 
 	for(const auto& syncLine: syncLines)
 	{
 		syncLine->point1->setCoords(x, y);
-		syncLine->realCoords = newRealCoords;
+		syncLine->realCoords = QPointF(x, y);
 	}
 }
 
 void MovableInfinityLine::setPoint2Coord(double x, double y)
 {
-	const QPoint newRealCoords(x, y);
-
-	if (realCoords.x() == newRealCoords.x() && realCoords.y() == newRealCoords.y()) return;
+	if (equals(realCoords.x(), x) && equals(realCoords.y(), y)) return;
 
 	point2->setCoords(x, y);
-	realCoords = newRealCoords;
+	realCoords = QPointF(x, y);
 
 	for (const auto& syncLine : syncLines)
 	{
 		syncLine->point2->setCoords(x, y);
-		syncLine->realCoords = newRealCoords;
+		syncLine->realCoords = QPointF(x, y);
 	}
 }
 
