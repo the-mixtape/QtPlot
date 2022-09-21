@@ -13,19 +13,22 @@ public:
 	void enableTooltip() const;
 	void disableTooltip() const;
 
-	inline void setShowInfoRule(EShowInfoRule rule) { showInfoRule = rule; }
-	inline void setInfoGraphIndex(int index) { infoGraphIndex = index; }
+	void setMarkerScatterStyle(QCPScatterStyle style) const;
+	void setShowInfoRule(EShowInfoRule rule);
+	void setInfoGraphIndex(int index);
 
-	virtual QString createTooltipText(double x, double y) const;
+	virtual QString createTooltipText(double x, double y);
 
 private:
-	QString updateTooltip(double x, double y) const;
+	QString updateTooltip(double x, double y);
 
 private slots:
 	void mouseMovePlot(QMouseEvent* event);
 
 private:
 	EShowInfoRule	showInfoRule = ESIR_None;
-	int				infoGraphIndex = 0;
+	int				infoGraphIndex = 1;
+
+	QCPGraph*		graphMarker;
 
 };
