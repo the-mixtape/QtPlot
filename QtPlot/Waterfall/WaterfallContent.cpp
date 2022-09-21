@@ -396,7 +396,7 @@ void WaterfallContent::setupScaledPixmap(QRect finalRect)
 			const double width = mPixmap.width() * xMultiply;
 			const double height = mPixmap.height() * yMultiply;
 			const double xOffset = (xRange.lower - xLimitRange.lower) / xDelta * mPixmap.width();
-			const double yOffset = (yLimitRange.upper - yRange.upper) / xDelta * mPixmap.height();
+			const double yOffset = (yLimitRange.upper - yRange.upper) / yDelta * mPixmap.height();
 
 			const QRect baseRect = clipRect();
 			const QRect copyRect(xOffset, yOffset, width, height);
