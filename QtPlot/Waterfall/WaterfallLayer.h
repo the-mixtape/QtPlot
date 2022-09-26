@@ -18,7 +18,7 @@ public:
 	~WaterfallLayer();
 
 public:
-	QImage			image;
+	QImage*			image;
 	QImage::Format	format;
 	QColor			fillColor;
 	QtInterval		range;

@@ -65,7 +65,7 @@ void WaterfallContent::setAppendSide(EAppendSide side)
 void WaterfallContent::updatePixmap()
 {
 	readWriteLock->lockForRead();
-	setPixmap(QPixmap::fromImage(waterfallLayer->image));
+	setPixmap(QPixmap::fromImage(*waterfallLayer->image));
 	readWriteLock->unlock();
 }
 
@@ -76,31 +76,48 @@ void WaterfallContent::update()
 
 void WaterfallContent::setResolution(int width, int height)
 {
-	if (waterfallLayer->image.width() == width
-		&& waterfallLayer->image.height() == height) return;
+	readWriteLock->lockForRead();
+	if (waterfallLayer->image->width() == width
+		&& waterfallLayer->image->height() == height)
+	{
+		readWriteLock->unlock();
+		return;
+	}
+	readWriteLock->unlock();
 
-	waterfallLayer->image = QImage(width, height, waterfallLayer->format);
-	waterfallLayer->image.fill(waterfallLayer->fillColor);
+	readWriteLock->lockForWrite();
+
+	delete waterfallLayer->image;
+	waterfallLayer->image = new QImage(width, height, waterfallLayer->format);
+	waterfallLayer->image->fill(waterfallLayer->fillColor);
 	update();
+
+	readWriteLock->unlock();
 }
 
 void WaterfallContent::setWidth(int width)
 {
-	if (waterfallLayer->image.width() == width) return;
+	if (waterfallLayer->image->width() == width) return;
 
-	waterfallLayer->image = QImage(width, waterfallLayer->image.height(), waterfallLayer->format);
-	waterfallLayer->image.fill(waterfallLayer->fillColor);
+	const int height = waterfallLayer->image->height();
+
+	delete waterfallLayer->image;
+	waterfallLayer->image = new QImage(width, height, waterfallLayer->format);
+	waterfallLayer->image->fill(waterfallLayer->fillColor);
 	update();
 }
 
 void WaterfallContent::setHeight(int height)
 {
-	if (waterfallLayer->image.height() == height) return;
+	if (waterfallLayer->image->height() == height) return;
 
 	readWriteLock->lockForWrite();
 
-	waterfallLayer->image = QImage(waterfallLayer->image.width(), height, waterfallLayer->format);
-	waterfallLayer->image.fill(waterfallLayer->fillColor);
+	const int width = waterfallLayer->image->width();
+
+	delete waterfallLayer->image;
+	waterfallLayer->image = new QImage(width, height, waterfallLayer->format);
+	waterfallLayer->image->fill(waterfallLayer->fillColor);
 
 	readWriteLock->unlock();
 
@@ -112,8 +129,8 @@ void WaterfallContent::setFillColor(const QColor& fillColor)
 	readWriteLock->lockForWrite();
 	
 	waterfallLayer->fillColor = fillColor;
-	waterfallLayer->image.fill(fillColor);
-	setPixmap(QPixmap::fromImage(waterfallLayer->image));
+	waterfallLayer->image->fill(fillColor);
+	setPixmap(QPixmap::fromImage(*waterfallLayer->image));
 
 	readWriteLock->unlock();
 
@@ -122,6 +139,17 @@ void WaterfallContent::setFillColor(const QColor& fillColor)
 
 void WaterfallContent::setInterval(int minval, int maxval)
 {
+	readWriteLock->lockForRead();
+	{
+		if(equals(minval, waterfallLayer->range.minValue()) 
+			&& equals(maxval, waterfallLayer->range.maxValue()))
+		{
+			readWriteLock->unlock();
+			return;
+		}
+	}
+	readWriteLock->unlock();
+
 	readWriteLock->lockForWrite();
 	{
 		if (waterfallLayer->range.isValid())
@@ -129,11 +157,11 @@ void WaterfallContent::setInterval(int minval, int maxval)
 			const auto currentInterval = waterfallLayer->range;
 			waterfallLayer->range = QtInterval(minval, maxval);
 
-			for (int h = 0; h < waterfallLayer->image.height(); h++)
+			for (int h = 0; h < waterfallLayer->image->height(); h++)
 			{
-				auto line = reinterpret_cast<QRgb*>(waterfallLayer->image.scanLine(h));
+				auto line = reinterpret_cast<QRgb*>(waterfallLayer->image->scanLine(h));
 
-				for (int w = 0; w < waterfallLayer->image.width(); w++)
+				for (int w = 0; w < waterfallLayer->image->width(); w++)
 				{
 					double oldValue = waterfallLayer->colorMap->RGB2Double(currentInterval, *line);
 					if(equals(oldValue, 0.0))
@@ -152,11 +180,20 @@ void WaterfallContent::setInterval(int minval, int maxval)
 
 	{
 		readWriteLock->lockForRead();
-		setPixmap(QPixmap::fromImage(waterfallLayer->image));
+		setPixmap(QPixmap::fromImage(*waterfallLayer->image));
 		readWriteLock->unlock();
 
 		update();
 	}
+}
+
+QtInterval WaterfallContent::getInterval() const
+{
+	readWriteLock->lockForRead();
+	const QtInterval interval = waterfallLayer->range;
+	readWriteLock->unlock();
+
+	return interval;
 }
 
 void WaterfallContent::setPositionX(int minx, int maxx)
@@ -196,8 +233,8 @@ void WaterfallContent::clear()
 {
 	readWriteLock->lockForRead();
 	
-	waterfallLayer->image.fill(waterfallLayer->fillColor);
-	setPixmap(QPixmap::fromImage(waterfallLayer->image));
+	waterfallLayer->image->fill(waterfallLayer->fillColor);
+	setPixmap(QPixmap::fromImage(*waterfallLayer->image));
 
 	readWriteLock->unlock();
 
@@ -238,7 +275,7 @@ void WaterfallContent::append(double* data, int size, bool needUpdatePixmap/* = 
 	if (needUpdatePixmap)
 	{
 		readWritePixmap->lockForWrite();
-		setPixmap(QPixmap::fromImage(waterfallLayer->image));
+		setPixmap(QPixmap::fromImage(*waterfallLayer->image));
 		readWritePixmap->unlock();
 	}
 
@@ -253,12 +290,12 @@ bool WaterfallContent::createLayer(qint32 inWidth, qint32 inHeight, qreal minx, 
 	readWriteLock->lockForWrite();
 
 	waterfallLayer = new WaterfallLayer();
-	waterfallLayer->image = QImage(inWidth, inHeight, fm);
+	waterfallLayer->image = new QImage(inWidth, inHeight, fm);
 	waterfallLayer->format = fm;
-	waterfallLayer->image.fill(fil);
+	waterfallLayer->image->fill(fil);
 	waterfallLayer->fillColor = fil;
 	
-	setPixmap(QPixmap::fromImage(waterfallLayer->image));
+	setPixmap(QPixmap::fromImage(*waterfallLayer->image));
 
 	waterfallLayer->range = QtInterval(minval, maxval);
 
@@ -272,14 +309,17 @@ bool WaterfallContent::createLayer(qint32 inWidth, qint32 inHeight, qreal minx, 
 
 void WaterfallContent::appendT(double* data, int w, int h)
 {
-	if (waterfallLayer->image.width() > w) return;
+	if (waterfallLayer->image->width() > w) return;
 
 	int y = 0;
-	uchar* imageData = waterfallLayer->image.bits();
-	memmove(imageData + waterfallLayer->image.bytesPerLine() * h, imageData, waterfallLayer->image.sizeInBytes() - waterfallLayer->image.bytesPerLine() * h);
+	uchar* imageData = waterfallLayer->image->bits();
+	memmove(imageData + waterfallLayer->image->bytesPerLine() * h, 
+		imageData, 
+		waterfallLayer->image->sizeInBytes() - waterfallLayer->image->bytesPerLine() * h);
+
 	while (y < h)
 	{
-		QRgb* line = reinterpret_cast<QRgb*>(waterfallLayer->image.scanLine(y));
+		QRgb* line = reinterpret_cast<QRgb*>(waterfallLayer->image->scanLine(y));
 		for (int x = 0; x < w; x++)
 		{
 			*line++ = waterfallLayer->colorMap->rgb(waterfallLayer->range, data[x]);
@@ -290,14 +330,17 @@ void WaterfallContent::appendT(double* data, int w, int h)
 
 void WaterfallContent::appendB(double* data, int w, int h)
 {
-	if (waterfallLayer->image.width() > w) return;
+	if (waterfallLayer->image->width() > w) return;
 
 	int	y = h;
-	uchar* imageData = waterfallLayer->image.bits();
-	memmove(imageData, imageData + waterfallLayer->image.bytesPerLine() * h, waterfallLayer->image.sizeInBytes() - waterfallLayer->image.bytesPerLine() * h);
+	uchar* imageData = waterfallLayer->image->bits();
+	memmove(imageData, 
+		imageData + waterfallLayer->image->bytesPerLine() * h, 
+		waterfallLayer->image->sizeInBytes() - waterfallLayer->image->bytesPerLine() * h);
+
 	while (y >= 1) 
 	{
-		QRgb* line = reinterpret_cast<QRgb*>(waterfallLayer->image.scanLine(waterfallLayer->image.height() - y));
+		QRgb* line = reinterpret_cast<QRgb*>(waterfallLayer->image->scanLine(waterfallLayer->image->height() - y));
 		for (int x = 0; x < w; x++)
 			*line++ = waterfallLayer->colorMap->rgb(waterfallLayer->range, data[x]);
 		y--;
@@ -306,15 +349,15 @@ void WaterfallContent::appendB(double* data, int w, int h)
 
 void WaterfallContent::appendL(double* data, int w, int h)
 {
-	if (waterfallLayer->image.height() > w) return;
+	if (waterfallLayer->image->height() > w) return;
 
-	const qint32 bpp = waterfallLayer->image.depth() / 8;
+	const qint32 bpp = waterfallLayer->image->depth() / 8;
 	qint32 offset = 0;
 
 	for (int i = 0; i < w; i++)
 	{
-		uchar* line = waterfallLayer->image.scanLine(i);
-		memmove(line + h * bpp, line, waterfallLayer->image.bytesPerLine() - h * bpp);
+		uchar* line = waterfallLayer->image->scanLine(i);
+		memmove(line + h * bpp, line, waterfallLayer->image->bytesPerLine() - h * bpp);
 		QRgb* lina = reinterpret_cast<QRgb*>(line);
 		for (int x = offset; x <= offset + h; x++)
 			*lina++ = waterfallLayer->colorMap->rgb(waterfallLayer->range, data[i]);
@@ -324,16 +367,16 @@ void WaterfallContent::appendL(double* data, int w, int h)
 
 void WaterfallContent::appendR(double* data, int w, int h)
 {
-	if (waterfallLayer->image.height() > w) return;
+	if (waterfallLayer->image->height() > w) return;
 
-	const qint32 bpp = waterfallLayer->image.depth() / 8;
+	const qint32 bpp = waterfallLayer->image->depth() / 8;
 	qint32 offset = 0;
 
 	for (int i = 0; i < w; i++)
 	{
-		uchar* line = waterfallLayer->image.scanLine(i);
-		memmove(line, line + h * bpp, waterfallLayer->image.bytesPerLine() - h * bpp);
-		QRgb* lina = reinterpret_cast<QRgb*>(line + waterfallLayer->image.bytesPerLine() - h * bpp);
+		uchar* line = waterfallLayer->image->scanLine(i);
+		memmove(line, line + h * bpp, waterfallLayer->image->bytesPerLine() - h * bpp);
+		QRgb* lina = reinterpret_cast<QRgb*>(line + waterfallLayer->image->bytesPerLine() - h * bpp);
 		for (int x = offset; x <= offset + h; x++)
 			*lina++ = waterfallLayer->colorMap->rgb(waterfallLayer->range, data[i]);
 		offset += h;

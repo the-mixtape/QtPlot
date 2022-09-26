@@ -44,14 +44,10 @@ void WaterfallPlot::clear()
 	content->clear();
 }
 
-void WaterfallPlot::update()
-{
-	content->update();
-}
-
-void WaterfallPlot::updatePixmap()
+void WaterfallPlot::updateWaterfall()
 {
 	content->updatePixmap();
+	content->update();
 }
 
 void WaterfallPlot::setAutoUpdate(bool bAuto /*= true*/)
@@ -115,6 +111,11 @@ void WaterfallPlot::setPositionY(int miny, int maxy) const
 void WaterfallPlot::setInterval(int minval, int maxval) const
 {
 	content->setInterval(minval, maxval);
+}
+
+QtInterval WaterfallPlot::getInterval() const
+{
+	return content->getInterval();
 }
 
 void WaterfallPlot::setFillColor(const QColor& fillColor) const

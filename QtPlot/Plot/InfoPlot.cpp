@@ -24,6 +24,12 @@ void InfoPlot::disableTooltip() const
     disconnect(this, SIGNAL(mouseMove(QMouseEvent*)), this, SLOT(mouseMovePlot(QMouseEvent*)));
 }
 
+void InfoPlot::clearInfoMarker() const
+{
+    graphMarker->clearData();
+    layer(MARKERS_LAYER_NAME)->replot();
+}
+
 void InfoPlot::setMarkerScatterStyle(QCPScatterStyle style) const
 {
     graphMarker->setScatterStyle(style);

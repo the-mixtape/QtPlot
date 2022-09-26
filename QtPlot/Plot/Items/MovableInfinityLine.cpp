@@ -26,30 +26,33 @@ MovableInfinityLine::~MovableInfinityLine()
 {
 }
 
-void MovableInfinityLine::setPoint1Coord(double x, double y)
+void MovableInfinityLine::setPointCoord(QCPItemPosition* point, double x, double y)
 {
-	if (equals(realCoords.x(), x) && equals(realCoords.y(), y)) return;
+	if (equals(point->coords().x(), x) && equals(point->coords().y(), y)) return;
 
-	point1->setCoords(x, y);
-	realCoords = QPointF(x, y);
-
-	for(const auto& syncLine: syncLines)
+	point->setCoords(x, y);
+	
+	for (const auto& syncLine : syncLines)
 	{
-		syncLine->point1->setCoords(x, y);
-		syncLine->realCoords = QPointF(x, y);
+		if (point1 == point)
+		{
+			syncLine->point1->setCoords(x, y);
+		}
+		else
+		{
+			syncLine->point2->setCoords(x, y);
+		}
 	}
 }
 
-void MovableInfinityLine::setPoint2Coord(double x, double y)
+void MovableInfinityLine::setPointRealCoord(double x, double y)
 {
 	if (equals(realCoords.x(), x) && equals(realCoords.y(), y)) return;
 
-	point2->setCoords(x, y);
 	realCoords = QPointF(x, y);
 
 	for (const auto& syncLine : syncLines)
 	{
-		syncLine->point2->setCoords(x, y);
 		syncLine->realCoords = QPointF(x, y);
 	}
 }
@@ -77,8 +80,9 @@ void MovableInfinityLine::addOffset(int inOffset)
 		y2 += offset;
 	}
 
-	setPoint1Coord(x1, y1);
-	setPoint2Coord(x2, y2);
+	setPointCoord(point1, x1, y1);
+	setPointCoord(point2, x1, y1);
+	setPointRealCoord(x2, y2);
 }
 
 void MovableInfinityLine::setPen(ELineState inState, QPen pen)
@@ -137,37 +141,53 @@ void MovableInfinityLine::xMoveAxis(QMouseEvent* event)
 
 	const auto clampRange = mParentPlot->xAxis->range();
 
-	if(newPos < clampRange.lower)
+	bool isDirty = false;
+	if (newPos < clampRange.lower)
 	{
 		newPos = clampRange.lower;
+		isDirty = true;
 	}
 
-	if(newPos > clampRange.upper)
+	if (newPos > clampRange.upper)
 	{
 		newPos = clampRange.upper;
+		isDirty = true;
 	}
-	
-	setPoint1Coord(newPos, point1->coords().y());
-	setPoint2Coord(newPos, point2->coords().y());
+
+	setPointCoord(point1, newPos, point1->coords().y());
+	setPointCoord(point2, newPos, point2->coords().y());
+
+	if (isDirty == false) 
+	{
+		setPointRealCoord(newPos, point2->coords().y());
+	}
 }
 
 void MovableInfinityLine::yMoveAxis(QMouseEvent* event)
 {
 	double newPos = mParentPlot->yAxis->pixelToCoord(event->pos().y());
 	auto clampRange = mParentPlot->yAxis->range();
+	bool isDirty = false;
 
 	if (newPos < clampRange.lower)
 	{
 		newPos = clampRange.lower;
+		isDirty = true;
 	}
 
 	if (newPos > clampRange.upper)
 	{
 		newPos = clampRange.upper;
+		isDirty = true;
 	}
-	
-	setPoint1Coord(point1->coords().x(), newPos);
-	setPoint2Coord(point2->coords().x(), newPos);
+
+	setPointCoord(point1, point1->coords().x(), newPos);
+	setPointCoord(point2, point2->coords().x(), newPos);
+
+	if (isDirty == false)
+	{
+		setPointRealCoord(point1->coords().x(), newPos);
+	}
 }
 
 void MovableInfinityLine::checkHovered(QMouseEvent* event)

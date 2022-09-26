@@ -16,8 +16,10 @@ public:
 	explicit MovableInfinityLine(QCustomPlot* parentPlot);
 	~MovableInfinityLine() override;
 
-	void setPoint1Coord(double x, double y);
-	void setPoint2Coord(double x, double y);
+	void setPointCoord(QCPItemPosition* point, double x, double y);
+	// void setPoint2Coord(double x, double y);
+	void setPointRealCoord(double x, double y);
+	// void setPoint2RealCoord(double x, double y);
 
 	void addOffset(int inOffset);
 	void setPen(ELineState inState, QPen pen);
@@ -29,6 +31,8 @@ public:
 		bIsMovable = active;
 		if (active == false) setIsDrag(active);
 	}
+
+	inline QPointF getRealCoords() const { return realCoords; }
 
 protected:
 	void mousePressEvent(QMouseEvent* event, const QVariant& details) override;

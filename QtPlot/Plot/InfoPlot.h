@@ -13,6 +13,8 @@ public:
 	void enableTooltip() const;
 	void disableTooltip() const;
 
+	void clearInfoMarker() const;
+
 	void setMarkerScatterStyle(QCPScatterStyle style) const;
 	void setShowInfoRule(EShowInfoRule rule);
 	void setInfoGraphIndex(int index);

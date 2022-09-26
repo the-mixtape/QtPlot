@@ -191,8 +191,8 @@ void MovableItemLine::setState(ELineState inState)
 
 void MovableItemLine::xUpdate()
 {
-	QPointF leftMarker = firstMarker->point1->coords();
-	QPointF rightMarker = secondMarker->point1->coords();
+	QPointF leftMarker = firstMarker->getRealCoords();
+	QPointF rightMarker = secondMarker->getRealCoords();
 
 	if(leftMarker.x() > rightMarker.x())
 	{
@@ -219,8 +219,8 @@ void MovableItemLine::xUpdate()
 
 void MovableItemLine::yUpdate()
 {
-	QPointF leftMarker = firstMarker->point1->coords();
-	QPointF rightMarker = secondMarker->point1->coords();
+	QPointF leftMarker = firstMarker->getRealCoords();
+	QPointF rightMarker = secondMarker->getRealCoords();
 
 	if (leftMarker.y() > rightMarker.y())
 	{

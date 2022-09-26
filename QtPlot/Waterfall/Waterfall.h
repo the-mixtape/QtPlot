@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Interval.h"
 #include "Plot/QtPlot.h"
 
 //forward declaration
@@ -18,8 +19,7 @@ public:
 	void appendData(double* data, int size) const;
 	virtual void clear();
 
-	void update();
-	void updatePixmap();
+	void updateWaterfall();
 
 	void setAutoUpdate(bool bAuto = true);
 	void setFPSLimit(quint32 fps = 0) const;
@@ -33,6 +33,8 @@ public:
 	void setPositionX(int minx, int maxx) const;
 	void setPositionY(int miny, int maxy) const;
 	void setInterval(int minval, int maxval) const;
+	QtInterval getInterval() const;
+
 	void setFillColor(const QColor& fillColor) const;
 
 signals:

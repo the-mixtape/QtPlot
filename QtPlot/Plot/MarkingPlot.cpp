@@ -430,8 +430,9 @@ void MarkingPlot::incrementCount(short& count)
 
 void MarkingPlot::setHorLineCoords(MovableInfinityLine* line, double x)
 {
-	line->setPoint1Coord(x, 0);
-	line->setPoint2Coord(x, 1);
+	line->setPointCoord(line->point1, x, 0);
+	line->setPointCoord(line->point2, x, 1);
+	line->setPointRealCoord(x, 0);
 	line->setVisible(true);
 
 	layer(MARKERS_LAYER_NAME)->replot();
@@ -439,8 +440,9 @@ void MarkingPlot::setHorLineCoords(MovableInfinityLine* line, double x)
 
 void MarkingPlot::setVertLineCoords(MovableInfinityLine* line, double y)
 {
-	line->setPoint1Coord(0, y);
-	line->setPoint2Coord(1, y);
+	line->setPointCoord(line->point1, 0, y);
+	line->setPointCoord(line->point2, 1, y);
+	line->setPointRealCoord(0, y);
 	line->setVisible(true);
 
 	layer(MARKERS_LAYER_NAME)->replot();
@@ -466,8 +468,8 @@ void MarkingPlot::setupVertFirstMidLinePosition()
 
 void MarkingPlot::updateHorizontalMarkers()
 {
-	double firstPoint = horRangeLine1->point1->key();
-	double secondPoint = horRangeLine2->point1->key();
+	double firstPoint = horRangeLine1->getRealCoords().x();
+	double secondPoint = horRangeLine2->getRealCoords().x();
 
 	if (firstPoint > secondPoint)
 	{
@@ -487,8 +489,8 @@ void MarkingPlot::updateHorizontalMarkers()
 
 void MarkingPlot::updateVerticalMarkers()
 {
-	double firstPoint = vertRangeLine1->point1->value();
-	double secondPoint = vertRangeLine2->point1->value();
+	double firstPoint = horRangeLine1->getRealCoords().y();
+	double secondPoint = horRangeLine2->getRealCoords().y();
 
 	if (firstPoint > secondPoint)
 	{

@@ -33,7 +33,10 @@ public:
 	void setWidth(int width);
 	void setHeight(int height);
 	void setFillColor(const QColor& fillColor);
+
 	void setInterval(int minval, int maxval);
+	QtInterval getInterval() const;
+
 	void setPositionX(int minx, int maxx);
 	void setPositionY(int miny, int maxy);
 	void setAppendHeight(int h);
