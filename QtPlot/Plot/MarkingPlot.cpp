@@ -489,8 +489,8 @@ void MarkingPlot::updateHorizontalMarkers()
 
 void MarkingPlot::updateVerticalMarkers()
 {
-	double firstPoint = horRangeLine1->getRealCoords().y();
-	double secondPoint = horRangeLine2->getRealCoords().y();
+	double firstPoint = vertRangeLine1->getRealCoords().y();
+	double secondPoint = vertRangeLine2->getRealCoords().y();
 
 	if (firstPoint > secondPoint)
 	{
