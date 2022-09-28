@@ -426,9 +426,9 @@ void WaterfallContent::setupScaledPixmap(QRect finalRect)
 		{
 			xLastRange = xRange;
 			yLastRange = yRange;
-
-			const auto xLimitRange = parentQtPlot->getLimitRange(EA_xAxis);
-			const auto yLimitRange = parentQtPlot->getLimitRange(EA_yAxis);
+			
+			const QCPRange xLimitRange = QCPRange(topLeft->coords().x(), bottomRight->coords().x());
+			const QCPRange yLimitRange = QCPRange(bottomRight->coords().y(), topLeft->coords().y());
 
 			const double xDelta = xLimitRange.upper - xLimitRange.lower;
 			const double yDelta = yLimitRange.upper - yLimitRange.lower;
@@ -436,8 +436,12 @@ void WaterfallContent::setupScaledPixmap(QRect finalRect)
 			const double xMultiply = (xRange.upper - xRange.lower) / xDelta;
 			const double yMultiply = (yRange.upper - yRange.lower) / yDelta;
 
-			const double width = mPixmap.width() * xMultiply;
-			const double height = mPixmap.height() * yMultiply;
+			double width = mPixmap.width() * xMultiply;
+			if (width < 1.0) width = 1.0;
+
+			double height = mPixmap.height() * yMultiply;
+			if (height < 1.0) height = 1.0;
+
 			const double xOffset = (xRange.lower - xLimitRange.lower) / xDelta * mPixmap.width();
 			const double yOffset = (yLimitRange.upper - yRange.upper) / yDelta * mPixmap.height();
 
