@@ -29,6 +29,7 @@ public:
 	void setFPSLimit(quint32 fps = 0);
 
 	void addData(double* data, int size);
+	void setData(double* data, int width, int height);
 	void setWaterfallContent(WaterfallContent* content);
 
 signals:

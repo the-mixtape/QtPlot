@@ -122,6 +122,30 @@ void WaterfallThread::addData(double* inData, int inSize)
 	appendMutex.unlock();
 }
 
+void WaterfallThread::setData(double* inData, int width, int height)
+{
+	copyMutex.lock();
+
+	if (size != (width * height))
+	{
+		delete data;
+		data = new double[width * height];
+		size = width * height;
+	}
+
+	if (data)
+	{
+		memcpy(data, inData, size * sizeof(double));
+	}
+
+	emit copyingCompleted();
+
+	content->setData(data, width, height);
+	emit update();
+
+	copyMutex.unlock();
+}
+
 void WaterfallThread::setWaterfallContent(WaterfallContent* inContent)
 {
 	if (!inContent) return;

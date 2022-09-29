@@ -282,8 +282,46 @@ void WaterfallContent::append(double* data, int size, bool needUpdatePixmap/* = 
 	readWriteLock->unlock();
 }
 
+void WaterfallContent::setData(double* data, int width, int height)
+{
+	readWriteLock->lockForRead();
+
+	switch (appendSide)
+	{
+	case EAS_Top:
+	{
+		setFullDataT(data, width, height, appendHeight);
+		break;
+	}
+
+	case EAS_Bottom:
+	{
+		setFullDataB(data, width, height, appendHeight);
+		break;
+	}
+
+	case EAS_Left:
+	{
+		setFullDataL(data, width, height, appendHeight);
+		break;
+	}
+
+	case EAS_Right:
+	{
+		setFullDataR(data, width, height, appendHeight);
+		break;
+	}
+	}
+	
+	readWritePixmap->lockForWrite();
+	setPixmap(QPixmap::fromImage(*waterfallLayer->image));
+	readWritePixmap->unlock();
+
+	readWriteLock->unlock();
+}
+
 bool WaterfallContent::createLayer(qint32 inWidth, qint32 inHeight, qreal minx, qreal miny, qreal maxx, qreal maxy,
-                                qreal minval, qreal maxval, QImage::Format fm, QColor fil)
+                                   qreal minval, qreal maxval, QImage::Format fm, QColor fil)
 {
 	delete waterfallLayer;
 
@@ -380,6 +418,72 @@ void WaterfallContent::appendR(double* data, int w, int h)
 		for (int x = offset; x <= offset + h; x++)
 			*lina++ = waterfallLayer->colorMap->rgb(waterfallLayer->range, data[i]);
 		offset += h;
+	}
+}
+
+//todo: now don't using appendHeight 
+void WaterfallContent::setFullDataT(double* data, int w, int h, int /*appendHeight*/)
+{
+	if (waterfallLayer->image->width() > w ||
+		waterfallLayer->image->height() > h) return;
+
+	for(int y = 0; y < h; y++)
+	{
+		QRgb* line = reinterpret_cast<QRgb*>(waterfallLayer->image->scanLine(y));
+		const int offset = y * w;
+
+		for (int x = 0; x < w; x++)
+		{
+			*line++ = waterfallLayer->colorMap->rgb(waterfallLayer->range, data[x + offset]);
+		}
+	}
+}
+
+void WaterfallContent::setFullDataB(double* data, int w, int h, int appendHeight)
+{
+	if (waterfallLayer->image->width() > w ||
+		waterfallLayer->image->height() > h) return;
+
+	for (int y = h - 1; y >= 0; y--)
+	{
+		QRgb* line = reinterpret_cast<QRgb*>(waterfallLayer->image->scanLine(y));
+		const int offset = y * w;
+
+		for (int x = 0; x < w; x++)
+		{
+			*line++ = waterfallLayer->colorMap->rgb(waterfallLayer->range, data[x + offset]);
+		}
+	}
+}
+
+//todo: now don't using appendHeight
+void WaterfallContent::setFullDataR(double* data, int w, int h, int /*appendHeight*/)
+{
+	if (waterfallLayer->image->width() > w ||
+		waterfallLayer->image->height() > h) return;
+
+	for (int y = 0; y < h; y++)
+	{
+		QRgb* line = reinterpret_cast<QRgb*>(waterfallLayer->image->scanLine(y));
+		for (int x = 0; x < w; x++)
+		{
+			*line++ = waterfallLayer->colorMap->rgb(waterfallLayer->range, data[x*h + y]);
+		}
+	}
+}
+
+void WaterfallContent::setFullDataL(double* data, int w, int h, int appendHeight)
+{
+	if (waterfallLayer->image->width() > w ||
+		waterfallLayer->image->height() > h) return;
+
+	for (int y = 0; y < h; y++)
+	{
+		QRgb* line = reinterpret_cast<QRgb*>(waterfallLayer->image->scanLine(y));
+		for (int x = w - 1; x >= 0; x--)
+		{
+			*line++ = waterfallLayer->colorMap->rgb(waterfallLayer->range, data[x * h + y]);
+		}
 	}
 }
 

@@ -48,10 +48,22 @@ public:
 
 	Data 'data' is a linear array (of doubles) of size size*h.
 
-	\param data Array of double values. Size: w*h.
+	\param data Array of double values. Size: w.
 	\param size Width of the data block.
+	\param needUpdatePixmap Redraw after append?
 	*/
 	void append(double* data, int size, bool needUpdatePixmap = true);
+
+	/*!
+	\brief Add Full WaterfallData
+
+	Data 'data' is a linear array (of doubles) of size size*h.
+
+	\param data Array of double values. Size: w*h.
+	\param width Width of the data block.
+	\param height Height of the data block.
+	*/
+	void setData(double* data, int width, int height);
 
 	/*!
 	  \brief Create layer
@@ -113,11 +125,59 @@ private:
 
   Data 'data' is a linear array (of doubles) of size w*h.
 
-  \param data Array of double values. Size: w*h.
+  \param data Array of double values. Size: w.
   \param w Width of the data block.
   \param h Height of the data block.
 	*/
 	void appendR(double* data, int w, int h);
+
+	/*!
+  \brief Set Full Data Top
+
+  Data 'data' is a linear array (of doubles) of size w*h.
+
+  \param data Array of double values. Size: w*h.
+  \param w Width of the data block.
+  \param h Height of the data block.
+  \param appendHeight Pixels for one line.
+	*/
+	void setFullDataT(double* data, int w, int h, int appendHeight);
+
+	/*!
+  \brief Set Full Data Bottom
+
+  Data 'data' is a linear array (of doubles) of size w*h.
+
+  \param data Array of double values. Size: w*h.
+  \param w Width of the data block.
+  \param h Height of the data block.
+  \param appendHeight Pixels for one line.
+	*/
+	void setFullDataB(double* data, int w, int h, int appendHeight);
+
+	/*!
+  \brief Set Full Data Right
+
+  Data 'data' is a linear array (of doubles) of size h*w.
+
+  \param data Array of double values. Size: w*h.
+  \param w Width of the data block.
+  \param h Height of the data block.
+  \param appendHeight Pixels for one line.
+	*/
+	void setFullDataR(double* data, int w, int h, int appendHeight);
+
+	/*!
+  \brief Set Full Data Left
+
+  Data 'data' is a linear array (of doubles) of size h*w.
+
+  \param data Array of double values. Size: w*h.
+  \param w Width of the data block.
+  \param h Height of the data block.
+  \param appendHeight Pixels for one line.
+	*/
+	void setFullDataL(double* data, int w, int h, int appendHeight);
 
 protected:
 	void draw(QCPPainter* painter) override;

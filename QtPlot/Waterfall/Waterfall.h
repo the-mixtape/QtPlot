@@ -17,6 +17,8 @@ public:
 	~WaterfallPlot() override;
 
 	void appendData(double* data, int size) const;
+	void setData(double* data, int width, int height) const;
+
 	virtual void clear();
 
 	void updateWaterfall();

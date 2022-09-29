@@ -39,6 +39,11 @@ void WaterfallPlot::appendData(double* data, int size) const
 	loadThread->addData(data, size);
 }
 
+void WaterfallPlot::setData(double* data, int width, int height) const
+{
+	loadThread->setData(data, width, height);
+}
+
 void WaterfallPlot::clear()
 {
 	content->clear();
