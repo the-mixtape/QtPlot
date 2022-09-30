@@ -1,4 +1,4 @@
 <RCC>
-    <qresource prefix="MainWindow">
+    <qresource prefix="ExampleProject">
     </qresource>
 </RCC>

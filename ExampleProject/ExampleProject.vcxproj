@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7E6179FC-7269-498F-9F10-8FC8C9ACC210}</ProjectGuid>
+    <ProjectGuid>{4A8C4FBE-63B0-437B-B456-9A17FE343454}</ProjectGuid>
     <Keyword>QtVS_v304</Keyword>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0.19041.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0.19041.0</WindowsTargetPlatformVersion>
@@ -59,26 +59,18 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <AdditionalIncludeDirectories>.;..\QtPlot;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
     <Link>
       <AdditionalDependencies>QtPlot.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <QtRcc>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <UndefinePreprocessorDefinitions>
-      </UndefinePreprocessorDefinitions>
-      <UndefineAllPreprocessorDefinitions>
-      </UndefineAllPreprocessorDefinitions>
-    </QtRcc>
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;..\QtPlot;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
+      <AdditionalDependencies>QtPlot.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>QtPlot.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
       <AdditionalIncludeDirectories>.;..\QtPlot;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -111,16 +103,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Backend\ExampleBackend.cpp" />
-    <ClCompile Include="\\192.168.132.15\share\QtPlot\ExampleProject\Frontend\MainWindow\MainWindow.cpp" />
     <QtRcc Include="ExampleProject.qrc" />
+    <ClCompile Include="Backend\ExampleBackend.cpp" />
+    <ClCompile Include="Frontend\MainWindow\MainWindow.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="\\192.168.132.15\share\QtPlot\ExampleProject\Frontend\MainWindow\MainWindow.h" />
+    <QtMoc Include="Frontend\MainWindow\MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="\\192.168.132.15\share\QtPlot\ExampleProject\Frontend\MainWindow\MainWindow.ui" />
+    <QtUic Include="Frontend\MainWindow\MainWindow.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Backend\ExampleBackend.h" />

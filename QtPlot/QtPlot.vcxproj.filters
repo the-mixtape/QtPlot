@@ -21,41 +21,44 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
-    <Filter Include="Header Files\QCustomPlot">
-      <UniqueIdentifier>{0fc97910-68fc-45ce-9677-b7ff3aba76b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\QCustomPlot">
-      <UniqueIdentifier>{7a9a26ef-9426-4409-ac90-293e05a473d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Plot">
-      <UniqueIdentifier>{c81f3453-dec1-429e-957c-67e1a006e7e4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Plot">
-      <UniqueIdentifier>{518dfd4b-6cd4-4a7a-8769-678bd0cc3ebe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Library">
-      <UniqueIdentifier>{51ebb71b-f817-4265-804c-fd341f59b0c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Plot\Items">
-      <UniqueIdentifier>{4916bd9b-a85d-4172-8755-574952cee03d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Plot\Items">
-      <UniqueIdentifier>{bc2d843d-2278-41f2-9aa2-b4dd205f7242}</UniqueIdentifier>
+    <Filter Include="Source Files\Waterfall">
+      <UniqueIdentifier>{5b301211-24ae-4c93-bc78-700c048bdd37}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Waterfall">
-      <UniqueIdentifier>{9e720565-3334-4774-9f65-9e185d55a892}</UniqueIdentifier>
+      <UniqueIdentifier>{d1bed7e1-0e4a-4720-aa4b-e09a5beb6788}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Waterfall">
-      <UniqueIdentifier>{8493c6eb-4b55-44fb-88f0-f1197a2919e9}</UniqueIdentifier>
+    <Filter Include="Header Files\QCustomPlot">
+      <UniqueIdentifier>{0d5208f3-508a-4aba-a752-3f4ea8b1ffcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\QCustomPlot">
+      <UniqueIdentifier>{21c0f982-6bfd-4288-804a-d73d033a3179}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Plot">
+      <UniqueIdentifier>{676668e5-6e0d-4e82-8bcd-2758c722470a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Plot\Items">
+      <UniqueIdentifier>{1a4cbe60-6ee1-4dc6-98a9-29b33995e100}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Plot">
+      <UniqueIdentifier>{00b07481-3264-4a13-91ee-c372bfe3f13e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Plot\Items">
+      <UniqueIdentifier>{bf2acda3-8667-42a4-ad6c-5ed9c10a770d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Library">
+      <UniqueIdentifier>{8ba425e3-f29b-4c3f-8b79-75ca43c4b25e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\ColorMap">
-      <UniqueIdentifier>{3587abf1-d653-4835-85d4-b7920885a043}</UniqueIdentifier>
+      <UniqueIdentifier>{4e021864-e765-4c89-8e4a-26106d4ccfd5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\ColorMap">
-      <UniqueIdentifier>{93ca13a8-3916-473a-96ec-0e985f0a47a3}</UniqueIdentifier>
+      <UniqueIdentifier>{ec784bdd-3be2-4d2d-bc50-783d1191da4f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Interval.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="QtPlotGlobal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -65,37 +68,16 @@
     <ClInclude Include="Library\QtPlotMathLibrary.h">
       <Filter>Header Files\Library</Filter>
     </ClInclude>
-    <ClInclude Include="Interval.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="ColorMap\WaterfallColorMap.h">
+      <Filter>Header Files\ColorMap</Filter>
     </ClInclude>
     <ClInclude Include="ColorMap\WfColorMap.h">
       <Filter>Header Files\ColorMap</Filter>
     </ClInclude>
-    <ClInclude Include="ColorMap\WaterfallColorMap.h">
-      <Filter>Header Files\ColorMap</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.cpp">
-      <Filter>Source Files\QCustomPlot</Filter>
-    </ClCompile>
-    <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\QtPlot.cpp">
-      <Filter>Source Files\Plot</Filter>
-    </ClCompile>
-    <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\ZoomClampedPlot.cpp">
-      <Filter>Source Files\Plot</Filter>
-    </ClCompile>
-    <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\MarkingPlot.cpp">
-      <Filter>Source Files\Plot</Filter>
-    </ClCompile>
-    <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\Items\MovableItemLine.cpp">
-      <Filter>Source Files\Plot\Items</Filter>
-    </ClCompile>
-    <ClCompile Include="Plot\Items\MovableInfinityLine.cpp">
-      <Filter>Source Files\Plot\Items</Filter>
-    </ClCompile>
-    <ClCompile Include="Waterfall\WaterfallThread.cpp">
-      <Filter>Source Files\Waterfall</Filter>
+    <ClCompile Include="Interval.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Waterfall\Waterfall.cpp">
       <Filter>Source Files\Waterfall</Filter>
@@ -106,8 +88,29 @@
     <ClCompile Include="Waterfall\WaterfallLayer.cpp">
       <Filter>Source Files\Waterfall</Filter>
     </ClCompile>
-    <ClCompile Include="Interval.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Waterfall\WaterfallThread.cpp">
+      <Filter>Source Files\Waterfall</Filter>
+    </ClCompile>
+    <ClCompile Include="QCustomPlot\QCustomPlot.cpp">
+      <Filter>Source Files\QCustomPlot</Filter>
+    </ClCompile>
+    <ClCompile Include="Plot\Items\MovableInfinityLine.cpp">
+      <Filter>Source Files\Plot\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Plot\Items\MovableItemLine.cpp">
+      <Filter>Source Files\Plot\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Plot\InfoPlot.cpp">
+      <Filter>Source Files\Plot</Filter>
+    </ClCompile>
+    <ClCompile Include="Plot\MarkingPlot.cpp">
+      <Filter>Source Files\Plot</Filter>
+    </ClCompile>
+    <ClCompile Include="Plot\QtPlot.cpp">
+      <Filter>Source Files\Plot</Filter>
+    </ClCompile>
+    <ClCompile Include="Plot\ZoomClampedPlot.cpp">
+      <Filter>Source Files\Plot</Filter>
     </ClCompile>
     <ClCompile Include="ColorMap\WfColorMap.cpp">
       <Filter>Source Files\ColorMap</Filter>
@@ -115,30 +118,9 @@
     <ClCompile Include="ColorMap\WaterfallColorMap.cpp">
       <Filter>Source Files\ColorMap</Filter>
     </ClCompile>
-    <ClCompile Include="Plot\InfoPlot.cpp">
-      <Filter>Source Files\Plot</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.h">
-      <Filter>Header Files\QCustomPlot</Filter>
-    </QtMoc>
-    <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\QtPlot.h">
-      <Filter>Header Files\Plot</Filter>
-    </QtMoc>
-    <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\ZoomClampedPlot.h">
-      <Filter>Header Files\Plot</Filter>
-    </QtMoc>
-    <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\MarkingPlot.h">
-      <Filter>Header Files\Plot</Filter>
-    </QtMoc>
-    <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\Items\MovableItemLine.h">
-      <Filter>Header Files\Plot\Items</Filter>
-    </QtMoc>
-    <QtMoc Include="Plot\Items\MovableInfinityLine.h">
-      <Filter>Header Files\Plot\Items</Filter>
-    </QtMoc>
-    <QtMoc Include="Waterfall\WaterfallThread.h">
+    <QtMoc Include="Waterfall\Waterfall.h">
       <Filter>Header Files\Waterfall</Filter>
     </QtMoc>
     <QtMoc Include="Waterfall\WaterfallContent.h">
@@ -147,10 +129,28 @@
     <QtMoc Include="Waterfall\WaterfallLayer.h">
       <Filter>Header Files\Waterfall</Filter>
     </QtMoc>
-    <QtMoc Include="Waterfall\Waterfall.h">
+    <QtMoc Include="Waterfall\WaterfallThread.h">
       <Filter>Header Files\Waterfall</Filter>
     </QtMoc>
+    <QtMoc Include="QCustomPlot\QCustomPlot.h">
+      <Filter>Header Files\QCustomPlot</Filter>
+    </QtMoc>
+    <QtMoc Include="Plot\Items\MovableInfinityLine.h">
+      <Filter>Header Files\Plot\Items</Filter>
+    </QtMoc>
+    <QtMoc Include="Plot\Items\MovableItemLine.h">
+      <Filter>Header Files\Plot\Items</Filter>
+    </QtMoc>
     <QtMoc Include="Plot\InfoPlot.h">
+      <Filter>Header Files\Plot</Filter>
+    </QtMoc>
+    <QtMoc Include="Plot\MarkingPlot.h">
+      <Filter>Header Files\Plot</Filter>
+    </QtMoc>
+    <QtMoc Include="Plot\QtPlot.h">
+      <Filter>Header Files\Plot</Filter>
+    </QtMoc>
+    <QtMoc Include="Plot\ZoomClampedPlot.h">
       <Filter>Header Files\Plot</Filter>
     </QtMoc>
   </ItemGroup>

@@ -21,17 +21,23 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
-    <Filter Include="Source Files\Frontend">
-      <UniqueIdentifier>{9066158d-116e-440b-9c50-9aabd618858c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Frontend">
-      <UniqueIdentifier>{c35943ba-525b-4101-b762-ae4109c92804}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Backend">
-      <UniqueIdentifier>{0f712421-3941-42c2-b5d3-7ca2aec510a1}</UniqueIdentifier>
+      <UniqueIdentifier>{5c762777-89d3-4d55-abf6-474b56f05a76}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Backend">
-      <UniqueIdentifier>{1a055f30-a1ef-4d4e-83f6-9ee2afa1c182}</UniqueIdentifier>
+      <UniqueIdentifier>{2ab4ec5b-a6d5-4559-a6e2-3c3131365b5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Frontend\MainWindow">
+      <UniqueIdentifier>{ce6b39e0-32ed-42dd-b357-6b619a6d5345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Frontend">
+      <UniqueIdentifier>{fecf4445-ad81-4738-ac73-b18b9ac02f46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Backend">
+      <UniqueIdentifier>{c3ef9837-e670-4ca7-ba89-76150a0d660e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Frontend\MainWindow">
+      <UniqueIdentifier>{228c1061-7a95-458d-8c35-2c7e69cab0bb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -43,21 +49,21 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\192.168.132.15\share\QtPlot\ExampleProject\Frontend\MainWindow\MainWindow.cpp">
-      <Filter>Source Files\Frontend</Filter>
+    <ClCompile Include="Frontend\MainWindow\MainWindow.cpp">
+      <Filter>Source Files\Frontend\MainWindow</Filter>
     </ClCompile>
     <ClCompile Include="Backend\ExampleBackend.cpp">
       <Filter>Source Files\Backend</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="\\192.168.132.15\share\QtPlot\ExampleProject\Frontend\MainWindow\MainWindow.ui">
+    <QtUic Include="Frontend\MainWindow\MainWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="\\192.168.132.15\share\QtPlot\ExampleProject\Frontend\MainWindow\MainWindow.h">
-      <Filter>Header Files\Frontend</Filter>
+    <QtMoc Include="Frontend\MainWindow\MainWindow.h">
+      <Filter>Header Files\Frontend\MainWindow</Filter>
     </QtMoc>
     <QtMoc Include="Backend\ExampleBackend.h">
       <Filter>Header Files\Backend</Filter>

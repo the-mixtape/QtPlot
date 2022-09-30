@@ -10,8 +10,43 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ColorMap\WaterfallColorMap.cpp" />
+    <ClCompile Include="ColorMap\WfColorMap.cpp" />
+    <ClCompile Include="Interval.cpp" />
+    <ClCompile Include="Plot\InfoPlot.cpp" />
+    <ClCompile Include="Plot\Items\MovableInfinityLine.cpp" />
+    <ClCompile Include="Plot\Items\MovableItemLine.cpp" />
+    <ClCompile Include="Plot\MarkingPlot.cpp" />
+    <ClCompile Include="Plot\QtPlot.cpp" />
+    <ClCompile Include="Plot\ZoomClampedPlot.cpp" />
+    <ClCompile Include="QCustomPlot\QCustomPlot.cpp" />
+    <ClCompile Include="Waterfall\Waterfall.cpp" />
+    <ClCompile Include="Waterfall\WaterfallContent.cpp" />
+    <ClCompile Include="Waterfall\WaterfallLayer.cpp" />
+    <ClCompile Include="Waterfall\WaterfallThread.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ColorMap\WaterfallColorMap.h" />
+    <ClInclude Include="ColorMap\WfColorMap.h" />
+    <ClInclude Include="Interval.h" />
+    <ClInclude Include="Library\QtPlotEnumLibrary.h" />
+    <ClInclude Include="Library\QtPlotMathLibrary.h" />
+    <QtMoc Include="Plot\ZoomClampedPlot.h" />
+    <QtMoc Include="Plot\QtPlot.h" />
+    <QtMoc Include="Plot\MarkingPlot.h" />
+    <QtMoc Include="Plot\InfoPlot.h" />
+    <QtMoc Include="Plot\Items\MovableItemLine.h" />
+    <QtMoc Include="Plot\Items\MovableInfinityLine.h" />
+    <QtMoc Include="QCustomPlot\QCustomPlot.h" />
+    <ClInclude Include="QtPlotGlobal.h" />
+    <QtMoc Include="Waterfall\WaterfallThread.h" />
+    <QtMoc Include="Waterfall\WaterfallLayer.h" />
+    <QtMoc Include="Waterfall\WaterfallContent.h" />
+    <QtMoc Include="Waterfall\Waterfall.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{72529ADE-C777-4B55-85CD-1AAAC6075C44}</ProjectGuid>
+    <ProjectGuid>{A015EA27-ACE0-47B6-865A-9A0604EA0A00}</ProjectGuid>
     <Keyword>QtVS_v304</Keyword>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0.19041.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0.19041.0</WindowsTargetPlatformVersion>
@@ -32,12 +67,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>5.11.2_msvc2017_64</QtInstall>
-    <QtModules>core;printsupport</QtModules>
+    <QtModules>core;printsupport;</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>5.11.2_msvc2017_64</QtInstall>
-    <QtModules>core;printsupport</QtModules>
+    <QtModules>core;printsupport;</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -62,9 +97,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -99,41 +131,6 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="ColorMap\WaterfallColorMap.h" />
-    <ClInclude Include="ColorMap\WfColorMap.h" />
-    <ClInclude Include="Interval.h" />
-    <ClInclude Include="Library\QtPlotEnumLibrary.h" />
-    <QtMoc Include="Waterfall\Waterfall.h" />
-    <QtMoc Include="Waterfall\WaterfallContent.h" />
-    <QtMoc Include="Waterfall\WaterfallLayer.h" />
-    <QtMoc Include="Waterfall\WaterfallThread.h" />
-    <QtMoc Include="Plot\Items\MovableInfinityLine.h" />
-    <ClInclude Include="Library\QtPlotMathLibrary.h" />
-    <QtMoc Include="Plot\InfoPlot.h" />
-    <ClInclude Include="QtPlotGlobal.h" />
-    <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\Items\MovableItemLine.h" />
-    <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\MarkingPlot.h" />
-    <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\ZoomClampedPlot.h" />
-    <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\QtPlot.h" />
-    <QtMoc Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="ColorMap\WaterfallColorMap.cpp" />
-    <ClCompile Include="ColorMap\WfColorMap.cpp" />
-    <ClCompile Include="Interval.cpp" />
-    <ClCompile Include="Plot\InfoPlot.cpp" />
-    <ClCompile Include="Plot\Items\MovableInfinityLine.cpp" />
-    <ClCompile Include="Waterfall\Waterfall.cpp" />
-    <ClCompile Include="Waterfall\WaterfallContent.cpp" />
-    <ClCompile Include="Waterfall\WaterfallLayer.cpp" />
-    <ClCompile Include="Waterfall\WaterfallThread.cpp" />
-    <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\Items\MovableItemLine.cpp" />
-    <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\MarkingPlot.cpp" />
-    <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\QtPlot.cpp" />
-    <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\Plot\ZoomClampedPlot.cpp" />
-    <ClCompile Include="\\192.168.132.15\share\QtPlot\QtPlot\QCustomPlot\QCustomPlot.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />
