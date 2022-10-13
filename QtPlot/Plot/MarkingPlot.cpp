@@ -180,6 +180,38 @@ void MarkingPlot::setTextColor(EAxis axis, QColor color)
 	}
 }
 
+void MarkingPlot::forceUpdateVerticalText()
+{
+	double firstPoint = vertRangeLine1->getRealCoords().y();
+	double secondPoint = vertRangeLine2->getRealCoords().y();
+
+	if (firstPoint > secondPoint)
+	{
+		const double temp = firstPoint;
+		firstPoint = secondPoint;
+		secondPoint = temp;
+	}
+
+	vertLineText->setText(setupVerticalText(firstPoint, secondPoint));
+	layer(MARKERS_LAYER_NAME)->replot();
+}
+
+void MarkingPlot::forceUpdateHorizontalText()
+{
+	double firstPoint = horRangeLine1->getRealCoords().x();
+	double secondPoint = horRangeLine2->getRealCoords().x();
+
+	if (firstPoint > secondPoint)
+	{
+		const double temp = firstPoint;
+		firstPoint = secondPoint;
+		secondPoint = temp;
+	}
+
+	horLineText->setText(setupHorizontalText(firstPoint, secondPoint));
+	layer(MARKERS_LAYER_NAME)->replot();
+}
+
 void MarkingPlot::mousePressEvent(QMouseEvent* event)
 {
 	QCustomPlot::mousePressEvent(event);

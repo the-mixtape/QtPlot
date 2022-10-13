@@ -49,6 +49,9 @@ public:
 	//=======================================
 
 protected:
+	void forceUpdateVerticalText();
+	void forceUpdateHorizontalText();
+
 	void mousePressEvent(QMouseEvent* event) override;
 	void mouseReleaseEvent(QMouseEvent* event) override;
 
