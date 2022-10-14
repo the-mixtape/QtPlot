@@ -1,6 +1,7 @@
 #include "MovableInfinityLine.h"
 #include "MovableItemLine.h"
 #include "Library/QtPlotMathLibrary.h"
+#include "Plot/MarkingPlot.h"
 
 
 MovableInfinityLine::MovableInfinityLine(QCustomPlot* parentPlot)

@@ -6,6 +6,7 @@
 
 //forward declaration
 class MovableItemLine;
+class MarkingPlot;
 
 
 class MovableInfinityLine : public QCPItemStraightLine
@@ -17,9 +18,7 @@ public:
 	~MovableInfinityLine() override;
 
 	void setPointCoord(QCPItemPosition* point, double x, double y);
-	// void setPoint2Coord(double x, double y);
 	void setPointRealCoord(double x, double y);
-	// void setPoint2RealCoord(double x, double y);
 
 	void addOffset(int inOffset);
 	void setPen(ELineState inState, QPen pen);

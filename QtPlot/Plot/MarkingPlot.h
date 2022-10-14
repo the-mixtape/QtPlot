@@ -79,6 +79,12 @@ signals:
 	void rangeHorSelectedSignal(double first, double second);
 	void rangeVertSelectedSignal(double first, double second);
 
+	void rangeHorDeselectedSignal();
+	void rangeVertDeselectedSignal();
+
+	void updateHorMarkersSignal(double first, double second);
+	void updateVertMarkersSignal(double first, double second);
+
 private slots:
 	void updateHorizontalMarkers();
 	void updateVerticalMarkers();

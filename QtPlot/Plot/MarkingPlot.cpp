@@ -97,6 +97,7 @@ void MarkingPlot::clearMarkers(EAxis axis)
 		horRangeLine2->setVisible(false);
 		horLine->setVisible(false);
 		horLineText->setVisible(false);
+		emit rangeHorDeselectedSignal();
 
 		for (const auto& syncPlot : xSyncPlots)
 		{
@@ -105,6 +106,7 @@ void MarkingPlot::clearMarkers(EAxis axis)
 			syncPlot->horRangeLine2->setVisible(false);
 			syncPlot->horLine->setVisible(false);
 			syncPlot->horLineText->setVisible(false);
+			emit syncPlot->rangeHorDeselectedSignal();
 			syncPlot->layer(MARKERS_LAYER_NAME)->replot();
 		}
 	}
@@ -115,6 +117,7 @@ void MarkingPlot::clearMarkers(EAxis axis)
 		vertRangeLine2->setVisible(false);
 		vertLine->setVisible(false);
 		vertLineText->setVisible(false);
+		emit rangeVertDeselectedSignal();
 
 		for (const auto& syncPlot : ySyncPlots)
 		{
@@ -123,6 +126,7 @@ void MarkingPlot::clearMarkers(EAxis axis)
 			syncPlot->vertRangeLine2->setVisible(false);
 			syncPlot->vertLine->setVisible(false);
 			syncPlot->vertLineText->setVisible(false);
+			emit syncPlot->rangeVertDeselectedSignal();
 			syncPlot->layer(MARKERS_LAYER_NAME)->replot();
 		}
 	}
@@ -368,7 +372,7 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 			firstPoint = secondPoint;
 			secondPoint = temp;
 		}
-		emit rangeHorSelectedSignal(firstPoint, secondPoint);
+		emit rangeVertSelectedSignal(firstPoint, secondPoint);
 
 		for (const auto& syncPlot : ySyncPlots)
 		{
@@ -382,7 +386,7 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 
 			syncPlot->layer(MARKERS_LAYER_NAME)->replot();
 
-			emit syncPlot->rangeHorSelectedSignal(firstPoint, secondPoint);
+			emit syncPlot->rangeVertSelectedSignal(firstPoint, secondPoint);
 		}
 
 		return;
@@ -517,6 +521,8 @@ void MarkingPlot::updateHorizontalMarkers()
 
 	horLineText->position->setCoords(midX, horLine->start->coords().y());
 	horLineText->setText(setupHorizontalText(firstPoint, secondPoint));
+	
+	emit updateHorMarkersSignal(firstPoint, secondPoint);
 }
 
 void MarkingPlot::updateVerticalMarkers()
@@ -537,6 +543,8 @@ void MarkingPlot::updateVerticalMarkers()
 	const double midY = secondPoint - ((secondPoint - firstPoint) / 2.0);
 	vertLineText->position->setCoords(vertLine->start->coords().x(), midY);
 	vertLineText->setText(setupVerticalText(firstPoint, secondPoint));
+
+	emit updateVertMarkersSignal(firstPoint, secondPoint);
 }
 
 void MarkingPlot::addMarkerSyncPlot(EAxis syncAxis, MarkingPlot* plot)
