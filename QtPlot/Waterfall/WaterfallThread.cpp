@@ -86,6 +86,15 @@ void WaterfallThread::setAutoUpdate(bool bAuto)
 	locker.unlock();
 }
 
+bool WaterfallThread::getAutoUpdate()
+{
+	locker.lockForRead();
+	bool bAuto = bIsAuto;
+	locker.unlock();
+
+	return bAuto;
+}
+
 void WaterfallThread::setFPSLimit(quint32 fps /*= 0*/)
 {
 	locker.lockForWrite();
@@ -100,6 +109,18 @@ void WaterfallThread::setFPSLimit(quint32 fps /*= 0*/)
 	}
 
 	locker.unlock();
+}
+
+quint32 WaterfallThread::getFPSLimit()
+{
+	locker.lockForRead();
+
+	if (frameDeltaTime == 0) return 0;
+	const auto fps = static_cast<qint64>(1000 / static_cast<double>(frameDeltaTime));
+
+	locker.unlock();
+
+	return fps;
 }
 
 void WaterfallThread::addData(double* inData, int inSize)

@@ -18,6 +18,9 @@ WaterfallPlot::WaterfallPlot(QWidget* parent)
 	xAxis->setRange(0, 100);
 	yAxis->setRange(0, 100);
 
+	xAxis->grid()->setSubGridVisible(false);
+	yAxis->grid()->setSubGridVisible(false);
+
 	replot();
 	
 	loadThread = new WaterfallThread();

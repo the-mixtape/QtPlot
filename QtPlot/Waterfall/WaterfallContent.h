@@ -22,6 +22,8 @@ public:
 
 public:
 	void setColorMap(WfColorMap* inColorMap);
+	WfColorMap* getColorMap();
+
 	void setAppendSide(EAppendSide side);
 	void updatePixmap();
 
@@ -30,6 +32,8 @@ public slots:
 
 public:
 	void setResolution(int width, int height);
+	QRect getResolution() const;
+
 	void setWidth(int width);
 	void setHeight(int height);
 	void setFillColor(const QColor& fillColor);

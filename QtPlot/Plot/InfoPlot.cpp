@@ -52,7 +52,7 @@ void InfoPlot::setInfoGraphIndex(int index)
 
 QString InfoPlot::createTooltipText(double x, double y)
 {
-    return QString::number(x) + ":" + QString::number(y);
+    return QString::number(x) + " | " + QString::number(y);
 }
 
 QString InfoPlot::updateTooltip(double x, double y)
@@ -65,6 +65,7 @@ QString InfoPlot::updateTooltip(double x, double y)
 	if(showInfoRule == ESIR_Attach)
     {
         if (infoGraphIndex < 0 && infoGraphIndex > graphCount()) return "";
+        if (graph(infoGraphIndex) == nullptr || graph(infoGraphIndex)->data().isNull()) return "";
 
         const int size = graph(infoGraphIndex)->data()->size();
 

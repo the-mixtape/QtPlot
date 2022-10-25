@@ -24,9 +24,12 @@ protected:
 public:
 	void quit();
 	void stopAndClear();
+
 	void setAutoUpdate(bool bAuto);
+	bool getAutoUpdate();
 
 	void setFPSLimit(quint32 fps = 0);
+	quint32 getFPSLimit();
 
 	void addData(double* data, int size);
 	void setData(double* data, int width, int height);

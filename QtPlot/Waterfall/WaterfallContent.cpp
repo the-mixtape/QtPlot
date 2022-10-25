@@ -53,6 +53,18 @@ void WaterfallContent::setColorMap(WfColorMap* inColorMap)
 	readWriteLock->unlock();
 }
 
+WfColorMap* WaterfallContent::getColorMap()
+{
+	WfColorMap* colorMap = nullptr;
+	readWriteLock->lockForRead();
+	if(waterfallLayer)
+	{
+		colorMap = waterfallLayer->colorMap;
+	} 
+	readWriteLock->unlock();
+	return colorMap;
+}
+
 void WaterfallContent::setAppendSide(EAppendSide side)
 {
 	readWriteLock->lockForWrite();
@@ -64,9 +76,11 @@ void WaterfallContent::setAppendSide(EAppendSide side)
 
 void WaterfallContent::updatePixmap()
 {
-	readWriteLock->lockForRead();
-	setPixmap(QPixmap::fromImage(*waterfallLayer->image));
-	readWriteLock->unlock();
+	readWritePixmap->lockForWrite();
+	const QPixmap newPixmap = QPixmap::fromImage(*waterfallLayer->image);
+	if (newPixmap.isNull()) qDebug() << "pixmap is null!!!" << waterfallLayer->image->rect();
+	setPixmap(newPixmap);
+	readWritePixmap->unlock();
 }
 
 void WaterfallContent::update()
@@ -77,9 +91,10 @@ void WaterfallContent::update()
 void WaterfallContent::setResolution(int width, int height)
 {
 	readWriteLock->lockForRead();
-	if (waterfallLayer->image->width() == width
-		&& waterfallLayer->image->height() == height)
+	if ((waterfallLayer->image->width() == width
+		&& waterfallLayer->image->height() == height) || (width == 0 || height == 0))
 	{
+		qDebug() << parentQtPlot->objectName() << "| Set Resolution(" << width << "," << height << ") error";
 		readWriteLock->unlock();
 		return;
 	}
@@ -89,39 +104,59 @@ void WaterfallContent::setResolution(int width, int height)
 
 	delete waterfallLayer->image;
 	waterfallLayer->image = new QImage(width, height, waterfallLayer->format);
+	if(waterfallLayer->image == nullptr || 
+		waterfallLayer->image->height() <= 0 || waterfallLayer->image->width() <= 0)
+	{
+		qDebug() << "Can't create Image(" << width << "," << height << ")";
+	}
 	waterfallLayer->image->fill(waterfallLayer->fillColor);
 	update();
 
 	readWriteLock->unlock();
+}
+
+QRect WaterfallContent::getResolution() const
+{
+	QRect resolution;
+
+	readWriteLock->lockForRead();
+	if (waterfallLayer)
+	{
+		resolution = waterfallLayer->image->rect();
+	}
+	readWriteLock->unlock();
+
+	return resolution;
 }
 
 void WaterfallContent::setWidth(int width)
 {
-	if (waterfallLayer->image->width() == width) return;
+	if (waterfallLayer->image->width() == width || width <= 0) 
+	{
+		qDebug() << parentQtPlot->objectName() << "| Set Width(" << width << ") error";
+		return;
+	}
 
+	readWriteLock->lockForRead();
 	const int height = waterfallLayer->image->height();
+	readWriteLock->unlock();
 
-	delete waterfallLayer->image;
-	waterfallLayer->image = new QImage(width, height, waterfallLayer->format);
-	waterfallLayer->image->fill(waterfallLayer->fillColor);
-	update();
+	setResolution(width, height);
 }
 
 void WaterfallContent::setHeight(int height)
 {
-	if (waterfallLayer->image->height() == height) return;
+	if (waterfallLayer->image->height() == height || height <= 0) 
+	{
+		qDebug() << parentQtPlot->objectName() << "| Set Height(" << height << ") error";
+		return;
+	}
 
-	readWriteLock->lockForWrite();
-
+	readWriteLock->lockForRead();
 	const int width = waterfallLayer->image->width();
-
-	delete waterfallLayer->image;
-	waterfallLayer->image = new QImage(width, height, waterfallLayer->format);
-	waterfallLayer->image->fill(waterfallLayer->fillColor);
-
 	readWriteLock->unlock();
 
-	update();
+	setResolution(width, height);
 }
 
 void WaterfallContent::setFillColor(const QColor& fillColor)
@@ -130,7 +165,7 @@ void WaterfallContent::setFillColor(const QColor& fillColor)
 	
 	waterfallLayer->fillColor = fillColor;
 	waterfallLayer->image->fill(fillColor);
-	setPixmap(QPixmap::fromImage(*waterfallLayer->image));
+	updatePixmap();
 
 	readWriteLock->unlock();
 
@@ -179,9 +214,7 @@ void WaterfallContent::setInterval(int minval, int maxval)
 	readWriteLock->unlock();
 
 	{
-		readWriteLock->lockForRead();
-		setPixmap(QPixmap::fromImage(*waterfallLayer->image));
-		readWriteLock->unlock();
+		updatePixmap();
 
 		update();
 	}
@@ -234,7 +267,7 @@ void WaterfallContent::clear()
 	readWriteLock->lockForRead();
 	
 	waterfallLayer->image->fill(waterfallLayer->fillColor);
-	setPixmap(QPixmap::fromImage(*waterfallLayer->image));
+	updatePixmap();
 
 	readWriteLock->unlock();
 
@@ -244,7 +277,7 @@ void WaterfallContent::clear()
 void WaterfallContent::append(double* data, int size, bool needUpdatePixmap/* = true*/)
 {
 	readWriteLock->lockForRead();
-
+	
 	switch (appendSide)
 	{
 		case EAS_Top:
@@ -274,9 +307,7 @@ void WaterfallContent::append(double* data, int size, bool needUpdatePixmap/* = 
 
 	if (needUpdatePixmap)
 	{
-		readWritePixmap->lockForWrite();
-		setPixmap(QPixmap::fromImage(*waterfallLayer->image));
-		readWritePixmap->unlock();
+		updatePixmap();
 	}
 
 	readWriteLock->unlock();
@@ -312,10 +343,8 @@ void WaterfallContent::setData(double* data, int width, int height)
 		break;
 	}
 	}
-	
-	readWritePixmap->lockForWrite();
-	setPixmap(QPixmap::fromImage(*waterfallLayer->image));
-	readWritePixmap->unlock();
+
+	updatePixmap();
 
 	readWriteLock->unlock();
 }
@@ -332,8 +361,8 @@ bool WaterfallContent::createLayer(qint32 inWidth, qint32 inHeight, qreal minx, 
 	waterfallLayer->format = fm;
 	waterfallLayer->image->fill(fil);
 	waterfallLayer->fillColor = fil;
-	
-	setPixmap(QPixmap::fromImage(*waterfallLayer->image));
+
+	updatePixmap();
 
 	waterfallLayer->range = QtInterval(minval, maxval);
 
@@ -347,7 +376,11 @@ bool WaterfallContent::createLayer(qint32 inWidth, qint32 inHeight, qreal minx, 
 
 void WaterfallContent::appendT(double* data, int w, int h)
 {
-	if (waterfallLayer->image->width() > w) return;
+	if (waterfallLayer->image->width() > w)
+	{
+		qDebug() << "Error append T" << waterfallLayer->image->width() << w;
+		return;
+	}
 
 	int y = 0;
 	uchar* imageData = waterfallLayer->image->bits();
@@ -368,7 +401,11 @@ void WaterfallContent::appendT(double* data, int w, int h)
 
 void WaterfallContent::appendB(double* data, int w, int h)
 {
-	if (waterfallLayer->image->width() > w) return;
+	if (waterfallLayer->image->width() > w)
+	{
+		qDebug() << "Error append B";
+		return;
+	}
 
 	int	y = h;
 	uchar* imageData = waterfallLayer->image->bits();
@@ -387,7 +424,11 @@ void WaterfallContent::appendB(double* data, int w, int h)
 
 void WaterfallContent::appendL(double* data, int w, int h)
 {
-	if (waterfallLayer->image->height() > w) return;
+	if (waterfallLayer->image->height() > w) 
+	{
+		qDebug() << "Error append L";
+		return;
+	}
 
 	const qint32 bpp = waterfallLayer->image->depth() / 8;
 	qint32 offset = 0;
@@ -405,7 +446,11 @@ void WaterfallContent::appendL(double* data, int w, int h)
 
 void WaterfallContent::appendR(double* data, int w, int h)
 {
-	if (waterfallLayer->image->height() > w) return;
+	if (waterfallLayer->image->height() > w)
+	{
+		qDebug() << "Error append R";
+		return;
+	}
 
 	const qint32 bpp = waterfallLayer->image->depth() / 8;
 	qint32 offset = 0;
@@ -430,7 +475,7 @@ void WaterfallContent::setFullDataT(double* data, int w, int h, int /*appendHeig
 	for(int y = 0; y < h; y++)
 	{
 		QRgb* line = reinterpret_cast<QRgb*>(waterfallLayer->image->scanLine(y));
-		const int offset = y * w;
+		const int offset = (h - 1 - y) * w;
 
 		for (int x = 0; x < w; x++)
 		{
@@ -512,7 +557,7 @@ void WaterfallContent::setupScaledPixmap(QRect finalRect)
 {
 	if (mPixmap.isNull())
 		return;
-
+	
 	if (mScaled)
 	{
 #ifdef QCP_DEVICEPIXELRATIO_SUPPORTED
@@ -525,7 +570,7 @@ void WaterfallContent::setupScaledPixmap(QRect finalRect)
 
 		const auto xRange = parentQtPlot->xAxis->range();
 		const auto yRange = parentQtPlot->yAxis->range();
-
+		
 		if (mScaledPixmapInvalidated || lastFinalRect.size() != finalRect.size() || xLastRange != xRange || yLastRange != yRange)
 		{
 			xLastRange = xRange;
@@ -540,23 +585,22 @@ void WaterfallContent::setupScaledPixmap(QRect finalRect)
 			const double xMultiply = (xRange.upper - xRange.lower) / xDelta;
 			const double yMultiply = (yRange.upper - yRange.lower) / yDelta;
 
-			double width = mPixmap.width() * xMultiply;
-			if (width < 1.0) width = 1.0;
+			int width = mPixmap.width() * xMultiply;
+			if (width < 1) width = 1;
 
-			double height = mPixmap.height() * yMultiply;
-			if (height < 1.0) height = 1.0;
+			int height = mPixmap.height() * yMultiply;
+			if (height < 1) height = 1;
 
-			const double xOffset = (xRange.lower - xLimitRange.lower) / xDelta * mPixmap.width();
-			const double yOffset = (yLimitRange.upper - yRange.upper) / yDelta * mPixmap.height();
-
-			const QRect baseRect = clipRect();
+			const int xOffset = (xRange.lower - xLimitRange.lower) / xDelta * mPixmap.width();
+			const int yOffset = (yLimitRange.upper - yRange.upper) / yDelta * mPixmap.height();
+			
 			const QRect copyRect(xOffset, yOffset, width, height);
 
 			readWritePixmap->lockForRead();
 			mScaledPixmap = mPixmap.copy(copyRect);
 			readWritePixmap->unlock();
 
-			mScaledPixmap = mScaledPixmap.scaled(baseRect.size() * devicePixelRatio, mAspectRatioMode, mTransformationMode);
+			mScaledPixmap = mScaledPixmap.scaled(clipRect().size() * devicePixelRatio, mAspectRatioMode, mTransformationMode);
 
 #ifdef QCP_DEVICEPIXELRATIO_SUPPORTED
 			mScaledPixmap.setDevicePixelRatio(devicePixelRatio);
