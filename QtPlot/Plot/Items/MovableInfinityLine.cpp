@@ -82,7 +82,7 @@ void MovableInfinityLine::addOffset(int inOffset)
 	}
 
 	setPointCoord(point1, x1, y1);
-	setPointCoord(point2, x1, y1);
+	setPointCoord(point2, x2, y2);
 	setPointRealCoord(x2, y2);
 }
 
