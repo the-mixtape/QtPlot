@@ -422,3 +422,4 @@ void MovableInfinityLine::removeSyncLine(MovableInfinityLine* line)
 
 	syncLines.removeOne(line);
 }
+
