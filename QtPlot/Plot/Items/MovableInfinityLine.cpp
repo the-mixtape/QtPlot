@@ -260,7 +260,7 @@ void MovableInfinityLine::mouseRelease(QMouseEvent* event)
 
 void MovableInfinityLine::mouseMove(QMouseEvent* event)
 {
-	if (bIsMovable == false) return;
+	if (bIsMovable == false || visible() == false) return;
 
 	checkHovered(event);
 
@@ -294,7 +294,7 @@ void MovableInfinityLine::axisXChanged(const QCPRange& range)
 	const double linePos = point1->coords().x();
 	double newLinePos = linePos;
 
-	const double locOffset = abs(range.upper - range.lower) * 0.003;
+    const double locOffset = fabs(range.upper - range.lower) * 0.003;
 
 	bool clampMin = false;
 	if (newLinePos < range.lower)
@@ -355,7 +355,7 @@ void MovableInfinityLine::axisYChanged(const QCPRange& range)
 	const double linePos = point1->coords().y();
 	double newLinePos = linePos;
 
-	const double locOffset = abs(range.upper - range.lower) * 0.003;
+    const double locOffset = fabs(range.upper - range.lower) * 0.003;
 
 	bool clampMin = false;
 	if (newLinePos < range.lower)

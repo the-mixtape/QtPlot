@@ -3,6 +3,8 @@
 #include <QThread>
 #include <QDebug>
 
+#include <QtMath>
+
 
 ExampleBackend::ExampleBackend(QObject* parent)
 	:QThread(parent)
@@ -48,7 +50,7 @@ void ExampleBackend::run()
 		d = (rand() % 4 + 2);
 		for(int i = 0; i < size; i++)
 		{
-			data[i] = sin(i / (size/d)) * 100.0;
+            data[i] = sin(i / (size/d)) * 100.0;
 		}
 
 		emit generatedNewData(data, size);

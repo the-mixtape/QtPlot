@@ -400,3 +400,8 @@ FodyWeavers.xsd
 #custom
 *.ini
 ui_*.h
+
+moc_*.cpp
+moc_*.h
+.qmake.stash
+Makefile
