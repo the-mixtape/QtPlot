@@ -112,6 +112,19 @@ void MovableInfinityLine::mousePressEvent(QMouseEvent* event, const QVariant& de
 
 	if (!bIsMovable) return;
 
+	if(axis == EA_xAxis)
+	{
+		const QCPRange yRange = mParentPlot->yAxis->range();
+		const double yPos = mParentPlot->yAxis->pixelToCoord(event->pos().y());
+		if(yPos < yRange.lower || yPos > yRange.upper) return;
+	}
+	else
+	{
+		const QCPRange xRange = mParentPlot->xAxis->range();
+		const double xPos = mParentPlot->xAxis->pixelToCoord(event->pos().x());
+		if (xPos < xRange.lower || xPos > xRange.upper) return;
+	}
+
 	setIsDrag(true);
 }
 
@@ -196,19 +209,28 @@ void MovableInfinityLine::checkHovered(QMouseEvent* event)
 	const int width = pen().width();
 	int mousePos;
 	int linePos;
+	bool inRange;
 
 	if (axis == EA_xAxis)
 	{
 		mousePos = event->pos().x();
 		linePos = mParentPlot->xAxis->coordToPixel(point1->coords().x());
+
+		const QCPRange yRange = mParentPlot->yAxis->range();
+		const double yPos = mParentPlot->yAxis->pixelToCoord(event->pos().y());
+		inRange = yPos > yRange.lower && yPos < yRange.upper;
 	}
 	else
 	{
 		mousePos = event->pos().y();
 		linePos = mParentPlot->yAxis->coordToPixel(point1->coords().y());
+
+		const QCPRange xRange = mParentPlot->xAxis->range();
+		const double xPos = mParentPlot->xAxis->pixelToCoord(event->pos().x());
+		inRange = xPos > xRange.lower && xPos < xRange.upper;
 	}
 
-	const bool isHovered = mousePos >= linePos - width && mousePos <= linePos + width;
+	const bool isHovered = mousePos >= linePos - width && mousePos <= linePos + width && inRange;
 	if (isHovered)
 	{
 		setState(ELS_Hovered);
