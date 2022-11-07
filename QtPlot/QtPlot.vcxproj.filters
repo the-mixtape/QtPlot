@@ -118,6 +118,12 @@
     <ClCompile Include="ColorMap\WaterfallColorMap.cpp">
       <Filter>Source Files\ColorMap</Filter>
     </ClCompile>
+    <ClCompile Include="Plot\Items\BaseMarker.cpp">
+      <Filter>Source Files\Plot\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Plot\Items\SingleMarker.cpp">
+      <Filter>Source Files\Plot\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Waterfall\Waterfall.h">
@@ -152,6 +158,12 @@
     </QtMoc>
     <QtMoc Include="Plot\ZoomClampedPlot.h">
       <Filter>Header Files\Plot</Filter>
+    </QtMoc>
+    <QtMoc Include="Plot\Items\BaseMarker.h">
+      <Filter>Header Files\Plot\Items</Filter>
+    </QtMoc>
+    <QtMoc Include="Plot\Items\SingleMarker.h">
+      <Filter>Header Files\Plot\Items</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

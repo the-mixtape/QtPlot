@@ -15,8 +15,10 @@
     <ClCompile Include="ColorMap\WfColorMap.cpp" />
     <ClCompile Include="Interval.cpp" />
     <ClCompile Include="Plot\InfoPlot.cpp" />
+    <ClCompile Include="Plot\Items\BaseMarker.cpp" />
     <ClCompile Include="Plot\Items\MovableInfinityLine.cpp" />
     <ClCompile Include="Plot\Items\MovableItemLine.cpp" />
+    <ClCompile Include="Plot\Items\SingleMarker.cpp" />
     <ClCompile Include="Plot\MarkingPlot.cpp" />
     <ClCompile Include="Plot\QtPlot.cpp" />
     <ClCompile Include="Plot\ZoomClampedPlot.cpp" />
@@ -39,6 +41,8 @@
     <QtMoc Include="Plot\Items\MovableItemLine.h" />
     <QtMoc Include="Plot\Items\MovableInfinityLine.h" />
     <QtMoc Include="QCustomPlot\QCustomPlot.h" />
+    <QtMoc Include="Plot\Items\BaseMarker.h" />
+    <QtMoc Include="Plot\Items\SingleMarker.h" />
     <ClInclude Include="QtPlotGlobal.h" />
     <QtMoc Include="Waterfall\WaterfallThread.h" />
     <QtMoc Include="Waterfall\WaterfallLayer.h" />

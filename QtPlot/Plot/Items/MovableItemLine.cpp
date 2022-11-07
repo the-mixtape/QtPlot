@@ -8,6 +8,8 @@ MovableItemLine::MovableItemLine(QCustomPlot* parentPlot, MovableInfinityLine* f
 	firstMarker(fMarker), secondMarker(sMarker),
 	attachedText(text)
 {
+	setLayer(MARKERS_LAYER_NAME);
+
 	//initialize default pens
 	{
 		QPen pen;

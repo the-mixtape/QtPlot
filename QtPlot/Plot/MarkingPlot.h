@@ -128,5 +128,12 @@ public:
 private:
 	double clickAllowableOffset = 1;
 
+public:
+	inline void setIsAlreadyDragging(bool drag) { bIsAlreadyDragging = drag; }
+	inline bool getIsAlreadyDragging() const { return bIsAlreadyDragging; }
+
+private:
+	bool bIsAlreadyDragging;
+
 };
 

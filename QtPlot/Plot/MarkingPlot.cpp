@@ -425,7 +425,6 @@ void MarkingPlot::initializeRangeLine(MovableInfinityLine** line, EAxis moveAxis
 {
 	(*line) = new MovableInfinityLine(this);
 	(*line)->setVisible(false);
-	(*line)->setLayer(MARKERS_LAYER_NAME);
 	(*line)->setMoveAxis(moveAxis);
 
 	if(moveAxis == EA_xAxis)
@@ -442,7 +441,6 @@ void MarkingPlot::initializeLine(MovableItemLine** line, MovableInfinityLine* fM
 {
 	(*line) = new MovableItemLine(this, fMarker, sMarker, text);
 	(*line)->setVisible(false);
-	(*line)->setLayer(MARKERS_LAYER_NAME);
 	(*line)->setMoveAxis(moveAxis);
 }
 

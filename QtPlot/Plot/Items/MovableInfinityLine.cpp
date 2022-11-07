@@ -5,22 +5,9 @@
 
 
 MovableInfinityLine::MovableInfinityLine(QCustomPlot* parentPlot)
-	: QCPItemStraightLine(parentPlot),
+	: BaseMarker(parentPlot),
 	offset(0)
 {
-	//initialize default pens
-	{
-		QPen pen;
-		pen.setWidth(2);
-		QCPItemStraightLine::setPen(pen);
-	
-		pens[ELS_Idle] = pen;
-		pens[ELS_Hovered] = pen;
-		pens[ELS_Dragging] = pen;
-	}
-
-	connect(parentPlot, SIGNAL(mouseRelease(QMouseEvent*)), this, SLOT(mouseRelease(QMouseEvent*)));
-	connect(parentPlot, SIGNAL(mouseMove(QMouseEvent*)), this, SLOT(mouseMove(QMouseEvent*)));
 }
 
 MovableInfinityLine::~MovableInfinityLine()
@@ -70,7 +57,7 @@ void MovableInfinityLine::addOffset(int inOffset)
 	qreal y1 = coords1.y();
 	qreal y2 = coords2.y();
 
-	if(axis == EA_xAxis)
+	if(getAxis() == EA_xAxis)
 	{
 		x1 += offset;
 		x2 += offset;
@@ -86,17 +73,11 @@ void MovableInfinityLine::addOffset(int inOffset)
 	setPointRealCoord(x2, y2);
 }
 
-void MovableInfinityLine::setPen(ELineState inState, QPen pen)
-{
-	pens[inState] = pen;
-	if (inState == ELS_Idle) QCPItemStraightLine::setPen(pen);
-}
-
 void MovableInfinityLine::setMoveAxis(EAxis inAxis)
 {
-	axis = inAxis;
+	setAxis(inAxis);
 
-	if(axis == EA_xAxis)
+	if(getAxis() == EA_xAxis)
 	{
 		connect(mParentPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(axisXChanged(QCPRange)));
 	}
@@ -108,45 +89,9 @@ void MovableInfinityLine::setMoveAxis(EAxis inAxis)
 
 void MovableInfinityLine::mousePressEvent(QMouseEvent* event, const QVariant& details)
 {
-	QCPItemStraightLine::mousePressEvent(event, details);
-
 	if (!bIsMovable) return;
 
-	if(axis == EA_xAxis)
-	{
-		const QCPRange yRange = mParentPlot->yAxis->range();
-		const double yPos = mParentPlot->yAxis->pixelToCoord(event->pos().y());
-		if(yPos < yRange.lower || yPos > yRange.upper) return;
-	}
-	else
-	{
-		const QCPRange xRange = mParentPlot->xAxis->range();
-		const double xPos = mParentPlot->xAxis->pixelToCoord(event->pos().x());
-		if (xPos < xRange.lower || xPos > xRange.upper) return;
-	}
-
-	setIsDrag(true);
-}
-
-void MovableInfinityLine::setIsDrag(bool drag)
-{
-	if (bIsDrag == drag) return;
-
-	bIsDrag = drag;
-
-	if (bIsDrag)
-	{
-		setState(ELS_Dragging);
-		currentInteractions = mParentPlot->interactions();
-
-		int temp = currentInteractions;
-		mParentPlot->setInteraction(static_cast<QCP::Interaction>(temp), false);
-	}
-	else
-	{
-		setState(ELS_Idle);
-		mParentPlot->setInteractions(currentInteractions);
-	}
+	BaseMarker::mousePressEvent(event, details);
 }
 
 void MovableInfinityLine::xMoveAxis(QMouseEvent* event)
@@ -204,98 +149,11 @@ void MovableInfinityLine::yMoveAxis(QMouseEvent* event)
 	}
 }
 
-void MovableInfinityLine::checkHovered(QMouseEvent* event)
-{
-	const int width = pen().width();
-	int mousePos;
-	int linePos;
-	bool inRange;
-
-	if (axis == EA_xAxis)
-	{
-		mousePos = event->pos().x();
-		linePos = mParentPlot->xAxis->coordToPixel(point1->coords().x());
-
-		const QCPRange yRange = mParentPlot->yAxis->range();
-		const double yPos = mParentPlot->yAxis->pixelToCoord(event->pos().y());
-		inRange = yPos > yRange.lower && yPos < yRange.upper;
-	}
-	else
-	{
-		mousePos = event->pos().y();
-		linePos = mParentPlot->yAxis->coordToPixel(point1->coords().y());
-
-		const QCPRange xRange = mParentPlot->xAxis->range();
-		const double xPos = mParentPlot->xAxis->pixelToCoord(event->pos().x());
-		inRange = xPos > xRange.lower && xPos < xRange.upper;
-	}
-
-	const bool isHovered = mousePos >= linePos - width && mousePos <= linePos + width && inRange;
-	if (isHovered)
-	{
-		setState(ELS_Hovered);
-	}
-	else
-	{
-		setState(ELS_Idle);
-	}
-}
-
-void MovableInfinityLine::setState(ELineState inState)
-{
-	if (state == inState) return;
-
-	QPen newPen = pen();
-	bool needReplot = false;
-	if(inState == ELS_Hovered && state == ELS_Idle)
-	{
-		state = ELS_Hovered;
-		newPen = pens[ELS_Hovered];
-		needReplot = true;
-	}
-
-	if(inState == ELS_Dragging)
-	{
-		state = ELS_Dragging;
-		newPen = pens[ELS_Dragging];
-		needReplot = true;
-	}
-
-	if(inState == ELS_Idle && !bIsDrag)
-	{
-		state = ELS_Idle;
-		newPen = pens[ELS_Idle];
-		needReplot = true;
-	}
-
-	if (needReplot)
-	{
-		QCPItemStraightLine::setPen(newPen);
-		mParentPlot->layer(MARKERS_LAYER_NAME)->replot();
-	}
-}
-
-void MovableInfinityLine::mouseRelease(QMouseEvent* event)
-{
-	setIsDrag(false);
-}
-
 void MovableInfinityLine::mouseMove(QMouseEvent* event)
 {
-	if (bIsMovable == false || visible() == false) return;
+	if (bIsMovable == false) return;
 
-	checkHovered(event);
-
-	if (bIsDrag == false) return;
-
-	if (axis == EA_xAxis)
-	{
-		xMoveAxis(event);
-	}
-	else
-	{
-		yMoveAxis(event);
-	}
+	BaseMarker::mouseMove(event);
 
 	midLine->updatePosition();
 	emit updatePosition();
@@ -311,8 +169,6 @@ void MovableInfinityLine::mouseMove(QMouseEvent* event)
 
 void MovableInfinityLine::axisXChanged(const QCPRange& range)
 {
-	if (bIsMovable == false) return;
-
 	const double linePos = point1->coords().x();
 	double newLinePos = linePos;
 
