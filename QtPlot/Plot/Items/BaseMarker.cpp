@@ -160,13 +160,13 @@ void BaseMarker::mouseRelease(QMouseEvent* event)
 	setIsDrag(false);
 }
 
-void BaseMarker::mouseMove(QMouseEvent* event)
+bool BaseMarker::mouseMove(QMouseEvent* event)
 {
-	if (visible() == false) return;
+	if (visible() == false) return false;
 
 	checkHovered(event);
 
-	if (getIsDrag() == false) return;
+	if (getIsDrag() == false) return false;
 
 	if (getAxis() == EA_xAxis)
 	{
@@ -176,6 +176,8 @@ void BaseMarker::mouseMove(QMouseEvent* event)
 	{
 		yMoveAxis(event);
 	}
+
+	return true;
 }
 
 

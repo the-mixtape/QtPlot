@@ -149,12 +149,13 @@ void MovableInfinityLine::yMoveAxis(QMouseEvent* event)
 	}
 }
 
-void MovableInfinityLine::mouseMove(QMouseEvent* event)
+bool MovableInfinityLine::mouseMove(QMouseEvent* event)
 {
-	if (bIsMovable == false) return;
+	if (bIsMovable == false) return false;
 
-	BaseMarker::mouseMove(event);
-
+	const bool success = BaseMarker::mouseMove(event);
+	if (success == false) return false;
+	
 	midLine->updatePosition();
 	emit updatePosition();
 	mParentPlot->layer(MARKERS_LAYER_NAME)->replot();
@@ -165,6 +166,8 @@ void MovableInfinityLine::mouseMove(QMouseEvent* event)
 		emit syncLine->updatePosition();
 		syncLine->mParentPlot->layer(MARKERS_LAYER_NAME)->replot();
 	}
+
+	return true;
 }
 
 void MovableInfinityLine::axisXChanged(const QCPRange& range)

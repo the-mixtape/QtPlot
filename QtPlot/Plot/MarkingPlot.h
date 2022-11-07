@@ -133,7 +133,7 @@ public:
 	inline bool getIsAlreadyDragging() const { return bIsAlreadyDragging; }
 
 private:
-	bool bIsAlreadyDragging;
+	bool bIsAlreadyDragging = false;
 
 };
 

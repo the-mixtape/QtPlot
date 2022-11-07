@@ -418,7 +418,7 @@ QString MarkingPlot::setupHorizontalText(double start, double end)
 
 QString MarkingPlot::setupVerticalText(double start, double end)
 {
-	return QString::number(end - start);
+	return " " + QString::number(end - start);
 }
 
 void MarkingPlot::initializeRangeLine(MovableInfinityLine** line, EAxis moveAxis)

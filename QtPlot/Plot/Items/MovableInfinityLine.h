@@ -43,7 +43,7 @@ signals:
 	void updatePosition();
 
 private slots:
-	void mouseMove(QMouseEvent* event) override;
+	bool mouseMove(QMouseEvent* event) override;
 
 	void axisXChanged(const QCPRange& range);
 	void axisYChanged(const QCPRange& range);

@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 
 #include "Plot/QtPlot.h"
+#include "Plot/Items/SingleMarker.h"
 #include "Waterfall/WaterfallContent.h"
 
 
@@ -60,6 +61,11 @@ void MainWindow::initializeSyncPlots()
 {
     initializePlot(ui.syncPlot1, "Sync Plot 1");
     initializePlot(ui.syncPlot2, "Sync Plot 2");
+
+    const auto singleMarker = new SingleMarker(ui.syncPlot2);
+    singleMarker->setPen(ELS_Hovered, QPen(Qt::yellow));
+    singleMarker->setAxis(EA_yAxis);
+    singleMarker->setMarkerPos(50);
 
     QtPlot::syncZoom(ui.syncPlot1, ui.syncPlot2, EA_xAxis, ESR_Range);
     QtPlot::syncZoom(ui.syncPlot1, ui.syncPlot2, EA_yAxis, ESR_Range);

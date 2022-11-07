@@ -31,7 +31,7 @@ protected:
 
 protected slots:
 	void mouseRelease(QMouseEvent* event);
-	virtual void mouseMove(QMouseEvent* event);
+	virtual bool mouseMove(QMouseEvent* event);
 
 private:
 	ELineState state = ELS_Idle;
