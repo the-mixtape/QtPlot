@@ -227,7 +227,8 @@ void MarkingPlot::mouseReleaseEvent(QMouseEvent* event)
 {
 	QCustomPlot::mouseReleaseEvent(event);
 	
-	if (mouseClickPoint != event->pos()) return;
+	if (fabs(mouseClickPoint.x() - event->pos().x()) > clickAllowableOffset || 
+		fabs(mouseClickPoint.y() - event->pos().y()) > clickAllowableOffset) return;
 
 	{
 		const double x = xAxis->pixelToCoord(event->pos().x());
@@ -236,7 +237,7 @@ void MarkingPlot::mouseReleaseEvent(QMouseEvent* event)
 		if (xRange.lower > x || xRange.upper < x) return;
 
 		const double y = yAxis->pixelToCoord(event->pos().y());
-		const QCPRange yRange = xAxis->range();
+		const QCPRange yRange = yAxis->range();
 
 		if (yRange.lower > y || yRange.upper < y) return;
 	}

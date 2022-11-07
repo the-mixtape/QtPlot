@@ -121,5 +121,12 @@ private:
 	QList<MarkingPlot*> xSyncPlots;
 	QList<MarkingPlot*> ySyncPlots;
 
+public:
+	inline void setClickAllowableOffset(double offset) { clickAllowableOffset = offset; }
+	inline double getClickAllowableOffset() const { return clickAllowableOffset; }
+
+private:
+	double clickAllowableOffset = 1;
+
 };
 
