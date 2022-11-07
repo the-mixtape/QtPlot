@@ -229,6 +229,18 @@ void MarkingPlot::mouseReleaseEvent(QMouseEvent* event)
 	
 	if (mouseClickPoint != event->pos()) return;
 
+	{
+		const double x = xAxis->pixelToCoord(event->pos().x());
+		const QCPRange xRange = xAxis->range();
+
+		if (xRange.lower > x || xRange.upper < x) return;
+
+		const double y = yAxis->pixelToCoord(event->pos().y());
+		const QCPRange yRange = xAxis->range();
+
+		if (yRange.lower > y || yRange.upper < y) return;
+	}
+
 	if (event->button() == horMouseButton && event->modifiers() == horMouseModifier 
 		&& markerActiveRules[EA_xAxis])
 	{
