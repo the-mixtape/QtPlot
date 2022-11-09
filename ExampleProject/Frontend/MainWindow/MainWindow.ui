@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab1">
        <attribute name="title">
@@ -36,7 +36,7 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="WaterfallPlot" name="waterfallPlot" native="true"/>
+         <widget class="WaterfallWithMemory" name="waterfallPlot" native="true"/>
         </item>
        </layout>
       </widget>
@@ -86,9 +86,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WaterfallPlot</class>
+   <class>WaterfallWithMemory</class>
    <extends>QWidget</extends>
-   <header>Waterfall/Waterfall.h</header>
+   <header>Waterfall/WaterfallWM.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

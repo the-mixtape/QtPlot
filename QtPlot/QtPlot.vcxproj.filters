@@ -124,6 +124,15 @@
     <ClCompile Include="Plot\Items\SingleMarker.cpp">
       <Filter>Source Files\Plot\Items</Filter>
     </ClCompile>
+    <ClCompile Include="Waterfall\WaterfallWM.cpp">
+      <Filter>Source Files\Waterfall</Filter>
+    </ClCompile>
+    <ClCompile Include="Waterfall\WaterfallContentWM.cpp">
+      <Filter>Source Files\Waterfall</Filter>
+    </ClCompile>
+    <ClCompile Include="Waterfall\WaterfallBase.cpp">
+      <Filter>Source Files\Waterfall</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Waterfall\Waterfall.h">
@@ -164,6 +173,15 @@
     </QtMoc>
     <QtMoc Include="Plot\Items\SingleMarker.h">
       <Filter>Header Files\Plot\Items</Filter>
+    </QtMoc>
+    <QtMoc Include="Waterfall\WaterfallWM.h">
+      <Filter>Header Files\Waterfall</Filter>
+    </QtMoc>
+    <QtMoc Include="Waterfall\WaterfallContentWM.h">
+      <Filter>Header Files\Waterfall</Filter>
+    </QtMoc>
+    <QtMoc Include="Waterfall\WaterfallBase.h">
+      <Filter>Source Files\Waterfall</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

@@ -2,7 +2,9 @@
 
 #include "Plot/QtPlot.h"
 #include "Plot/Items/SingleMarker.h"
+#include "Waterfall/Waterfall.h"
 #include "Waterfall/WaterfallContent.h"
+#include "Waterfall/WaterfallWM.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -17,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     backend.start();
 
     connect(&backend, &ExampleBackend::generatedNewData, [=](double* data, int size) { ui.waterfallPlot->appendData(data, size); });
-    connect(ui.waterfallPlot, &WaterfallPlot::copyingCompleted, &backend, &ExampleBackend::copyingCompleted);
+    connect(ui.waterfallPlot, &WaterfallBase::copyingCompleted, &backend, &ExampleBackend::copyingCompleted);
 }
 
 MainWindow::~MainWindow()
@@ -52,8 +54,8 @@ void MainWindow::initializeWaterfall()
     ui.waterfallPlot->setBackground(Qt::black);
     ui.waterfallPlot->setFillColor(Qt::black);
     ui.waterfallPlot->setAppendHeight(1);
-    ui.waterfallPlot->setAppendSide(EAS_Right);
-    ui.waterfallPlot->setResolution(10000, 512);
+    ui.waterfallPlot->setAppendSide(EAS_Top);
+    ui.waterfallPlot->setResolution(512, 512);
     ui.waterfallPlot->setFPSLimit(30);
 }
 

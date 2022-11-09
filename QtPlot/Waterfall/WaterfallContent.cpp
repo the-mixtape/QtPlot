@@ -90,6 +90,7 @@ void WaterfallContent::update()
 
 void WaterfallContent::setResolution(int width, int height)
 {
+	qDebug() << "set resolution";
 	readWriteLock->lockForRead();
 	if ((waterfallLayer->image->width() == width
 		&& waterfallLayer->image->height() == height) || (width == 0 || height == 0))
@@ -469,8 +470,12 @@ void WaterfallContent::appendR(double* data, int w, int h)
 //todo: now don't using appendHeight 
 void WaterfallContent::setFullDataT(double* data, int w, int h, int /*appendHeight*/)
 {
-	if (waterfallLayer->image->width() > w ||
-		waterfallLayer->image->height() > h) return;
+	if (waterfallLayer->image->width() < w ||
+		waterfallLayer->image->height() < h) 
+	{
+		qDebug() << "Error set full data T";
+		return;
+	}
 
 	for(int y = 0; y < h; y++)
 	{
@@ -486,8 +491,12 @@ void WaterfallContent::setFullDataT(double* data, int w, int h, int /*appendHeig
 
 void WaterfallContent::setFullDataB(double* data, int w, int h, int appendHeight)
 {
-	if (waterfallLayer->image->width() > w ||
-		waterfallLayer->image->height() > h) return;
+	if (waterfallLayer->image->width() != w ||
+		waterfallLayer->image->height() < h)
+	{
+		qDebug() << "Error set full data B";
+		return;
+	}
 
 	for (int y = h - 1; y >= 0; y--)
 	{
@@ -504,8 +513,12 @@ void WaterfallContent::setFullDataB(double* data, int w, int h, int appendHeight
 //todo: now don't using appendHeight
 void WaterfallContent::setFullDataR(double* data, int w, int h, int /*appendHeight*/)
 {
-	if (waterfallLayer->image->width() > w ||
-		waterfallLayer->image->height() > h) return;
+	if (waterfallLayer->image->width() != w ||
+		waterfallLayer->image->height() < h) 
+	{
+		qDebug() << "Error set full data R";
+		return;
+	}
 
 	for (int y = 0; y < h; y++)
 	{
@@ -519,8 +532,12 @@ void WaterfallContent::setFullDataR(double* data, int w, int h, int /*appendHeig
 
 void WaterfallContent::setFullDataL(double* data, int w, int h, int appendHeight)
 {
-	if (waterfallLayer->image->width() > w ||
-		waterfallLayer->image->height() > h) return;
+	if (waterfallLayer->image->width() != w ||
+		waterfallLayer->image->height() < h)
+	{
+		qDebug() << "Error set full data L";
+		return;
+	}
 
 	for (int y = 0; y < h; y++)
 	{

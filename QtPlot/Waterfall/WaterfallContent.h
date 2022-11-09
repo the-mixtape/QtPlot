@@ -31,21 +31,21 @@ public slots:
 	void update();
 
 public:
-	void setResolution(int width, int height);
+	virtual void setResolution(int width, int height);
 	QRect getResolution() const;
 
 	void setWidth(int width);
 	void setHeight(int height);
 	void setFillColor(const QColor& fillColor);
 
-	void setInterval(int minval, int maxval);
+	virtual void setInterval(int minval, int maxval);
 	QtInterval getInterval() const;
 
 	void setPositionX(int minx, int maxx);
 	void setPositionY(int miny, int maxy);
 	void setAppendHeight(int h);
 
-	void clear();
+	virtual void clear();
 
 	/*!
 	\brief Append data
@@ -56,7 +56,7 @@ public:
 	\param size Width of the data block.
 	\param needUpdatePixmap Redraw after append?
 	*/
-	void append(double* data, int size, bool needUpdatePixmap = true);
+	virtual void append(double* data, int size, bool needUpdatePixmap = true);
 
 	/*!
 	\brief Add Full WaterfallData
@@ -67,7 +67,7 @@ public:
 	\param width Width of the data block.
 	\param height Height of the data block.
 	*/
-	void setData(double* data, int width, int height);
+	virtual void setData(double* data, int width, int height);
 
 	/*!
 	  \brief Create layer
@@ -189,7 +189,7 @@ protected:
 private:
 	void setupScaledPixmap(QRect finalRect);
 
-private:
+protected:
 	QRect			lastFinalRect;
 
 	WaterfallLayer* waterfallLayer;

@@ -24,9 +24,12 @@
     <ClCompile Include="Plot\ZoomClampedPlot.cpp" />
     <ClCompile Include="QCustomPlot\QCustomPlot.cpp" />
     <ClCompile Include="Waterfall\Waterfall.cpp" />
+    <ClCompile Include="Waterfall\WaterfallBase.cpp" />
     <ClCompile Include="Waterfall\WaterfallContent.cpp" />
+    <ClCompile Include="Waterfall\WaterfallContentWM.cpp" />
     <ClCompile Include="Waterfall\WaterfallLayer.cpp" />
     <ClCompile Include="Waterfall\WaterfallThread.cpp" />
+    <ClCompile Include="Waterfall\WaterfallWM.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColorMap\WaterfallColorMap.h" />
@@ -34,6 +37,9 @@
     <ClInclude Include="Interval.h" />
     <ClInclude Include="Library\QtPlotEnumLibrary.h" />
     <ClInclude Include="Library\QtPlotMathLibrary.h" />
+    <QtMoc Include="Waterfall\WaterfallBase.h" />
+    <QtMoc Include="Waterfall\WaterfallContentWM.h" />
+    <QtMoc Include="Waterfall\WaterfallWM.h" />
     <QtMoc Include="Plot\ZoomClampedPlot.h" />
     <QtMoc Include="Plot\QtPlot.h" />
     <QtMoc Include="Plot\MarkingPlot.h" />
