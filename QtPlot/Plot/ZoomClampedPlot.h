@@ -1,10 +1,10 @@
 #pragma once
 #include "QtPlotGlobal.h"
-#include "QCustomPlot/QCustomPlot.h"
+#include "SettingingPlot.h"
 #include "Library/QtPlotEnumLibrary.h"
 
 
-class QTPLOT_EXPORT ZoomClampedPlot : public QCustomPlot
+class QTPLOT_EXPORT ZoomClampedPlot : public SettingingPlot
 {
 	Q_OBJECT
 

@@ -54,6 +54,15 @@
     <Filter Include="Source Files\ColorMap">
       <UniqueIdentifier>{ec784bdd-3be2-4d2d-bc50-783d1191da4f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Singleton">
+      <UniqueIdentifier>{244f99c5-9770-4593-9c23-01afeb9f23fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Managers">
+      <UniqueIdentifier>{ca3c5210-be37-4280-9bce-86d83e0bb2e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Managers">
+      <UniqueIdentifier>{b30900d6-4e47-458f-b9b5-d6bdbb3d11e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Interval.h">
@@ -73,6 +82,12 @@
     </ClInclude>
     <ClInclude Include="ColorMap\WfColorMap.h">
       <Filter>Header Files\ColorMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton\QtPlotSingleton.h">
+      <Filter>Header Files\Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\QtPlotSettingsManager.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +148,15 @@
     <ClCompile Include="Waterfall\WaterfallBase.cpp">
       <Filter>Source Files\Waterfall</Filter>
     </ClCompile>
+    <ClCompile Include="Plot\ClickablePlot.cpp">
+      <Filter>Source Files\Plot</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\QtPlotSettingsManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Plot\SettingingPlot.cpp">
+      <Filter>Source Files\Plot</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Waterfall\Waterfall.h">
@@ -182,6 +206,12 @@
     </QtMoc>
     <QtMoc Include="Waterfall\WaterfallBase.h">
       <Filter>Source Files\Waterfall</Filter>
+    </QtMoc>
+    <QtMoc Include="Plot\ClickablePlot.h">
+      <Filter>Header Files\Plot</Filter>
+    </QtMoc>
+    <QtMoc Include="Plot\SettingingPlot.h">
+      <Filter>Header Files\Plot</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

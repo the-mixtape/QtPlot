@@ -1,7 +1,7 @@
 #include "ZoomClampedPlot.h"
 
 ZoomClampedPlot::ZoomClampedPlot(QWidget* parent)
-	: QCustomPlot(parent)
+	: SettingingPlot(parent)
 {
     clampAxisRules[EA_xAxis] = false;
     clampAxisRules[EA_yAxis] = false;

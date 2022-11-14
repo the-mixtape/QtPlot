@@ -33,3 +33,10 @@ enum EShowInfoRule
 	ESIR_None,
 	ESIR_Attach,
 };
+
+enum EClickPos
+{
+	ECA_ClickX,
+	ECA_ClickY,
+	ECA_ClickPlot,
+};

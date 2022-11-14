@@ -1,7 +1,7 @@
 #include "QtPlot.h"
 
 QtPlot::QtPlot(QWidget* parent)
-	: InfoPlot(parent)
+	: ClickablePlot(parent)
 {
 
 }

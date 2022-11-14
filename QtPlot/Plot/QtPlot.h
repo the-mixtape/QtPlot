@@ -1,10 +1,10 @@
 #pragma once
 
+#include "ClickablePlot.h"
 #include "QtPlotGlobal.h"
-#include "Plot/InfoPlot.h"
 
 
-class QTPLOT_EXPORT QtPlot : public InfoPlot
+class QTPLOT_EXPORT QtPlot : public ClickablePlot
 {
 	Q_OBJECT
 

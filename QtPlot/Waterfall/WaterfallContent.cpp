@@ -90,7 +90,6 @@ void WaterfallContent::update()
 
 void WaterfallContent::setResolution(int width, int height)
 {
-	qDebug() << "set resolution";
 	readWriteLock->lockForRead();
 	if ((waterfallLayer->image->width() == width
 		&& waterfallLayer->image->height() == height) || (width == 0 || height == 0))
