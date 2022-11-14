@@ -88,6 +88,20 @@ void MarkingPlot::addMarkersOffset(EAxis axis, int offset) const
 	}
 }
 
+void MarkingPlot::setMarkers(EAxis axis, double first, double second)
+{
+	if(axis == EA_xAxis)
+	{
+		horizontalClickEvent(first);
+		horizontalClickEvent(second);
+	}
+	else
+	{
+		verticalClickEvent(first);
+		verticalClickEvent(second);
+	}
+}
+
 void MarkingPlot::clearMarkers(EAxis axis)
 {
 	if(axis == EA_xAxis)
@@ -230,13 +244,14 @@ void MarkingPlot::mouseReleaseEvent(QMouseEvent* event)
 	if (fabs(mouseClickPoint.x() - event->pos().x()) > clickAllowableOffset || 
 		fabs(mouseClickPoint.y() - event->pos().y()) > clickAllowableOffset) return;
 
+	const double x = xAxis->pixelToCoord(event->pos().x());
+	const double y = yAxis->pixelToCoord(event->pos().y());
+
 	{
-		const double x = xAxis->pixelToCoord(event->pos().x());
 		const QCPRange xRange = xAxis->range();
 
 		if (xRange.lower > x || xRange.upper < x) return;
 
-		const double y = yAxis->pixelToCoord(event->pos().y());
 		const QCPRange yRange = yAxis->range();
 
 		if (yRange.lower > y || yRange.upper < y) return;
@@ -245,28 +260,27 @@ void MarkingPlot::mouseReleaseEvent(QMouseEvent* event)
 	if (event->button() == horMouseButton && event->modifiers() == horMouseModifier 
 		&& markerActiveRules[EA_xAxis])
 	{
-		horizontalClickEvent(event);
+		horizontalClickEvent(x);
 		return;
 	}
 
 	if (event->button() == vertMouseButton && event->modifiers() == vertMouseModifier 
 		&& markerActiveRules[EA_yAxis])
 	{
-		verticalClickEvent(event);
+		verticalClickEvent(y);
 	}
 }
 
-void MarkingPlot::horizontalClickEvent(QMouseEvent* event)
+void MarkingPlot::horizontalClickEvent(double pos)
 {
-	double x = xAxis->pixelToCoord(event->pos().x());
 	const bool bNeedAttachMarker = markerAttachRules[EAxis::EA_xAxis];
 
 	if (bNeedAttachMarker && graphCount() >= 0)
 	{
 		for (auto point = graph(0)->data()->constBegin(); point != graph(0)->data()->constEnd(); ++point)
 		{
-			if (fabs(point->key - x) < 0.5) {
-				x = point->key;
+			if (fabs(point->key - pos) < 0.5) {
+				pos = point->key;
 				break;
 			}
 		}
@@ -274,12 +288,12 @@ void MarkingPlot::horizontalClickEvent(QMouseEvent* event)
 
 	if (horClickCount == 0)
 	{
-		setHorLineCoords(horRangeLine1, x);
+		setHorLineCoords(horRangeLine1, pos);
 		incrementCount(horClickCount);
 
 		for(const auto& syncPlot: xSyncPlots)
 		{
-			syncPlot->setHorLineCoords(syncPlot->horRangeLine1, x);
+			syncPlot->setHorLineCoords(syncPlot->horRangeLine1, pos);
 			syncPlot->incrementCount(syncPlot->horClickCount);
 		}
 
@@ -288,7 +302,7 @@ void MarkingPlot::horizontalClickEvent(QMouseEvent* event)
 
 	if (horClickCount == 1)
 	{
-		setHorLineCoords(horRangeLine2, x);
+		setHorLineCoords(horRangeLine2, pos);
 		incrementCount(horClickCount);
 
 		setupHorFirstMidLinePosition();
@@ -312,7 +326,7 @@ void MarkingPlot::horizontalClickEvent(QMouseEvent* event)
 
 		for (const auto& syncPlot : xSyncPlots)
 		{
-			syncPlot->setHorLineCoords(syncPlot->horRangeLine2, x);
+			syncPlot->setHorLineCoords(syncPlot->horRangeLine2, pos);
 			syncPlot->incrementCount(syncPlot->horClickCount);
 
 			syncPlot->setupHorFirstMidLinePosition();
@@ -334,17 +348,16 @@ void MarkingPlot::horizontalClickEvent(QMouseEvent* event)
 	}
 }
 
-void MarkingPlot::verticalClickEvent(QMouseEvent* event)
+void MarkingPlot::verticalClickEvent(double pos)
 {
-	double y = yAxis->pixelToCoord(event->pos().y());
 	const bool bNeedAttachMarker = markerAttachRules[EAxis::EA_yAxis];
 
 	if (bNeedAttachMarker && graphCount() >= 0)
 	{
 		for (auto point = graph(0)->data()->constBegin(); point != graph(0)->data()->constEnd(); ++point)
 		{
-			if (fabs(point->value - y) < 0.5) {
-				y = point->value;
+			if (fabs(point->value - pos) < 0.5) {
+				pos = point->value;
 				break;
 			}
 		}
@@ -352,12 +365,12 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 
 	if (vertClickCount == 0)
 	{
-		setVertLineCoords(vertRangeLine1, y);
+		setVertLineCoords(vertRangeLine1, pos);
 		incrementCount(vertClickCount);
 
 		for (const auto& syncPlot : ySyncPlots)
 		{
-			syncPlot->setVertLineCoords(syncPlot->vertRangeLine1, y);
+			syncPlot->setVertLineCoords(syncPlot->vertRangeLine1, pos);
 			syncPlot->incrementCount(syncPlot->vertClickCount);
 		}
 
@@ -366,7 +379,7 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 
 	if (vertClickCount == 1)
 	{
-		setVertLineCoords(vertRangeLine2, y);
+		setVertLineCoords(vertRangeLine2, pos);
 		incrementCount(vertClickCount);
 
 		setupVertFirstMidLinePosition();
@@ -389,7 +402,7 @@ void MarkingPlot::verticalClickEvent(QMouseEvent* event)
 
 		for (const auto& syncPlot : ySyncPlots)
 		{
-			syncPlot->setVertLineCoords(syncPlot->vertRangeLine2, y);
+			syncPlot->setVertLineCoords(syncPlot->vertRangeLine2, pos);
 			syncPlot->incrementCount(syncPlot->vertClickCount);
 
 			syncPlot->setupVertFirstMidLinePosition();

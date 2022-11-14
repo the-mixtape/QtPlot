@@ -38,6 +38,7 @@ public:
 	void setMarkerMovableAxisActive(EAxis axis, bool isActive) const;
 	void addMarkersOffset(EAxis axis, int offset) const;
 
+	void setMarkers(EAxis axis, double first, double second);
 	void clearMarkers(EAxis axis);
 
 	//=======================================
@@ -55,8 +56,8 @@ protected:
 	void mousePressEvent(QMouseEvent* event) override;
 	void mouseReleaseEvent(QMouseEvent* event) override;
 
-	virtual void horizontalClickEvent(QMouseEvent* event);
-	virtual void verticalClickEvent(QMouseEvent* event);
+	virtual void horizontalClickEvent(double pos);
+	virtual void verticalClickEvent(double pos);
 
 	virtual QString setupHorizontalText(double start, double end);
 	virtual QString setupVerticalText(double start, double end);
