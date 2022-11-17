@@ -53,7 +53,11 @@ private:
 	double* data;
 	int		size;
 
+	int setWidth;
+	int setHeight;
+
 	bool	bIsQuit;
 	bool	bIsAuto;
+	bool	bIsAppend;
 };
 

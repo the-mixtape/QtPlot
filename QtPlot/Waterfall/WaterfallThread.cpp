@@ -53,12 +53,21 @@ void WaterfallThread::run()
 		{
 			locker.lockForRead();
 
-			content->append(data, size, bIsAuto);
-
-			if(bIsAuto)
+			if (bIsAppend)
 			{
+				content->append(data, size, bIsAuto);
+
+				if (bIsAuto)
+				{
+					emit update();
+				}
+			}
+			else
+			{
+				content->setData(data, setWidth, setHeight);
 				emit update();
 			}
+
 
 			locker.unlock();
 		}
@@ -139,6 +148,8 @@ void WaterfallThread::addData(double* inData, int inSize)
 		memcpy(data, inData, size * sizeof(double));
 	}
 
+	bIsAppend = true;
+
 	emit copyingCompleted();
 	appendMutex.unlock();
 }
@@ -159,12 +170,12 @@ void WaterfallThread::setData(double* inData, int width, int height)
 		memcpy(data, inData, size * sizeof(double));
 	}
 
+	setWidth = width;
+	setHeight = height;
+	bIsAppend = false;
+
 	emit copyingCompleted();
-
-	content->setData(data, width, height);
-	emit update();
-
-	copyMutex.unlock();
+	appendMutex.unlock();
 }
 
 void WaterfallThread::setWaterfallContent(WaterfallContent* inContent)
