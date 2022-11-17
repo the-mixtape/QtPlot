@@ -8,6 +8,7 @@ InfoPlot::InfoPlot(QWidget* parent)
     graphMarker->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle,
         QColor(255, 255, 255), QColor(255, 255, 255, 50), 8));
 	graphMarker->setVisible(false);
+    graphMarker->removeFromLegend();
 }
 
 InfoPlot::~InfoPlot()
