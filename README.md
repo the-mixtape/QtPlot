@@ -14,7 +14,7 @@ Classes:
 <h3 align="center"><a name="QtPlot"></a>QtPlot</h3> 
 
 <p align="center">
-  <img src="https://github.com/if-not-skill/QtPlot/blob/main/Resources/Markers.gif">
+  <img src="https://github.com/the-mixtape/QtPlot/blob/main/Resources/Markers.gif">
 </p>
 
 #### Implemented features
@@ -28,7 +28,7 @@ Classes:
 <h3 align="center"><a name="WaterfallPlot"></a>WaterfallPlot</h3> 
 
 <p align="center">
-  <img src="https://github.com/if-not-skill/QtPlot/blob/main/Resources/Waterfall.gif">
+  <img src="https://github.com/the-mixtape/QtPlot/blob/main/Resources/Waterfall.gif">
 </p>
 
 Based on Qimage of pure Qt and QCPItemPixmap of QCustomPlot.
